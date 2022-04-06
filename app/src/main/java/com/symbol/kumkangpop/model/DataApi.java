@@ -23,8 +23,10 @@ public interface DataApi {
     @POST("checkAppProgramsPowerAndLoginHistory")
     Single<List<AppVersion>> checkAppProgramsPowerAndLoginHistory(@Body SearchCondition searchCondition);
 
+    @POST("insertAppLoginHistory")
+    Single<List<AppVersion>> insertAppLoginHistory(@Body SearchCondition searchCondition);
+
     @POST("GetLoginInfoData")
     Single<List<LoginInfo>> GetLoginInfoData(@Body SearchCondition searchCondition);
-
 }
 

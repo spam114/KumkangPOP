@@ -49,4 +49,9 @@ public class AppVersionService {
     public Single<List<AppVersion>> checkAppProgramsPowerAndLoginHistory(SearchCondition searchCondition) {// 객체의 사용//todo
         return api.checkAppProgramsPowerAndLoginHistory(searchCondition);//todo
     }
+
+    //insertAppLoginHistory
+    public Single<List<AppVersion>> insertAppLoginHistory(SearchCondition searchCondition) {// 객체의 사용//todo
+        return api.insertAppLoginHistory(searchCondition);//todo
+    }
 }

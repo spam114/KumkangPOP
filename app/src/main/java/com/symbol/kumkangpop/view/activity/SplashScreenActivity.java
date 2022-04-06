@@ -29,15 +29,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.viewbinding.BuildConfig;
 
-import com.symbol.kumkangpop.BuildConfig;
 import com.symbol.kumkangpop.R;
 import com.symbol.kumkangpop.databinding.ActivitySplashScreenBinding;
-import com.symbol.kumkangpop.model.SearchCondition;
 import com.symbol.kumkangpop.model.object.Users;
 import com.symbol.kumkangpop.viewmodel.AppVersionViewModel;
-import com.symbol.kumkangpop.viewmodel.ProgressFloorReturnViewModel;
 
 import java.io.File;
 
@@ -51,7 +48,7 @@ public class SplashScreenActivity extends BaseActivity {
     DownloadManager mDm;
     long mId = 0;
     //Handler mHandler;
-    String serverVersion;
+    //String serverVersion;
     String downloadUrl;
     ProgressDialog mProgressDialog;
     //버전 변수 끝
@@ -90,7 +87,7 @@ public class SplashScreenActivity extends BaseActivity {
                 downloadUrl = models.get(0).Message;
                 String serverVersion = models.get(0).ResultCode;
 
-                if (errorCheck!=null) {//에러발생
+                if (errorCheck != null) {//에러발생
                     //showErrorDialog(SplashScreenActivity.this, "서버연결에 실패하였습니다.", 2);
                     Toast.makeText(this, errorCheck, Toast.LENGTH_LONG).show();
                     ActivityCompat.finishAffinity(SplashScreenActivity.this);
@@ -108,23 +105,29 @@ public class SplashScreenActivity extends BaseActivity {
         viewModel.userDataList.observe(this, models -> {
             // 데이터 값이 변할 때마다 호출된다.
             if (models != null) {
-                String errorCheck = models.get(0).ErrorCheck;
-                if (errorCheck!=null) {//에러발생
-                    //showErrorDialog(SplashScreenActivity.this, "서버연결에 실패하였습니다.", 2);
-                    Toast.makeText(this, errorCheck.toString(), Toast.LENGTH_LONG).show();
-                    ActivityCompat.finishAffinity(SplashScreenActivity.this);
-                } else {
-                    for (int i = 0; i < models.size(); i++) {
-                        Users.UserName = models.get(i).UserName;
-                        Users.UserID = models.get(i).UserID;
-                        Users.authorityList.add(Integer.parseInt(models.get(i).Authority));
-                        Users.authorityNameList.add(models.get(i).AuthorityName);
-                        Users.CustomerCode = models.get(i).CustomerCode;
-                        Users.DeptCode = models.get(i).DeptCode;
-                        Users.DeptName = models.get(i).DeptName;
+                if (models.size() > 0) {
+                    String errorCheck = models.get(0).ErrorCheck;
+                    if (errorCheck != null) {//에러발생
+                        //showErrorDialog(SplashScreenActivity.this, "서버연결에 실패하였습니다.", 2);
+                        Toast.makeText(this, errorCheck, Toast.LENGTH_LONG).show();
+                        ActivityCompat.finishAffinity(SplashScreenActivity.this);
+                    } else {
+                        /*for (int i = 0; i < models.size(); i++) {
+                            //Users.UserName = models.get(i).UserName;
+                            //Users.UserID = models.get(i).UserID;
+                            //Users.authorityList.add(Integer.parseInt(models.get(i).Authority));
+                            //Users.authorityNameList.add(models.get(i).AuthorityName);
+                            //Users.CustomerCode = models.get(i).CustomerCode;
+                            //Users.DeptCode = models.get(i).DeptCode;
+                            //Users.DeptName = models.get(i).DeptName;
+                        }*/
                     }
+                } else {
+                    Intent intent = new Intent(SplashScreenActivity.this, LoginActivity.class);
+                    startActivity(intent);
                 }
             } else {
+                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_LONG).show();
                 finish();
             }
         });
@@ -229,7 +232,7 @@ public class SplashScreenActivity extends BaseActivity {
             //Toast.makeText(getBaseContext(), "test1", Toast.LENGTH_LONG).show();
             uri = uri.substring(7);
             File file = new File(uri);
-            Uri u = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", file);
+            Uri u = FileProvider.getUriForFile(this, BuildConfig.LIBRARY_PACKAGE_NAME + ".provider", file);
             open.setDataAndType(u, mimetype);
         } else {
             open.setDataAndType(Uri.parse(uri), mimetype);
@@ -295,7 +298,7 @@ public class SplashScreenActivity extends BaseActivity {
                     String str = e.getMessage();
                     String str2 = str;
                 } finally {
-                    viewModel.checkAppProgramsPowerAndLoginHistory();
+                    viewModel.insertAppLoginHistory();
 
                 }
             }
@@ -322,7 +325,7 @@ public class SplashScreenActivity extends BaseActivity {
                 String str = e.getMessage();
                 String str2 = str;
             } finally {
-                viewModel.checkAppProgramsPowerAndLoginHistory();
+                viewModel.insertAppLoginHistory();
             }
         }
     }
@@ -380,7 +383,7 @@ public class SplashScreenActivity extends BaseActivity {
                     /*String str=e.getMessage();
                     String str2=str;*/
                         } finally {
-                            viewModel.checkAppProgramsPowerAndLoginHistory();
+                            viewModel.insertAppLoginHistory();
                         }
                     }
                 }

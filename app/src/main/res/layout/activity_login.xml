@@ -1,154 +1,348 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
-    <data>
-        <variable
-            name="activity"
-            type="com.symbol.kumkangpop.view.activity.LoginActivity" />
-    </data>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <!--
+        1.ViewModel의 객체 연결
+         - ViewModel에서 사용할 객체를 연결하여 데이터 수정 시 레이아웃을 수정할 필요없이 값 변경
+         - name : view에서 view model 호출 시 사용할 이름
+         - type : 사용할 View Model 객체
+    -->
+    <!--<data>
+
+        <variable
+            name="user"
+            type="com.symbol.kumkangpop.view.activity.LoginActivity" />
+    </data>-->
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        android:orientation="vertical"
-        android:weightSum="10">
+        android:layout_height="match_parent">
 
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="4"
-            android:background="@drawable/backgroundloginpage2"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/layout1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="-55dp"
-            android:layout_marginRight="20dp"
-            android:layout_weight="3.5"
-            android:background="@drawable/backgroundlogindialog"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="50dp"
-                android:layout_marginTop="50dp"
-                android:layout_marginRight="50dp"
-                android:gravity="center"
-                android:padding="10dp"
-                android:text="LOGIN"
-                android:textColor="#077BD6"
-                android:textSize="25dp"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/edtID"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="50dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginRight="50dp"
-                android:background="@drawable/borderline2"
-                android:drawableStart="@drawable/ic_person_black_24dp"
-                android:drawableLeft="@drawable/ic_person_black_24dp"
-                android:hint=" 아이디"
-                android:inputType="text"
-                android:padding="10dp"
-                android:textColor="#000000"
-                android:textColorHint="@color/inactive_text" />
-
-            <EditText
-                android:id="@+id/edtPW"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="50dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="50dp"
-                android:background="@drawable/borderline2"
-                android:drawableStart="@drawable/ic_lock_black_24dp"
-                android:drawableLeft="@drawable/ic_lock_black_24dp"
-                android:hint=" 비밀번호"
-                android:inputType="textPassword"
-                android:padding="10dp"
-                android:textColor="#000000"
-                android:textColorHint="@color/inactive_text" />
-
-            <EditText
-                android:id="@+id/edtWorkerName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="50dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="50dp"
-                android:background="@drawable/borderline2"
-                android:drawableStart="@drawable/icon_drive_file_rename"
-                android:drawableLeft="@drawable/icon_drive_file_rename"
-                android:hint=" 출력 PC번호"
-                android:padding="10dp"
-                android:textColor="#000000"
-                android:textColorHint="@color/inactive_text" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnLogin"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="50dp"
-                android:layout_marginTop="40dp"
-                android:layout_marginRight="50dp"
-                android:background="#40A5F4"
-                android:onClick="mOnClick"
-                android:text="로그인"
-                android:textColor="@color/white"
-                android:textSize="15dp"
-                android:textStyle="bold" />
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1.3"
-            android:background="@color/white"
-            android:orientation="horizontal"
-            android:weightSum="3">
+            <ImageView
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:background="@android:color/transparent"
+                android:elevation="1dp"
+                android:src="@drawable/img_kumkanglogo_only"
+                app:layout_constraintBottom_toBottomOf="@id/layout_bg"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layout_bg" />
 
             <LinearLayout
+                android:id="@+id/layout_bg"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal|end">
+                android:layout_height="0dp"
+                android:background="@drawable/bg_login_erection"
+                android:gravity="bottom|center"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toTopOf="@+id/layout1"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_editor_absoluteX="411dp"
+                app:layout_constraintVertical_weight="4"
+                >
 
-                <ImageView
-                    android:id="@+id/imageView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:adjustViewBounds="true"
-                    tools:srcCompat="@drawable/kumkanglogo" />
             </LinearLayout>
-        </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1.2"
-            android:background="@drawable/backgroundcolor">
+            <LinearLayout
+                android:id="@+id/layout1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@drawable/border_logain"
+                android:orientation="vertical"
+                android:weightSum="11"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layout_bg"
+                app:layout_constraintVertical_weight="6"
+                tools:layout_editor_absoluteX="421dp">
 
-        </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="2"
+                    android:gravity="bottom|center"
+                    android:text="Welcome to Kumkang Application"
+                    android:textColor="#077BD6"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tlID"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginRight="50dp"
+                    android:layout_weight="2"
+                    android:hint="아이디"
+                    android:textColorHint="@android:color/darker_gray"
+                    app:endIconMode="clear_text">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtID"
+                        style="@style/TextInputEditTextStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:drawableStart="@drawable/ic_person_black_24dp"
+                        android:drawableLeft="@drawable/ic_person_black_24dp"
+                        android:imeOptions="actionDone"
+                        android:singleLine="true"
+                        android:textSize="12sp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tlPW"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginRight="50dp"
+                    android:layout_weight="2"
+                    android:hint="비밀번호"
+                    android:textColorHint="@android:color/darker_gray"
+                    app:passwordToggleEnabled="true">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtPW"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:drawableStart="@drawable/ic_lock_black_24dp"
+                        android:drawableLeft="@drawable/ic_lock_black_24dp"
+                        android:imeOptions="actionDone"
+                        android:inputType="textPassword"
+                        android:singleLine="true"
+                        android:textSize="12sp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tlPC"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginRight="50dp"
+                    android:layout_weight="2"
+                    android:hint=" 출력PC"
+                    android:textColorHint="@android:color/darker_gray"
+                    app:endIconMode="clear_text">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtPC"
+                        style="@style/TextInputEditTextStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:drawableStart="@drawable/outline_dvr_24"
+                        android:drawableLeft="@drawable/outline_dvr_24"
+                        android:imeOptions="actionDone"
+                        android:singleLine="true"
+                        android:textSize="12sp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginRight="50dp"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/checkAuto"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="로그인 유지"
+                        android:textColor="#7A7A7A"
+                        android:textSize="12dp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="50dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_weight="2"
+                    android:background="#077BD6"
+                    android:onClick="btnLoginClick"
+                    android:text="로그인"
+                    android:textColor="@color/white"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
+
 </layout>
+
+
+    <!--<?xml version="1.0" encoding="utf-8"?>-->
+    <!--<layout xmlns:tools="http://schemas.android.com/tools"-->
+    <!--    xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--    xmlns:app="http://schemas.android.com/apk/res-auto">-->
+
+    <!--    &lt;!&ndash;-->
+    <!--        1.ViewModel의 객체 연결-->
+    <!--         - ViewModel에서 사용할 객체를 연결하여 데이터 수정 시 레이아웃을 수정할 필요없이 값 변경-->
+    <!--         - name : view에서 view model 호출 시 사용할 이름-->
+    <!--         - type : 사용할 View Model 객체-->
+    <!--    &ndash;&gt;-->
+    <!--    <data>-->
+    <!--        <variable-->
+    <!--            name="loginViewModel"-->
+    <!--            type="com.example.mvvmpayroll.viewmodel.LoginViewModel" />-->
+    <!--    </data>-->
+
+    <!--    <LinearLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent">-->
+
+    <!--        <RelativeLayout-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="match_parent">-->
+
+    <!--            <LinearLayout-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="match_parent"-->
+    <!--                android:weightSum="10"-->
+    <!--                android:orientation="vertical">-->
+
+    <!--                <LinearLayout-->
+    <!--                    android:layout_width="match_parent"-->
+    <!--                    android:layout_height="0dp"-->
+    <!--                    android:layout_weight="5"-->
+    <!--                    android:background="@drawable/bg_login_erection"-->
+    <!--                    android:layout_marginBottom="5dp">-->
+
+    <!--                </LinearLayout>-->
+
+    <!--                <LinearLayout-->
+    <!--                    android:id="@+id/layout1"-->
+    <!--                    android:layout_width="match_parent"-->
+    <!--                    android:layout_height="0dp"-->
+    <!--                    android:layout_marginLeft="10dp"-->
+    <!--                    android:layout_marginRight="10dp"-->
+    <!--                    android:layout_weight="5"-->
+    <!--                    android:background="@drawable/border_logain"-->
+    <!--                    android:orientation="vertical"-->
+    <!--                    android:layout_marginBottom="10dp"-->
+    <!--                    android:weightSum="12">-->
+
+    <!--                    <TextView-->
+    <!--                        android:layout_width="match_parent"-->
+    <!--                        android:layout_height="0dp"-->
+    <!--                        android:layout_weight="1.5"-->
+    <!--                        android:gravity="center"-->
+    <!--                        android:text="Welcome to Kumkang Application"-->
+    <!--                        android:textStyle="bold"-->
+    <!--                        android:textColor="#077BD6"-->
+    <!--                        android:textSize="15dp"-->
+    <!--                        android:layout_marginTop="60dp"/>-->
+
+    <!--                    <EditText-->
+    <!--                        android:id="@+id/edtID"-->
+    <!--                        android:layout_width="match_parent"-->
+    <!--                        android:layout_height="0dp"-->
+    <!--                        android:layout_weight="3"-->
+    <!--                        android:layout_gravity="center"-->
+    <!--                        android:layout_marginLeft="50dp"-->
+    <!--                        android:layout_marginTop="20dp"-->
+    <!--                        android:layout_marginRight="50dp"-->
+    <!--                        android:background="@drawable/border_login_edit"-->
+    <!--                        android:drawableStart="@drawable/ic_person_black_24dp"-->
+    <!--                        android:drawableLeft="@drawable/ic_person_black_24dp"-->
+    <!--                        android:hint="아이디"-->
+    <!--                        android:inputType="text"-->
+    <!--                        android:textSize="12dp"-->
+    <!--                        android:padding="10dp"-->
+    <!--                        android:textColor="#000000"-->
+    <!--                        android:textColorHint="@android:color/darker_gray" />-->
+
+    <!--                    <EditText-->
+    <!--                        android:id="@+id/edtPW"-->
+    <!--                        android:layout_width="match_parent"-->
+    <!--                        android:layout_height="0dp"-->
+    <!--                        android:layout_weight="3"-->
+    <!--                        android:layout_gravity="center"-->
+    <!--                        android:layout_marginLeft="50dp"-->
+    <!--                        android:layout_marginTop="10dp"-->
+    <!--                        android:layout_marginRight="50dp"-->
+    <!--                        android:background="@drawable/border_login_edit"-->
+    <!--                        android:drawableStart="@drawable/ic_lock_black_24dp"-->
+    <!--                        android:drawableLeft="@drawable/ic_lock_black_24dp"-->
+    <!--                        android:hint="비밀번호"-->
+    <!--                        android:inputType="textPassword"-->
+    <!--                        android:textSize="12dp"-->
+    <!--                        android:padding="10dp"-->
+    <!--                        android:textColor="#000000"-->
+    <!--                        android:textColorHint="@android:color/darker_gray" />-->
+
+    <!--                    <androidx.appcompat.widget.AppCompatButton-->
+    <!--                        android:id="@+id/loginBtn"-->
+    <!--                        android:layout_width="match_parent"-->
+    <!--                        android:layout_height="0dp"-->
+    <!--                        android:layout_weight="3"-->
+    <!--                        android:layout_gravity="center"-->
+    <!--                        android:layout_marginLeft="50dp"-->
+    <!--                        android:layout_marginTop="40dp"-->
+    <!--                        android:layout_marginRight="50dp"-->
+    <!--                        android:background="#077BD6"-->
+    <!--                        android:text="로그인"-->
+    <!--                        android:textColor="@color/white"-->
+    <!--                        android:textSize="15dp"-->
+    <!--                        android:textStyle="bold" />-->
+
+    <!--                    <TextView-->
+    <!--                        android:layout_width="match_parent"-->
+    <!--                        android:layout_height="0dp"-->
+    <!--                        android:layout_weight="1.5"-->
+    <!--                        android:gravity="center"-->
+    <!--                        android:text="How to sign up?"-->
+    <!--                        android:textStyle="bold"-->
+    <!--                        android:textSize="12dp"-->
+    <!--                        android:layout_marginTop="60dp"-->
+    <!--                        android:layout_marginBottom="20dp"-->
+    <!--                        />-->
+
+    <!--                </LinearLayout>-->
+
+    <!--            </LinearLayout>-->
+
+    <!--            <de.hdodenhof.circleimageview.CircleImageView-->
+    <!--                android:layout_width="75dp"-->
+    <!--                android:layout_height="75dp"-->
+    <!--                android:background="@android:color/transparent"-->
+    <!--                app:civ_border_overlay="true"-->
+    <!--                app:civ_border_width="3dp"-->
+    <!--                app:civ_border_color="#ffffff"-->
+    <!--                android:src="@drawable/img_kumkanglogo_only"-->
+    <!--                android:layout_centerInParent="true"-->
+    <!--                />-->
+
+    <!--        </RelativeLayout>-->
+
+    <!--    </LinearLayout>-->
+
+    <!--</layout>-->
