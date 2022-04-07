@@ -8,9 +8,15 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="colorPrimary">#00445B</color>
-    <color name="colorPrimaryDark">#00445B</color>
+<!--    <color name="colorPrimary">#00445B</color>-->
+<!--    <color name="colorPrimaryDark">#00445B</color>-->
+<!--    <color name="colorAccent">#007CB0</color>-->
+
+    <color name="colorPrimary">#077BD6</color>
+    <color name="colorPrimaryDark">#077BD6</color>
     <color name="colorAccent">#007CB0</color>
+
+
     <color name="wallet_holo_blue_light">#ff33b5e5</color>
 
     <item name="font_color" type="color">#333D47</item>

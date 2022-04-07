@@ -108,7 +108,8 @@ public class LoginActivity extends BaseActivity {
         String userID = binding.edtID.getText().toString();
         if(userID.isEmpty()) {
             binding.tlID.setErrorEnabled(true);
-            binding.tlID.setError("아이디를 입력해주세요.");
+            //binding.tlID.setError("아이디를 입력해주세요.");
+            binding.tlID.setError(" ");
         }
         else {
             binding.tlID.setError(null);
@@ -121,7 +122,8 @@ public class LoginActivity extends BaseActivity {
         String passWord = binding.edtPW.getText().toString();
         if(passWord.isEmpty()){
             binding.tlPW.setErrorEnabled(true);
-            binding.tlPW.setError("패스워드를 입력해주세요.");
+            //binding.tlPW.setError("패스워드를 입력해주세요.");
+            binding.tlPW.setError(" ");
         }
         else {
             binding.tlPW.setError(null);

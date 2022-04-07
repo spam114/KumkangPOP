@@ -48,7 +48,8 @@
         <activity
             android:name="com.symbol.kumkangpop.view.activity.LoginActivity"
             tools:ignore="LockedOrientationActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
         </activity>
 
         <provider
