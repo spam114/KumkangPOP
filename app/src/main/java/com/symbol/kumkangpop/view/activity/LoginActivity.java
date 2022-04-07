@@ -32,6 +32,7 @@ public class LoginActivity extends BaseActivity {
         binding.tlPW.setErrorEnabled(true);
         backpressed = new BackPressControl(this);
         initEvent();
+        int a=3;
         observerViewModel();
     }
 
