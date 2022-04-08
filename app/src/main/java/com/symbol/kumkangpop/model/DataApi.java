@@ -17,16 +17,20 @@ public interface DataApi {
     @POST("getDongProgressFloorReturn")
     Single<List<Dong>> getCountries(@Body SearchCondition searchCondition);
 
-    @POST("checkAppVersionNew")
-    Single<List<AppVersion>> checkAppVersion(@Body SearchCondition searchCondition);
+    @POST("CheckAppVersion")
+    Single<AppVersion> CheckAppVersion(@Body SearchCondition searchCondition);
 
     @POST("checkAppProgramsPowerAndLoginHistory")
     Single<List<AppVersion>> checkAppProgramsPowerAndLoginHistory(@Body SearchCondition searchCondition);
 
-    @POST("insertAppLoginHistory")
-    Single<List<AppVersion>> insertAppLoginHistory(@Body SearchCondition searchCondition);
+    @POST("InsertAppLoginHistory")
+    Single<AppVersion> InsertAppLoginHistory(@Body SearchCondition searchCondition);
 
     @POST("GetLoginInfoData")
-    Single<List<LoginInfo>> GetLoginInfoData(@Body SearchCondition searchCondition);
+    Single<LoginInfo> GetLoginInfoData(@Body SearchCondition searchCondition);
+
+    //GetNoticeData
+    @POST("GetNoticeData2")
+    Single<Object> GetNoticeData2(@Body SearchCondition searchCondition);
 }
 

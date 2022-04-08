@@ -43,7 +43,7 @@ public class ProgressFloorReturnActivity extends BaseActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                progressOFF2(this.getClass().getName());
+                progressOFF2();
             }
         }, 5000);
         progressON("Loading...", handler);
@@ -123,7 +123,7 @@ public class ProgressFloorReturnActivity extends BaseActivity {
                    // countriesList.setVisibility(View.GONE);
                 }
                 else{
-                    progressOFF();
+                    progressOFF2();
                 }
             }
         });

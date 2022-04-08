@@ -10,19 +10,20 @@ public class LoginInfo {
     @SerializedName("UserName")
     public String UserName="";
 
-    //downloadUrl
-    @SerializedName("PassWord")
-    public String PassWord="";
+    @SerializedName("DeptCode")
+    public int DeptCode;
 
-    //serverVersion
     @SerializedName("CustomerCode")
     public String CustomerCode="";
 
-    @SerializedName("DeptCode")
-    public String DeptCode="";
-
     @SerializedName("BusinessClassCode")
-    public String BusinessClassCode="";
+    public int BusinessClassCode;
+
+    @SerializedName("Gboutsourcing")
+    public boolean Gboutsourcing;
+
+    @SerializedName("PassWord")
+    public String PassWord="";
 
     @SerializedName("DeptName")
     public String DeptName="";

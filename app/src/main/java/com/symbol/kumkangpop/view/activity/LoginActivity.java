@@ -1,6 +1,7 @@
 package com.symbol.kumkangpop.view.activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -25,14 +26,12 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
         binding.tlID.setErrorEnabled(true);
         binding.tlPW.setErrorEnabled(true);
         backpressed = new BackPressControl(this);
         initEvent();
-        int a=3;
         observerViewModel();
     }
 
@@ -134,25 +133,48 @@ public class LoginActivity extends BaseActivity {
     }
 
     public void observerViewModel(){
-        loginViewModel.loginInfoList.observe(this, models-> {
+        //성공, 실패 여부
+        loginViewModel.loadError.observe(this, models-> {
             if(models != null){
-                String errorCheck = models.get(0).ErrorCheck;
-                if(errorCheck != null) { // 에러 발생 (1.유저정보x, 2.비밀번호 불일치, 3.server Error)
-                    Toast.makeText(this, errorCheck, Toast.LENGTH_LONG).show();
-                    finish();
-                }
-                else { // POP 계정 존재
+                if(!models){//성공
                     Intent intent = new Intent(this, MainActivity.class);
                     startActivity(intent);
                 }
             }
-            else{
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_LONG).show();
-                finish();
+        });
+
+        //에러메시지
+        loginViewModel.errorMsg.observe(this, models-> {
+            if(models != null){
+                Toast.makeText(this, models, Toast.LENGTH_LONG).show();
+                progressOFF2();
             }
         });
 
+        loginViewModel.loading.observe(this, isLoading -> {
+            if (isLoading!= null){
+                if (isLoading){//로딩중
+                    startProgress();
+                }
+                else{//로딩끝
+                    progressOFF2();
+                }
+            }
+        });
+
+
     }
+    private void startProgress() {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                progressOFF2();
+            }
+        }, 5000);
+        progressON("Loading...", handler);
+    }
+
     @Override
     public void onBackPressed() {
         backpressed.onBackPressed();

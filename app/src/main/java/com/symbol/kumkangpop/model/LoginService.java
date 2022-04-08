@@ -30,7 +30,8 @@ public class LoginService {
     public static LoginService getInstance() { // getInstance 호출 시 본인 객체를 반환하며 api 서버 객체를 생성한다.
         if (instance == null) {
             instance = new LoginService();
-            OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
+            //통신 에러로그 확인을 위한 코드
+            /*OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             clientBuilder.addInterceptor(loggingInterceptor);
@@ -40,14 +41,14 @@ public class LoginService {
                     .addConverterFactory(GsonConverterFactory.create()) // json 데이터를 java object로 변형해줌
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .build()
-                    .create(DataApi.class);
+                    .create(DataApi.class);*/
         }
         return instance;
     }
 
     // api가 인터페이스로 존재하는데 해당 인터페이스를 통해 서버와 연결하여 checkAppVersion 으로 연결되어있는 서버 함수를 호출한다.
     // POP 로그인 정보를 확인한다.
-    public Single<List<LoginInfo>> GetLoginInfoData(SearchCondition searchCondition) {// 객체의 사용//todo
+    public Single <LoginInfo> GetLoginInfoData(SearchCondition searchCondition) {// 객체의 사용//todo
         return api.GetLoginInfoData(searchCondition);//todo
     }
 }

@@ -23,12 +23,9 @@ public class BaseActivity extends AppCompatActivity {
         ApplicationClass.getInstance().progressON(this, message, handler);
     }
 
-    public void progressOFF2(String className) {
-        ApplicationClass.getInstance().progressOFF2(className);
+    public void progressOFF2() {
+        ApplicationClass.getInstance().progressOFF2();
     }
 
-    public void progressOFF() {
-        ApplicationClass.getInstance().progressOFF();
-    }
 
 }

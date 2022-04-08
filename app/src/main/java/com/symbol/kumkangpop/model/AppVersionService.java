@@ -27,7 +27,9 @@ public class AppVersionService {
     public static AppVersionService getInstance() {
         if (instance == null) {
             instance = new AppVersionService();
-              OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
+            
+            //통신에러 로그 확인을 위한 코드
+            /*OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             clientBuilder.addInterceptor(loggingInterceptor);
@@ -37,21 +39,21 @@ public class AppVersionService {
                     .addConverterFactory(GsonConverterFactory.create()) // json 데이터를 java object로 변형해줌
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .build()
-                    .create(DataApi.class);
+                    .create(DataApi.class);*/
         }
         return instance;
     }
 
-    public Single<List<AppVersion>> checkAppVersion(SearchCondition searchCondition) {// 객체의 사용//todo
-        return api.checkAppVersion(searchCondition);//todo
+    public Single<AppVersion> CheckAppVersion(SearchCondition searchCondition) {// 객체의 사용//todo
+        return api.CheckAppVersion(searchCondition);//todo
     }
 
     public Single<List<AppVersion>> checkAppProgramsPowerAndLoginHistory(SearchCondition searchCondition) {// 객체의 사용//todo
         return api.checkAppProgramsPowerAndLoginHistory(searchCondition);//todo
     }
 
-    //insertAppLoginHistory
-    public Single<List<AppVersion>> insertAppLoginHistory(SearchCondition searchCondition) {// 객체의 사용//todo
-        return api.insertAppLoginHistory(searchCondition);//todo
+    //InsertAppLoginHistory
+    public Single<AppVersion> InsertAppLoginHistory(SearchCondition searchCondition) {// 객체의 사용//todo
+        return api.InsertAppLoginHistory(searchCondition);//todo
     }
 }

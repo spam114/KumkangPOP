@@ -7,34 +7,18 @@ public class AppVersion {
     @SerializedName("ErrorCheck")
     public String ErrorCheck="";
 
-    //downloadUrl
-    @SerializedName("Message")
-    public String Message="";
+    @SerializedName("AppCode")
+    public String AppCode="";
 
-    //serverVersion
-    @SerializedName("ResultCode")
-    public String ResultCode="";
+    @SerializedName("AppName")
+    public String AppName="";
 
-    @SerializedName("UserName")
-    public String UserName="";
+    @SerializedName("AppVersion")
+    public String AppVersion="";
 
-    @SerializedName("UserID")
-    public String UserID="";
+    @SerializedName("AppUrl")
+    public String AppUrl="";
 
-    @SerializedName("CustomerCode")
-    public String CustomerCode="";
-
-    @SerializedName("DeptCode")
-    public String DeptCode="";
-
-    @SerializedName("DeptName")
-    public String DeptName="";
-
-    @SerializedName("Authority")
-    public String Authority="";
-
-    @SerializedName("AuthorityName")
-    public String AuthorityName="";
-
-
+    @SerializedName("Remark")
+    public String Remark="";
 }
