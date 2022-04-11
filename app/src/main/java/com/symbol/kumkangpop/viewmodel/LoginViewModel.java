@@ -7,6 +7,8 @@ import com.symbol.kumkangpop.model.LoginService;
 import com.symbol.kumkangpop.model.SearchCondition;
 import com.symbol.kumkangpop.model.object.LoginInfo;
 import com.symbol.kumkangpop.model.object.Users;
+import com.symbol.kumkangpop.view.PreferenceManager;
+import com.symbol.kumkangpop.view.activity.MainActivity;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;

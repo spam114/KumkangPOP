@@ -165,7 +165,7 @@
                         android:id="@+id/checkAuto"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:checked="true"
+                        android:checked="false"
                         android:text="로그인 유지"
                         android:textColor="#7A7A7A"
                         android:textSize="12dp"

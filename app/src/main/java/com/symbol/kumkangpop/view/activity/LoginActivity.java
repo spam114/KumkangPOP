@@ -15,6 +15,7 @@ import com.symbol.kumkangpop.R;
 import com.symbol.kumkangpop.databinding.ActivityLoginBinding;
 import com.symbol.kumkangpop.model.SearchCondition;
 import com.symbol.kumkangpop.view.BackPressControl;
+import com.symbol.kumkangpop.view.PreferenceManager;
 import com.symbol.kumkangpop.viewmodel.LoginViewModel;
 
 public class LoginActivity extends BaseActivity {
@@ -33,6 +34,17 @@ public class LoginActivity extends BaseActivity {
         backpressed = new BackPressControl(this);
         initEvent();
         observerViewModel();
+        LoginByAutoFlag();
+    }
+
+    private void LoginByAutoFlag() {
+        boolean autoLoginFlag = PreferenceManager.getBoolean(this, "AutoLogin");
+        if(autoLoginFlag){
+            SearchCondition sc= new SearchCondition();
+            sc.UserID = PreferenceManager.getString(this, "ID");
+            sc.PassWord = PreferenceManager.getString(this, "PW");
+            loginViewModel.GetLoginInfoData(sc);
+        }
     }
 
     private void initEvent(){
@@ -91,16 +103,7 @@ public class LoginActivity extends BaseActivity {
         sc.UserID = CheckInputLoginUserID(); // 아이디 공백 확인
         sc.PassWord = CheckInputLoginPassword(); // 패스워드 공백 확인
         if(sc.UserID.equals("")||sc.PassWord.equals(""))return;
-        // 자동로그인 체크 여부
-        //users.AutoLogin = loginBinding.checkAuto.isChecked();
         loginViewModel.GetLoginInfoData(sc);
-        // 자동로그인 체크 여부
-        //users.AutoLogin = loginBinding.checkAuto.isChecked();
-
-        // ViewModel 호출
-        // 로그인 실시
-        //loginViewModel.loginInfo();
-        //observerViewModel();
     }
 
     // 로그인 시 ID와 Password가 공백인지 확인한다.
@@ -137,8 +140,14 @@ public class LoginActivity extends BaseActivity {
         loginViewModel.loadError.observe(this, models-> {
             if(models != null){
                 if(!models){//성공
+                    if(binding.checkAuto.isChecked()) {
+                        PreferenceManager.setBoolean(this, "AutoLogin", true);
+                        PreferenceManager.setString(this, "ID", binding.edtID.getText().toString());
+                        PreferenceManager.setString(this, "PW", binding.edtPW.getText().toString());
+                    }
                     Intent intent = new Intent(this, MainActivity.class);
                     startActivity(intent);
+                    finish();
                 }
             }
         });
@@ -147,6 +156,9 @@ public class LoginActivity extends BaseActivity {
         loginViewModel.errorMsg.observe(this, models-> {
             if(models != null){
                 Toast.makeText(this, models, Toast.LENGTH_LONG).show();
+                PreferenceManager.setBoolean(this, "AutoLogin", false);
+                PreferenceManager.setString(this, "ID", "");
+                PreferenceManager.setString(this, "PW", "");
                 progressOFF2();
             }
         });

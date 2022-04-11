@@ -34,6 +34,7 @@ import androidx.viewbinding.BuildConfig;
 import com.symbol.kumkangpop.R;
 import com.symbol.kumkangpop.databinding.ActivitySplashScreenBinding;
 import com.symbol.kumkangpop.model.object.Users;
+import com.symbol.kumkangpop.view.PreferenceManager;
 import com.symbol.kumkangpop.viewmodel.AppVersionViewModel;
 
 import java.io.File;
@@ -91,7 +92,6 @@ public class SplashScreenActivity extends BaseActivity {
                 } else {
                     CheckPermission();
                 }
-
             } else {
                 finish();
             }
@@ -99,18 +99,18 @@ public class SplashScreenActivity extends BaseActivity {
         viewModel.userDataList.observe(this, models -> {
             // 데이터 값이 변할 때마다 호출된다.
             if (models != null) {
-                Intent intent = new Intent(SplashScreenActivity.this, LoginActivity.class);
+                Intent intent;
+                intent = new Intent(SplashScreenActivity.this, LoginActivity.class);
                 startActivity(intent);
-
             } else {
                 Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_LONG).show();
-                finish();
             }
+            finish();
         });
 
         //에러발생
-        viewModel.errorMsg.observe(this, models-> {
-            if(models != null){
+        viewModel.errorMsg.observe(this, models -> {
+            if (models != null) {
                 Toast.makeText(this, models, Toast.LENGTH_LONG).show();
                 progressOFF2();
             }
