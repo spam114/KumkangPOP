@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">KumkangPOP</string>
     <string name="service_address">http://211.245.239.53:2224/Service/json/</string>
-    <string name="product_dbname">ERP_Total</string>
+    <string name="product_dbname">ERP_Total_TEST</string>
     <string name="KMURL">Default</string>
-    <string name="SDBN">Erp_Total</string>
+    <string name="SDBN">ERP_Total_TEST</string>
     <string name="app_code">8</string>
-
+    <string name="qr_state_common">TAG를 인식해주세요.</string>
 
 </resources>

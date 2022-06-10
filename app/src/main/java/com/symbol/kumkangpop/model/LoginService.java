@@ -51,4 +51,8 @@ public class LoginService {
     public Single <LoginInfo> GetLoginInfoData(SearchCondition searchCondition) {// 객체의 사용//todo
         return api.GetLoginInfoData(searchCondition);//todo
     }
+
+    public Single <LoginInfo> GetPrintPCData(SearchCondition searchCondition) {// 객체의 사용//todo
+        return api.GetPrintPCData(searchCondition);//todo
+    }
 }

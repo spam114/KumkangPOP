@@ -1,46 +1,25 @@
 package com.symbol.kumkangpop.view.adapter;
 
-import android.app.Activity;
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.os.AsyncTask;
-import android.os.Handler;
-import android.view.HapticFeedbackConstants;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.symbol.kumkangpop.R;
 import com.symbol.kumkangpop.databinding.RowProgressFloorReturnBinding;
 import com.symbol.kumkangpop.model.object.Dong;
-import com.symbol.kumkangpop.model.RequestHttpURLConnection;
-import com.symbol.kumkangpop.view.application.ApplicationClass;
-import com.symbol.kumkangpop.view.edittext.BackPressEditText;
-import com.symbol.kumkangpop.view.Interface.BaseActivityInterface;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ProgressFloorReturnViewAdapter extends RecyclerView.Adapter<ProgressFloorReturnViewAdapter.ViewHolder> {
 
-   /* Context context;
-    LinearLayout layoutTop;
-    String contractNo;
-    String fromDate;*/
+    /* Context context;
+     LinearLayout layoutTop;
+     String contractNo;
+     String fromDate;*/
     private ArrayList<Dong> items = new ArrayList<>();
 
     public ProgressFloorReturnViewAdapter(ArrayList<Dong> items) {
@@ -56,7 +35,7 @@ public class ProgressFloorReturnViewAdapter extends RecyclerView.Adapter<Progres
         this.fromDate = fromDate;
     }*/
 
-    public void updateAdapter(ArrayList<Dong> newCountries){
+    public void updateAdapter(ArrayList<Dong> newCountries) {
         items.clear();
         items.addAll(newCountries);
         notifyDataSetChanged();
@@ -90,7 +69,7 @@ public class ProgressFloorReturnViewAdapter extends RecyclerView.Adapter<Progres
 
         public ViewHolder(RowProgressFloorReturnBinding binding) {
             super(binding.getRoot());
-            this.binding=binding;
+            this.binding = binding;
         }
 
         public void setItem(Dong item, int position) {

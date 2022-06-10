@@ -27,4 +27,10 @@ public class LoginInfo {
 
     @SerializedName("DeptName")
     public String DeptName="";
+
+    @SerializedName("PCCode")
+    public String PCCode="";
+
+    @SerializedName("PCName")
+    public String PCName="";
 }

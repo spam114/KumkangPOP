@@ -39,6 +39,45 @@ public class SearchCondition {
     @SerializedName("PassWord")
     public String PassWord;
 
+    @SerializedName("BusinessClassCode")
+    public int BusinessClassCode;
+
+    @SerializedName("CustomerCode")
+    public String CustomerCode;
+
+    @SerializedName("SaleOrderNo")
+    public String SaleOrderNo;
+
+    @SerializedName("PCCode")
+    public String PCCode;
+
+    @SerializedName("InDate")
+    public String InDate;
+
+    @SerializedName("DeptCode")
+    public String DeptCode;
+
+    @SerializedName("StockInType")
+    public int StockInType;
+
+    @SerializedName("CheckType")
+    public int CheckType;
+
+    @SerializedName("ShortNo")
+    public String ShortNo;
+
+    @SerializedName("SearchYear")
+    public int SearchYear;
+
+    @SerializedName("SearchMonth")
+    public int SearchMonth;
+
+    @SerializedName("SearchDay")
+    public int SearchDay;
+
+    @SerializedName("PartCode")
+    public String PartCode;
+
     public SearchCondition(){}
 
 }

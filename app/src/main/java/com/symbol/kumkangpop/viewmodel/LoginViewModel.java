@@ -29,7 +29,6 @@ public class LoginViewModel extends ViewModel {
     // Single 객체를 가로채기 위함
     private CompositeDisposable disposable = new CompositeDisposable();
 
-    // 로그인 확인 후 에러메시지를 출력하기 위한 변수로 사용
     public MutableLiveData<LoginInfo> loginInfo = new MutableLiveData<>();//todo
 
     // 로그인 정보 호출
@@ -56,7 +55,7 @@ public class LoginViewModel extends ViewModel {
                                 Users.CustomerCode = models.CustomerCode;
                                 Users.BusinessClassCode = models.BusinessClassCode;
                                 Users.Gboutsourcing = models.Gboutsourcing;
-
+                                Users.UserID=sc.UserID;
                             }
 
                             @Override
@@ -69,4 +68,40 @@ public class LoginViewModel extends ViewModel {
                         })
         );
     }
+
+
+    public void GetPrintPCData(SearchCondition sc) {
+        loading.setValue(true);
+        disposable.add(
+                service.GetPrintPCData(sc) // POP 로그인 정보를 확인한다.
+                        .subscribeOn(Schedulers.newThread()) // 새로운 스레드에서 통신한다.
+                        .observeOn(AndroidSchedulers.mainThread()) // 응답 값을 가지고 ui update를 하기 위해 필요함, 메인스레드와 소통하기 위
+                        .subscribeWith(new DisposableSingleObserver<LoginInfo>() {//todo
+
+                            @Override
+                            public void onSuccess(@NonNull LoginInfo models) {//todo
+                                if (models.ErrorCheck != null) {
+                                    //errorMsg.setValue(models.ErrorCheck);
+                                    //loadError.setValue(true);
+                                    //loading.setValue(false);
+                                    return;
+                                }
+                                //loadError.setValue(false);
+                                //loading.setValue(false);
+                                Users.PCCode = models.PCCode;
+                                Users.PCName = models.PCName;
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                //errorMsg.setValue("서버 오류 발생");
+                                //loadError.setValue(true);
+                                //loading.setValue(false);
+                                //e.printStackTrace();
+                            }
+                        })
+        );
+    }
+
+
 }

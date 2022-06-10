@@ -97,7 +97,6 @@ public class ApplicationClass extends Application {
             progressDialog.setCancelable(false);
             progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
             progressDialog.setContentView(R.layout.progress_loading);
-            Log.i("로딩바ON", activity.getClass().getName());
             progressDialog.show();
         }
         final ImageView img_loading_frame = (ImageView) progressDialog.findViewById(R.id.iv_frame_loading);
@@ -126,7 +125,6 @@ public class ApplicationClass extends Application {
             progressDialog.setCancelable(false);
             progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
             progressDialog.setContentView(R.layout.progress_loading);
-            Log.i("로딩바ON", activity.getClass().getName());
             progressDialog.show();
         }
         final ImageView img_loading_frame = (ImageView) progressDialog.findViewById(R.id.iv_frame_loading);
@@ -179,5 +177,4 @@ public class ApplicationClass extends Application {
             this.handler.removeCallbacksAndMessages(null);
         }
     }
-
 }

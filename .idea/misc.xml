@@ -8,10 +8,31 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/JHLEE/Desktop/KumkangApp/KumkangPOP/app/src/main/res/drawable/baseline_logout_24.xml" value="0.135" />
+        <entry key="..\:/Users/JHLEE/Desktop/KumkangApp/KumkangPOP/app/src/main/res/drawable/baseline_menu_24.xml" value="0.133" />
+        <entry key="..\:/Users/JHLEE/Desktop/KumkangApp/KumkangPOP/app/src/main/res/drawable/baseline_menu_36.xml" value="0.1285" />
+        <entry key="..\:/Users/JHLEE/Desktop/KumkangApp/KumkangPOP/app/src/main/res/drawable/baseline_qr_code_24.xml" value="0.133" />
+        <entry key="..\:/Users/JHLEE/Desktop/KumkangApp/KumkangPOP/app/src/main/res/drawable/borderline.xml" value="0.133" />
+        <entry key="..\:/Users/JHLEE/Desktop/KumkangApp/KumkangPOP/app/src/main/res/drawable/borderline2.xml" value="0.133" />
+        <entry key="..\:/Users/JHLEE/Desktop/KumkangApp/KumkangPOP/app/src/main/res/drawable/borderline_top.xml" value="0.1285" />
+        <entry key="..\:/Users/JHLEE/Desktop/KumkangApp/KumkangPOP/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1285" />
+        <entry key="..\:/Users/JHLEE/Desktop/KumkangApp/KumkangPOP/app/src/main/res/drawable/ic_lock_black_24dp.xml" value="0.1285" />
+        <entry key="..\:/Users/JHLEE/Desktop/KumkangApp/KumkangPOP/app/src/main/res/drawable/icon_drive_file_rename.xml" value="0.112" />
+        <entry key="..\:/Users/JHLEE/Desktop/KumkangApp/KumkangPOP/app/src/main/res/drawable/keyboard-48px.xml" value="0.112" />
+        <entry key="..\:/Users/JHLEE/Desktop/KumkangApp/KumkangPOP/app/src/main/res/drawable/outline_dvr_24.xml" value="0.1285" />
+        <entry key="..\:/Users/JHLEE/Desktop/KumkangApp/KumkangPOP/app/src/main/res/layout/activity0000.xml" value="0.25" />
+        <entry key="..\:/Users/JHLEE/Desktop/KumkangApp/KumkangPOP/app/src/main/res/layout/activity9000.xml" value="0.25" />
+        <entry key="..\:/Users/JHLEE/Desktop/KumkangApp/KumkangPOP/app/src/main/res/layout/activity9100.xml" value="0.2" />
         <entry key="..\:/Users/JHLEE/Desktop/KumkangApp/KumkangPOP/app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="..\:/Users/JHLEE/Desktop/KumkangApp/KumkangPOP/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Users/JHLEE/Desktop/KumkangApp/KumkangPOP/app/src/main/res/layout/activity_splash_screen.xml" value="0.209375" />
+        <entry key="..\:/Users/JHLEE/Desktop/KumkangApp/KumkangPOP/app/src/main/res/layout/dialog_key_in.xml" value="0.25" />
         <entry key="..\:/Users/JHLEE/Desktop/KumkangApp/KumkangPOP/app/src/main/res/layout/dialog_notice.xml" value="0.25" />
+        <entry key="..\:/Users/JHLEE/Desktop/KumkangApp/KumkangPOP/app/src/main/res/layout/row9000.xml" value="0.25" />
+        <entry key="..\:/Users/JHLEE/Desktop/KumkangApp/KumkangPOP/app/src/main/res/layout/row_progress_floor_return.xml" value="0.234375" />
+        <entry key="..\:/Users/JHLEE/Desktop/KumkangApp/KumkangPOP/app/src/main/res/layout/spinner_business.xml" value="0.23052536231884058" />
+        <entry key="..\:/Users/JHLEE/Desktop/KumkangApp/KumkangPOP/app/src/main/res/layout/spinner_spinner1_normal.xml" value="0.209375" />
+        <entry key="..\:/Users/JHLEE/Desktop/KumkangApp/KumkangPOP/app/src/main/res/menu/menu_toolbar.xml" value="0.67" />
       </map>
     </option>
   </component>

@@ -27,5 +27,5 @@ public class BaseActivity extends AppCompatActivity {
         ApplicationClass.getInstance().progressOFF2();
     }
 
-
+    public void getKeyInResult(String result){}
 }
