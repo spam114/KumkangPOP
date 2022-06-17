@@ -18,7 +18,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/borderline_top2">
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -26,53 +27,43 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:layout_width="75dp"
-                android:layout_height="75dp"
-                android:background="@android:color/transparent"
-                android:elevation="1dp"
-                android:src="@drawable/img_kumkanglogo_only"
-                app:layout_constraintBottom_toBottomOf="@id/layout_bg"
+                android:id="@+id/imvBG"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:adjustViewBounds="true"
+                android:gravity="bottom|center"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                app:layout_constraintBottom_toTopOf="@+id/layout1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/layout_bg" />
-
-            <LinearLayout
-                android:id="@+id/layout_bg"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:background="@drawable/bg_login_erection"
-                android:gravity="bottom|center"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toTopOf="@+id/layout1"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:layout_editor_absoluteX="411dp"
-                app:layout_constraintVertical_weight="4"
-                >
+                app:layout_constraintVertical_weight="3.3"
+                app:srcCompat="@drawable/logo3">
 
-            </LinearLayout>
+            </ImageView>
 
             <LinearLayout
                 android:id="@+id/layout1"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:background="@drawable/border_logain"
                 android:orientation="vertical"
                 android:weightSum="11"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/layout_bg"
-                app:layout_constraintVertical_weight="6"
+                app:layout_constraintTop_toBottomOf="@+id/imvBG"
+                app:layout_constraintVertical_weight="6.7"
                 tools:layout_editor_absoluteX="0dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="2"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1.5"
                     android:gravity="bottom|center"
                     android:text="Welcome to Kumkang Application"
                     android:textColor="#077BD6"
                     android:textSize="15dp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="10dp"/>
+                    android:textStyle="bold" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tlID"
@@ -187,6 +178,17 @@
                     android:onClick="btnLoginClick"
                     android:text="로그인"
                     android:textColor="@color/white"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center|top"
+                    android:text="AL-FORM SYSTEM"
+                    android:textColor="#000000"
                     android:textSize="15dp"
                     android:textStyle="bold" />
 

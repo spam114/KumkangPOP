@@ -1,14 +1,15 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light">
         <!-- Customize your theme here. -->
         <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
-
         <item name="android:statusBarColor" targetApi="l">@color/white</item><!--상태바 흰색, 아이콘 검정-->
         <item name="android:windowLightStatusBar" targetApi="m">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <style name="AppTheme2" parent="Theme.AppCompat.Light">
@@ -16,9 +17,11 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:statusBarColor" targetApi="l">@color/white</item><!--상태바 흰색, 아이콘 검정-->
+        <item name="android:windowLightStatusBar" targetApi="m">true</item>
         <!-- No Title Bar-->
-        <!--<item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>-->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <style name="Theme.ComplaintImageActivity" parent="Theme.AppCompat.Light.Dialog.Alert">
@@ -36,13 +39,18 @@
         <item name="materialAlertDialogBodyTextStyle">@style/BodyMaterialAlertDialog.MaterialComponents.Body.Text</item>
         <item name="android:textSize">14sp</item>
     </style>
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar">
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
     <style name="TextInputEditTextStyle">
         <item name="android:textStyle">normal</item>
         <item name="android:includeFontPadding">false</item>
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">@color/black</item>
     </style>
-
+    <style name="NavigationStyle" parent="Widget.Design.NavigationView">
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
 </resources>

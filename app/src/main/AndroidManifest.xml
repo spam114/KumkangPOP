@@ -14,7 +14,7 @@
     <application
         android:name="com.symbol.kumkangpop.view.application.ApplicationClass"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/logo2"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -42,6 +42,16 @@
         </activity>
         <activity
             android:name="com.symbol.kumkangpop.view.activity.menu0.Activity0000"
+            tools:ignore="LockedOrientationActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.symbol.kumkangpop.view.activity.menu1.Activity1000"
+            tools:ignore="LockedOrientationActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.symbol.kumkangpop.view.activity.menu1.Activity1100"
             tools:ignore="LockedOrientationActivity"
             android:screenOrientation="portrait">
         </activity>

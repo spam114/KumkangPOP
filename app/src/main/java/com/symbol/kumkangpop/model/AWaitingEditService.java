@@ -37,6 +37,11 @@ public class AWaitingEditService {
         return api.GetAWaitingPartSpecForEdit(sc);
     }
 
+    public Single<String> UpdateShortData(SearchCondition sc) {
+        return api.UpdateShortData(sc);
+    }
+
+
     /*public Single<List<Object>> GetSimpleDataList(String apiName) {
         SearchCondition sc = new SearchCondition();
         if (apiName.equals("GetBusinessClassData")) {

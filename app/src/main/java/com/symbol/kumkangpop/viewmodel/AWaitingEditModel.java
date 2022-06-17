@@ -23,6 +23,7 @@ public class AWaitingEditModel extends ViewModel {
     public MutableLiveData<Boolean> loading = new MutableLiveData<>();
     // 에러메시지
     public MutableLiveData<String> errorMsg = new MutableLiveData<>();
+    public MutableLiveData<String> resultMsg = new MutableLiveData<>();
     // 서버 객체 호출 : api를 통해 서버와 연결된다.
     public AWaitingEditService service = AWaitingEditService.getInstance();
     // Single 객체를 가로채기 위함
@@ -81,6 +82,38 @@ public class AWaitingEditModel extends ViewModel {
                         }*/
                         partSpecList.setValue(models);
                         loadError.setValue(false);
+                        loading.setValue(false);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        errorMsg.setValue("서버 오류 발생");
+                        loadError.setValue(true);
+                        loading.setValue(false);
+                        e.printStackTrace();
+                    }
+                })
+        );
+    }
+
+
+    public void UpdateShortData(SearchCondition sc) {
+
+        loading.setValue(true);
+        disposable.add(service.UpdateShortData(sc)
+                .subscribeOn(Schedulers.newThread()) // 새로운 스레드에서 통신한다.
+                .observeOn(AndroidSchedulers.mainThread()) // 응답 값을 가지고 ui update를 하기 위해 필요함, 메인스레드와 소통하기 위
+                .subscribeWith(new DisposableSingleObserver<String>() {
+                    @Override
+                    public void onSuccess(@NonNull String models) {
+                        if (!models.equals("success")) {
+                            errorMsg.setValue(models);
+                            loadError.setValue(true);
+                        }
+                        else{
+                            resultMsg.setValue("저장되었습니다.");
+                            loadError.setValue(false);
+                        }
                         loading.setValue(false);
                     }
 

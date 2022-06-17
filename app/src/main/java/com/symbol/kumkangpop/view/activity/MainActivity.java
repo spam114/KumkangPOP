@@ -1,23 +1,29 @@
 package com.symbol.kumkangpop.view.activity;
 
-import android.content.ClipData;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.andremion.floatingnavigationview.FloatingNavigationView;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.symbol.kumkangpop.R;
@@ -31,6 +37,7 @@ import com.symbol.kumkangpop.view.CommonMethod;
 import com.symbol.kumkangpop.view.PreferenceManager;
 import com.symbol.kumkangpop.view.TypeChanger;
 import com.symbol.kumkangpop.view.activity.menu0.Activity0000;
+import com.symbol.kumkangpop.view.activity.menu1.Activity1000;
 import com.symbol.kumkangpop.view.activity.menu9.Activity9000;
 import com.symbol.kumkangpop.viewmodel.SimpleDataViewModel;
 
@@ -41,20 +48,32 @@ public class MainActivity extends BaseActivity {
     SimpleDataViewModel simpleDataViewModel;
     BackPressControl backpressed;
     ArrayAdapter businessAdapter;
+    private ActivityResultLauncher<Intent> resultLauncher;
+    private FloatingNavigationView mFloatingNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        init();
+    }
+    private void init(){
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         simpleDataViewModel = new ViewModelProvider(this).get(SimpleDataViewModel.class);
         simpleDataViewModel.GetSimpleData("GetNoticeData2");
         setBar();
         setListener();
+        setFloatingNavigationView();
+        setResultLauncher();
         observerViewModel();
         backpressed = new BackPressControl(this);
         if (Users.Gboutsourcing)
             binding.button6.setVisibility(View.GONE);//외주처의 경우 출고검수 사용금지
+        binding.constraintLayout.setVisibility(View.GONE);
+        binding.constraintLayout3.setVisibility(View.GONE);
+        binding.constraintLayout4.setVisibility(View.GONE);
+        binding.constraintLayout5.setVisibility(View.GONE);
     }
+
 
     private void setListener() {
         binding.button.setOnClickListener(new View.OnClickListener() {//제품포장
@@ -69,6 +88,14 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, Activity9000.class);
+                startActivity(intent);
+            }
+        });
+
+        binding.button10.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, Activity1000.class);
                 startActivity(intent);
             }
         });
@@ -174,23 +201,59 @@ public class MainActivity extends BaseActivity {
     /**
      * 공용부분
      */
+
+    private void setFloatingNavigationView() {
+        mFloatingNavigationView = CommonMethod.setFloatingNavigationView(this);
+    }
+
+    private void setResultLauncher() {
+        resultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        /**
+                         * QR코드 시작
+                         */
+                        IntentResult intentResult = IntentIntegrator.parseActivityResult(result.getResultCode(), result.getData());
+                        if (intentResult.getContents() != null) {
+                            String scanResult = intentResult.getContents();
+                            Toast.makeText(MainActivity.this, scanResult, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        /**
+                         * QR코드 끝
+                         */
+
+
+                        if (result.getResultCode() == 100){
+
+                        }
+                    }
+                });
+    }
+
     private void setBar() {
         setSupportActionBar(binding.toolbar);
         CommonMethod.setBar(this);
     }
 
+    public void showFloatingNavigationView() {
+        mFloatingNavigationView.open();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         simpleDataViewModel.GetSimpleDataList("GetBusinessClassData");
-        return CommonMethod.onCreateOptionsMenu(this, menu);
+        return CommonMethod.onCreateOptionsMenu2(this, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return CommonMethod.onOptionsItemSelected(this, item);
+        return CommonMethod.onOptionsItemSelected(this, item, resultLauncher);
     }
 
-    @Override
+    /*@Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {//qr코드 리딩 결과
@@ -205,7 +268,7 @@ public class MainActivity extends BaseActivity {
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
-    }
+    }*/
 
     private void startProgress() {
         Handler handler = new Handler();

@@ -59,5 +59,8 @@ public interface DataApi {
     @POST("GetAWaitingPartSpecForEdit")
     Single<List<PartSpec>> GetAWaitingPartSpecForEdit(@Body SearchCondition searchCondition);
 
+    @POST("UpdateShortData")
+    Single<String> UpdateShortData(@Body SearchCondition searchCondition);
+
 }
 

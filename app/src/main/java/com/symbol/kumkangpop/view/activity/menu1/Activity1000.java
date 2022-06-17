@@ -1,4 +1,4 @@
-package com.symbol.kumkangpop.view.activity.menu9;
+package com.symbol.kumkangpop.view.activity.menu1;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -23,13 +23,13 @@ import com.andremion.floatingnavigationview.FloatingNavigationView;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.symbol.kumkangpop.R;
-import com.symbol.kumkangpop.databinding.Activity9000Binding;
+import com.symbol.kumkangpop.databinding.Activity1000Binding;
 import com.symbol.kumkangpop.model.SearchCondition;
 import com.symbol.kumkangpop.model.object.Users;
 import com.symbol.kumkangpop.view.CommonMethod;
 import com.symbol.kumkangpop.view.TypeChanger;
 import com.symbol.kumkangpop.view.activity.BaseActivity;
-import com.symbol.kumkangpop.view.adapter.Adapter9000;
+import com.symbol.kumkangpop.view.adapter.Adapter1000;
 import com.symbol.kumkangpop.viewmodel.RecyclerViewModel;
 import com.symbol.kumkangpop.viewmodel.SimpleDataViewModel;
 
@@ -37,11 +37,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
- * A급대기
+ * A급
  */
-public class Activity9000 extends BaseActivity {
-    Activity9000Binding binding;
-    Adapter9000 adapter;
+public class Activity1000 extends BaseActivity {
+    Activity1000Binding binding;
+    Adapter1000 adapter;
     RecyclerViewModel recyclerViewModel;
     SimpleDataViewModel simpleDataViewModel;
     private ActivityResultLauncher<Intent> resultLauncher;
@@ -64,7 +64,7 @@ public class Activity9000 extends BaseActivity {
     }
 
     private void init() {
-        binding = DataBindingUtil.setContentView(this, R.layout.activity9000);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity1000);
         simpleDataViewModel = new ViewModelProvider(this).get(SimpleDataViewModel.class);
         recyclerViewModel = new ViewModelProvider(this).get(RecyclerViewModel.class);
         final Calendar calendar = Calendar.getInstance();
@@ -72,12 +72,12 @@ public class Activity9000 extends BaseActivity {
         tmonth = calendar.get(Calendar.MONTH);
         tdate = calendar.get(Calendar.DATE);
         binding.txtFromDate.setText("[ " + tyear + "-" + (tmonth + 1) + "-" + tdate + " ]");
-        binding.txtTitle.setText("A급대기");
+        binding.txtTitle.setText("A급");
         setBar();
         setListener();
         setFloatingNavigationView();
         setResultLauncher();
-        adapter = new Adapter9000(new ArrayList<>(), this, resultLauncher);
+        adapter = new Adapter1000(new ArrayList<>(), this, resultLauncher);
         observerRecycler();
         observerSimpleData();
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -231,7 +231,7 @@ public class Activity9000 extends BaseActivity {
                             if (binding.rbNo.isChecked())//미확인 탭에 위치
                                 CheckAWaitingQR(scanResult);
                             else {//확인 탭에 위치
-                                GoActivity9100(scanResult);
+                                GoActivity1100(scanResult);
                             }
                             return;
                         }
@@ -261,7 +261,7 @@ public class Activity9000 extends BaseActivity {
         if (binding.rbNo.isChecked())//미확인 탭에 위치
             CheckAWaitingQR(result);
         else//확인 탭에 위치
-            GoActivity9100(result);
+            GoActivity1100(result);
     }
 
     @Override
@@ -274,8 +274,8 @@ public class Activity9000 extends BaseActivity {
         return CommonMethod.onOptionsItemSelected(this, item, resultLauncher);
     }
 
-    private void GoActivity9100(String result) {
-        Intent intent = new Intent(this, Activity9100.class);
+    private void GoActivity1100(String result) {
+        Intent intent = new Intent(this, Activity1100.class);
         intent.putExtra("result", result);
         resultLauncher.launch(intent);
     }

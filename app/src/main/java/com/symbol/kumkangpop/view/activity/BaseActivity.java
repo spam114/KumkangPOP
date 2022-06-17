@@ -28,4 +28,6 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void getKeyInResult(String result){}
+
+    public void showFloatingNavigationView(){}
 }

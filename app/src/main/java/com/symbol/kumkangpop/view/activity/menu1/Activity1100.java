@@ -1,4 +1,4 @@
-package com.symbol.kumkangpop.view.activity.menu9;
+package com.symbol.kumkangpop.view.activity.menu1;
 
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
@@ -25,7 +25,7 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.symbol.kumkangpop.R;
-import com.symbol.kumkangpop.databinding.Activity9100Binding;
+import com.symbol.kumkangpop.databinding.Activity1100Binding;
 import com.symbol.kumkangpop.model.SearchCondition;
 import com.symbol.kumkangpop.model.object.Part;
 import com.symbol.kumkangpop.model.object.PartSpec;
@@ -39,10 +39,10 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 /**
- * A급대기 Detail
+ * A급
  */
-public class Activity9100 extends BaseActivity {
-    Activity9100Binding binding;
+public class Activity1100 extends BaseActivity {
+    Activity1100Binding binding;
     SimpleDataViewModel simpleDataViewModel;
     AWaitingEditModel aWaitingEditModel;
     String tagNo;
@@ -59,7 +59,7 @@ public class Activity9100 extends BaseActivity {
 
     private void init() {
         setResult(100);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity9100);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity1100);
         stockIn = new StockIn();
         simpleDataViewModel = new ViewModelProvider(this).get(SimpleDataViewModel.class);
         aWaitingEditModel = new ViewModelProvider(this).get(AWaitingEditModel.class);
@@ -176,7 +176,7 @@ public class Activity9100 extends BaseActivity {
                 String output = edtTagNo.getText().toString();
 
                 if (output.equals("")) {
-                    Toast.makeText(Activity9100.this, msg, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Activity1100.this, msg, Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (type == 1) {//수량 확인 버튼

@@ -13,14 +13,14 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.symbol.kumkangpop.R;
-import com.symbol.kumkangpop.databinding.Row9000Binding;
+import com.symbol.kumkangpop.databinding.Row1000Binding;
 import com.symbol.kumkangpop.model.object.StockIn;
-import com.symbol.kumkangpop.view.activity.menu9.Activity9100;
+import com.symbol.kumkangpop.view.activity.menu1.Activity1100;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-public class Adapter9000 extends RecyclerView.Adapter<Adapter9000.ViewHolder> {
+public class Adapter1000 extends RecyclerView.Adapter<Adapter1000.ViewHolder> {
 
     /*
      LinearLayout layoutTop;
@@ -31,7 +31,7 @@ public class Adapter9000 extends RecyclerView.Adapter<Adapter9000.ViewHolder> {
     boolean confirmFlag;
     ActivityResultLauncher<Intent> resultLauncher;
 
-    public Adapter9000(ArrayList<StockIn> items, Context context, ActivityResultLauncher<Intent> resultLauncher) {
+    public Adapter1000(ArrayList<StockIn> items, Context context, ActivityResultLauncher<Intent> resultLauncher) {
         this.context=context;
         this.items = items;
         this.resultLauncher=resultLauncher;
@@ -62,8 +62,8 @@ public class Adapter9000 extends RecyclerView.Adapter<Adapter9000.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
-        Row9000Binding binding = DataBindingUtil.inflate(inflater, R.layout.row9000, viewGroup, false);
-        return new Adapter9000.ViewHolder(binding);
+        Row1000Binding binding = DataBindingUtil.inflate(inflater, R.layout.row1000, viewGroup, false);
+        return new Adapter1000.ViewHolder(binding);
     }
 
     @Override
@@ -80,10 +80,10 @@ public class Adapter9000 extends RecyclerView.Adapter<Adapter9000.ViewHolder> {
     //보통은 ViewHolder를 Static 으로 쓴다.
     //범용성을 위해서, 나는 제거함
     class ViewHolder extends RecyclerView.ViewHolder {
-        Row9000Binding binding;
+        Row1000Binding binding;
         //View row;
 
-        public ViewHolder(Row9000Binding binding) {
+        public ViewHolder(Row1000Binding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
@@ -109,15 +109,15 @@ public class Adapter9000 extends RecyclerView.Adapter<Adapter9000.ViewHolder> {
                 @Override
                 public void onClick(View v) {
                     if(confirmFlag)
-                        GoActivity9100(item.ShortNo);
+                        GoActivity1100(item.ShortNo);
                     //Toast.makeText(context, "Test", Toast.LENGTH_SHORT).show();
                 }
             });
 
         }
     }
-    private void GoActivity9100(String result){
-        Intent intent = new Intent(context, Activity9100.class);
+    private void GoActivity1100(String result){
+        Intent intent = new Intent(context, Activity1100.class);
         intent.putExtra("result", result);
         resultLauncher.launch(intent);
     }

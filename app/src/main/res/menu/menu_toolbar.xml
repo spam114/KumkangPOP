@@ -29,10 +29,5 @@
         android:enabled="true"
         android:icon="@drawable/baseline_qr_code_black_36"
         android:title="메뉴2"
-        app:showAsAction="always"
-        />
-
-
-
-
+        app:showAsAction="always"/>
 </menu>

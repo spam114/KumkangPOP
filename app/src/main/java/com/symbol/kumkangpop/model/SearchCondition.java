@@ -78,6 +78,24 @@ public class SearchCondition {
     @SerializedName("PartCode")
     public String PartCode;
 
+    @SerializedName("StockInNo")
+    public String StockInNo;
+
+    @SerializedName("PartSpec")
+    public String PartSpec;
+
+    @SerializedName("InQty")
+    public double InQty;
+
+    @SerializedName("ActualWeight")
+    public double ActualWeight;
+
+    @SerializedName("WorkingGroup")
+    public double WorkingGroup;
+
+    @SerializedName("WorkingMachine")
+    public double WorkingMachine;
+
     public SearchCondition(){}
 
 }

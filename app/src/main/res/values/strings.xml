@@ -1,10 +1,32 @@
 <resources>
-    <string name="app_name">KumkangPOP</string>
+    <string name="app_name">금강공업 음성공장</string>
     <string name="service_address">http://211.245.239.53:2224/Service/json/</string>
     <string name="product_dbname">ERP_Total_TEST</string>
     <string name="KMURL">Default</string>
     <string name="SDBN">ERP_Total_TEST</string>
     <string name="app_code">8</string>
     <string name="qr_state_common">TAG를 인식해주세요.</string>
+    <string name="price_format">%,2d</string>
+
+    <string name="developer">JH LEE</string>
+    <string name="website">https://github.com/spam114</string>
+    <string name="menu_item_import">Import</string>
+    <string name="menu_item_gallery">Gallery</string>
+    <string name="menu_item_slideshow">Slideshow</string>
+    <string name="menu_item_tools">Tools</string>
+    <string name="menu_group_communicate">Communicate</string>
+    <string name="menu_item_share">Share</string>
+    <string name="menu_item_send">Send</string>
+
+    <string name="menu1">제품포장</string>
+    <string name="menu2">번들생성</string>
+    <string name="menu3">재고이송</string>
+    <string name="menu4">재고이입</string>
+    <string name="menu5">제품출고</string>
+    <string name="menu6">출고검수</string>
+    <string name="menu7">자료수신</string>
+    <string name="menu8">자료송신</string>
+    <string name="menu9">A급대기</string>
+    <string name="menu10">A급</string>
 
 </resources>

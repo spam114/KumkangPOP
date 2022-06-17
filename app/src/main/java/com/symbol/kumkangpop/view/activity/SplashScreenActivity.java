@@ -34,7 +34,6 @@ import androidx.viewbinding.BuildConfig;
 import com.symbol.kumkangpop.R;
 import com.symbol.kumkangpop.databinding.ActivitySplashScreenBinding;
 import com.symbol.kumkangpop.model.object.Users;
-import com.symbol.kumkangpop.view.PreferenceManager;
 import com.symbol.kumkangpop.viewmodel.AppVersionViewModel;
 
 import java.io.File;
@@ -398,7 +397,7 @@ public class SplashScreenActivity extends BaseActivity {
         Intent intent = new Intent();
         intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);//putExtra(이름, 실제값)
         intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, "KUMKANGREADER");
-        intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(this, R.drawable.logo2));
+        intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, Intent.ShortcutIconResource.fromContext(this, R.drawable.logo3));
         //Intent.ShortcutIconResource.fromContext(context, R.drawable.img_kumkang);
         intent.putExtra("duplicate", false);
         intent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
