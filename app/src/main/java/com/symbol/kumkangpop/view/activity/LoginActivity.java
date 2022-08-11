@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.symbol.kumkangpop.R;
 import com.symbol.kumkangpop.databinding.ActivityLoginBinding;
 import com.symbol.kumkangpop.model.SearchCondition;
+import com.symbol.kumkangpop.model.object.Users;
 import com.symbol.kumkangpop.view.BackPressControl;
 import com.symbol.kumkangpop.view.PreferenceManager;
 import com.symbol.kumkangpop.viewmodel.LoginViewModel;
@@ -35,25 +36,27 @@ public class LoginActivity extends BaseActivity {
         backpressed = new BackPressControl(this);
         initEvent();
         observerViewModel();
-        LoginByAutoFlag();
-    }
-
-    private void GetPrintPCData() {
-        SearchCondition sc = new SearchCondition();
-        sc.PCCode = binding.edtPC.getText().toString();
-        loginViewModel.GetPrintPCData(sc);
-
-    }
-
-    private void LoginByAutoFlag() {
-        boolean autoLoginFlag = PreferenceManager.getBoolean(this, "AutoLogin");
-        if (autoLoginFlag) {
-            SearchCondition sc = new SearchCondition();
-            sc.UserID = PreferenceManager.getString(this, "ID");
-            sc.PassWord = PreferenceManager.getString(this, "PW");
-            loginViewModel.GetLoginInfoData(sc);
+        if(getIntent().getBooleanExtra("FirstFlag",true)){
+            StartLogin();
         }
     }
+
+    //로그인을 성공하면 무조건 이 메소드를 쓴다.
+    private void GetPrintPCData() {
+        SearchCondition sc = new SearchCondition();
+
+        sc.PCCode = PreferenceManager.getString(this, "PCCode");
+        if(sc.PCCode.equals(""))//저장되어 있는 PCCode가 없다면,
+            sc.PCCode = binding.edtPC.getText().toString();
+
+        loginViewModel.GetPrintPCData(sc, this);
+        if (binding.checkAuto.isChecked()) {
+            PreferenceManager.setBoolean(this, "AutoLogin", true);
+            PreferenceManager.setString(this, "ID", binding.edtID.getText().toString());
+            PreferenceManager.setString(this, "PW", binding.edtPW.getText().toString());
+        }
+    }
+
 
     private void initEvent() {
         // 키보드 엔터 키 이벤트 생성
@@ -108,11 +111,34 @@ public class LoginActivity extends BaseActivity {
      * @param v
      */
     public void btnLoginClick(View v) {
+        StartLogin();
+    }
+
+    private void StartLogin(){
         SearchCondition sc = new SearchCondition();
-        sc.UserID = CheckInputLoginUserID(); // 아이디 공백 확인
-        sc.PassWord = CheckInputLoginPassword(); // 패스워드 공백 확인
-        if (sc.UserID.equals("") || sc.PassWord.equals("")) return;
+        boolean autoLoginFlag = PreferenceManager.getBoolean(this, "AutoLogin");
+        if (autoLoginFlag) {
+            sc.UserID = PreferenceManager.getString(this, "ID");
+            sc.PassWord = PreferenceManager.getString(this, "PW");
+        }
+        else{
+            if(getIntent().getBooleanExtra("FirstFlag",true)){
+                GetLoginInfoByPhoneNumber();
+                return;
+            }
+            else{
+                sc.UserID = CheckInputLoginUserID(); // 아이디 공백 확인
+                sc.PassWord = CheckInputLoginPassword(); // 패스워드 공백 확인
+                if (sc.UserID.equals("") || sc.PassWord.equals("")) return;
+            }
+        }
         loginViewModel.GetLoginInfoData(sc);
+    }
+
+    private void GetLoginInfoByPhoneNumber() {
+        SearchCondition sc = new SearchCondition();
+        sc.UserID = Users.PhoneNumber;
+        loginViewModel.GetLoginInfoByPhoneNumber(sc);
     }
 
     // 로그인 시 ID와 Password가 공백인지 확인한다.
@@ -143,18 +169,33 @@ public class LoginActivity extends BaseActivity {
     }
 
     public void observerViewModel() {
+        loginViewModel.userImage.observe(this, models -> {
+            if (models != null) {
+                Users.UserImage = models;
+            }
+            else
+                Users.UserImage = "fail";
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        });
+
+        loginViewModel.phoneNumberFlag.observe(this, phoneNumberFlag -> {
+            if (phoneNumberFlag != null) {
+                if (phoneNumberFlag) {//성공
+                    GetPrintPCData();
+                }
+                /*else{//PhoneNumber 가 없으니 자동로그인 or 직접로그인
+                    LoginByAutoFlag();
+                }*/
+            }
+        });
+
         //성공, 실패 여부
         loginViewModel.loadError.observe(this, models -> {
             if (models != null) {
                 if (!models) {//성공
-                    if (binding.checkAuto.isChecked()) {
-                        PreferenceManager.setBoolean(this, "AutoLogin", true);
-                        PreferenceManager.setString(this, "ID", binding.edtID.getText().toString());
-                        PreferenceManager.setString(this, "PW", binding.edtPW.getText().toString());
-                    }
-                    Intent intent = new Intent(this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
+                    GetPrintPCData();
                 }
             }
         });
@@ -166,6 +207,7 @@ public class LoginActivity extends BaseActivity {
                 PreferenceManager.setBoolean(this, "AutoLogin", false);
                 PreferenceManager.setString(this, "ID", "");
                 PreferenceManager.setString(this, "PW", "");
+                PreferenceManager.setString(this, "PCCode", "");
                 progressOFF2();
             }
         });
@@ -179,8 +221,6 @@ public class LoginActivity extends BaseActivity {
                 }
             }
         });
-
-
     }
 
     private void startProgress() {

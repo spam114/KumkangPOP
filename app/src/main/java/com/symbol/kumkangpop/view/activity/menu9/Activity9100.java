@@ -180,6 +180,10 @@ public class Activity9100 extends BaseActivity {
                     return;
                 }
                 if (type == 1) {//수량 확인 버튼
+                    if(Double.parseDouble(output)<=0){
+                        Toast.makeText(Activity9100.this, "수량은 0보다 커야합니다.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     stockIn.InQty = Double.parseDouble(output);
                     binding.txtQty.setBackgroundColor(Color.parseColor("#FFF5F5DC"));
                 } else {//중량 확인 버튼
@@ -355,7 +359,7 @@ public class Activity9100 extends BaseActivity {
     public void observerSimpleData() {
         simpleDataViewModel.data.observe(this, data -> {
             if (data != null) {
-                stockIn = TypeChanger.chageTypeStockIn(data);
+                stockIn = TypeChanger.changeTypeStockIn(data);
 
                 if (stockIn.ErrorCheck != null) {
                     Toast.makeText(this, stockIn.ErrorCheck, Toast.LENGTH_SHORT).show();

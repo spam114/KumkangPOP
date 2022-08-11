@@ -2,17 +2,20 @@ package com.symbol.kumkangpop.view.activity;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
@@ -22,6 +25,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.andremion.floatingnavigationview.FloatingNavigationView;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -29,16 +33,18 @@ import com.google.zxing.integration.android.IntentResult;
 import com.symbol.kumkangpop.R;
 import com.symbol.kumkangpop.databinding.ActivityMainBinding;
 import com.symbol.kumkangpop.databinding.DialogNoticeBinding;
+import com.symbol.kumkangpop.model.SearchCondition;
 import com.symbol.kumkangpop.model.object.AppVersion;
 import com.symbol.kumkangpop.model.object.BusinessClass;
+import com.symbol.kumkangpop.model.object.MainMenuItem;
 import com.symbol.kumkangpop.model.object.Users;
 import com.symbol.kumkangpop.view.BackPressControl;
 import com.symbol.kumkangpop.view.CommonMethod;
 import com.symbol.kumkangpop.view.PreferenceManager;
 import com.symbol.kumkangpop.view.TypeChanger;
-import com.symbol.kumkangpop.view.activity.menu0.Activity0000;
-import com.symbol.kumkangpop.view.activity.menu1.Activity1000;
-import com.symbol.kumkangpop.view.activity.menu9.Activity9000;
+import com.symbol.kumkangpop.view.adapter.MainAdapter;
+import com.symbol.kumkangpop.viewmodel.BarcodeConvertPrintViewModel;
+import com.symbol.kumkangpop.viewmodel.ScanViewModel;
 import com.symbol.kumkangpop.viewmodel.SimpleDataViewModel;
 
 import java.util.ArrayList;
@@ -46,37 +52,44 @@ import java.util.ArrayList;
 public class MainActivity extends BaseActivity {
     ActivityMainBinding binding;
     SimpleDataViewModel simpleDataViewModel;
+    BarcodeConvertPrintViewModel barcodeConvertPrintViewModel;
+    ScanViewModel scanViewModel;
     BackPressControl backpressed;
     ArrayAdapter businessAdapter;
+    MainAdapter mainAdapter;
     private ActivityResultLauncher<Intent> resultLauncher;
     private FloatingNavigationView mFloatingNavigationView;
-
+    ArrayList<BusinessClass> businessClassList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         init();
     }
-    private void init(){
+
+    private void init() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         simpleDataViewModel = new ViewModelProvider(this).get(SimpleDataViewModel.class);
         simpleDataViewModel.GetSimpleData("GetNoticeData2");
+        barcodeConvertPrintViewModel = new ViewModelProvider(this).get(BarcodeConvertPrintViewModel.class);
+        scanViewModel = new ViewModelProvider(this).get(ScanViewModel.class);
         setBar();
-        setListener();
         setFloatingNavigationView();
         setResultLauncher();
         observerViewModel();
+        ArrayList<MainMenuItem> menuItemArrayList = getMainMenuItem();
+        mainAdapter = new MainAdapter(menuItemArrayList,this);
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        binding.recyclerView.setAdapter(mainAdapter);
         backpressed = new BackPressControl(this);
-        if (Users.Gboutsourcing)
-            binding.button6.setVisibility(View.GONE);//외주처의 경우 출고검수 사용금지
-        binding.constraintLayout.setVisibility(View.GONE);
-        binding.constraintLayout3.setVisibility(View.GONE);
-        binding.constraintLayout4.setVisibility(View.GONE);
-        binding.constraintLayout5.setVisibility(View.GONE);
+        if (Users.GboutSourcing) {//외주처의 경우 출고검수 사용금지
+            mainAdapter.removeItem(17);
+            //mainAdapter.notifyDataSetChanged();
+        }
     }
 
 
     private void setListener() {
-        binding.button.setOnClickListener(new View.OnClickListener() {//제품포장
+        /*binding.button.setOnClickListener(new View.OnClickListener() {//제품포장
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, Activity0000.class);
@@ -98,7 +111,7 @@ public class MainActivity extends BaseActivity {
                 Intent intent = new Intent(MainActivity.this, Activity1000.class);
                 startActivity(intent);
             }
-        });
+        });*/
     }
 
     public void observerViewModel() {
@@ -106,7 +119,7 @@ public class MainActivity extends BaseActivity {
             if (data != null) {
                 //LinkedTreeMap linkedTreeMap = (LinkedTreeMap) data;
                 //Object errorCheck = linkedTreeMap.get("ErrorCheck");
-                AppVersion appVersion = TypeChanger.chageTypeAppVersion(data);
+                AppVersion appVersion = TypeChanger.changeTypeAppVersion(data);
                 Object errorCheck = appVersion.ErrorCheck;
                 if (errorCheck != null) {// SimpleDataViewModel 은 에러처리를 각각의 View에서 처리한다.(각각 다르므로)
                     Toast.makeText(this, errorCheck.toString(), Toast.LENGTH_LONG).show();
@@ -125,7 +138,7 @@ public class MainActivity extends BaseActivity {
 
         simpleDataViewModel.list.observe(this, list -> {
             if (list != null) {
-                ArrayList<BusinessClass> businessClassList = TypeChanger.chageTypeBusinessClassList(list);
+                businessClassList = TypeChanger.changeTypeBusinessClassList(list);
                 Object errorCheck = businessClassList.get(0).ErrorCheck;
                 if (errorCheck != null) {// SimpleDataViewModel 은 에러처리를 각각의 View에서 처리한다.(각각 다르므로)
                     Toast.makeText(this, errorCheck.toString(), Toast.LENGTH_LONG).show();
@@ -143,6 +156,21 @@ public class MainActivity extends BaseActivity {
                     //Log.i("스피너순서", "실행");
                     yourSpinnerName.setAdapter(adapter);
 
+                    yourSpinnerName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {//사업장이 변경될때마다, CustomerCode, LocationNo를 바꿔준다.
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            Users.BusinessClassCode = (int)businessClassList.get(position).BusinessClassCode;
+                            if(!Users.GboutSourcing){
+                                Users.CustomerCode = businessClassList.get(position).CustomerCode;
+                            }
+                            Users.LocationNo = (int)businessClassList.get(position).LocationNo;
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+
+                        }
+                    });
                     //Log.i("스피너순서", "구성");
                 }
             } else {
@@ -171,6 +199,55 @@ public class MainActivity extends BaseActivity {
                 }
             }
         });
+
+        /*barcodeConvertPrintViewModel.data.observe(this, barcode -> {
+            if (barcode != null) {
+                if (barcode.equals("")) return;
+
+                int iConvetDivision = 1;
+                //주문번호 1
+                //포장번호 2
+                //번들번호 3
+                //이송번호 4
+                //출고번호 5
+                //컨테이너번호 6
+                if (npopControl.GetNumSeekData(3, barcode))
+                {
+                    //RMwrt2300P nForm = new RMwrt2300P(barcode);
+                    //nForm.ShowDialog();
+                    // 프로그램 시작시 바코드 모듈 ON
+                    //MBBarcode.Power(true);
+                    // 바코드 모듈 제어권 시작
+                    //MBBarcode.ActiveForm = this;
+                    return;
+                }
+
+                DataSet nDataSet = npopControl.GetNumConvertData(iConvetDivision, barcode);
+                if (nDataSet.Tables[0].Rows.Count == 0)
+                {
+                    ////nScaner.fnBeepError();
+                    return;
+                }
+
+                DataTable nDataTable = npopControl.GetSalesOrderData(mclVariable.BusinessClassCode, mclVariable.CustomerCode, nDataSet.Tables[0].Rows[0][0].ToString()).Tables[0];
+                if (nDataTable.Rows.Count != 0)
+                {
+                    //MBBarcode.ActiveForm = null;
+                    //RMwrt0010P nForm = new RMwrt0010P(nDataTable.Rows[0]);
+                    //nForm.ShowDialog();
+                    // 프로그램 시작시 바코드 모듈 ON
+                    //MBBarcode.Power(true);
+                    // 바코드 모듈 제어권 시작
+                    //MBBarcode.ActiveForm = this;
+
+                }
+
+            }
+            else {
+                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_LONG).show();
+            }
+        });*/
+
     }
 
     private void viewNotice(String remark) {
@@ -202,6 +279,11 @@ public class MainActivity extends BaseActivity {
      * 공용부분
      */
 
+    @Override
+    public ArrayList<MainMenuItem> getMainMenuItem() {
+        return super.getMainMenuItem();
+    }
+
     private void setFloatingNavigationView() {
         mFloatingNavigationView = CommonMethod.setFloatingNavigationView(this);
     }
@@ -217,16 +299,23 @@ public class MainActivity extends BaseActivity {
                          */
                         IntentResult intentResult = IntentIntegrator.parseActivityResult(result.getResultCode(), result.getData());
                         if (intentResult.getContents() != null) {
-                            String scanResult = intentResult.getContents();
-                            Toast.makeText(MainActivity.this, scanResult, Toast.LENGTH_SHORT).show();
+
+                            scanViewModel.GetTest();
+
+                            /*String barcode = intentResult.getContents();
+                            Toast.makeText(MainActivity.this, barcode, Toast.LENGTH_SHORT).show();
+                            SearchCondition sc = new SearchCondition();
+                            sc.Barcode = barcode;
+                            sc.LocationNo = Users.LocationNo;
+                            sc.PCCode = Users.PCCode;
+                            sc.UserID = Users.UserID;
+                            barcodeConvertPrintViewModel.FNBarcodeConvertPrint(sc);*/
                             return;
                         }
                         /**
                          * QR코드 끝
                          */
-
-
-                        if (result.getResultCode() == 100){
+                        if (result.getResultCode() == 100) {
 
                         }
                     }
@@ -245,7 +334,7 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         simpleDataViewModel.GetSimpleDataList("GetBusinessClassData");
-        return CommonMethod.onCreateOptionsMenu2(this, menu);
+        return CommonMethod.onCreateOptionsMenu4(this, menu);
     }
 
     @Override

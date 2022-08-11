@@ -45,14 +45,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:text="test2"
         android:textColor="#FFFFFF" />
 
     <TextView
         android:id="@+id/txtUserID"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="test"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="#C6C6C6"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/txtPCName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="#C6C6C6"
         android:textSize="15sp" />

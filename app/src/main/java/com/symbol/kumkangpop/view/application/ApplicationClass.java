@@ -20,6 +20,9 @@ import androidx.appcompat.app.AppCompatDialog;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.symbol.kumkangpop.R;
+import com.symbol.kumkangpop.model.object.MainMenuItem;
+
+import java.util.ArrayList;
 
 /**
  * 공통으로 쓰는 메소드들이 담겨져있다.
@@ -117,6 +120,10 @@ public class ApplicationClass extends Application {
         if (activity == null || activity.isFinishing()) {
             return;
         }
+        if(this.handler!=null){
+            //기존에 돌고있던 handler를 cancel 시켜준다.
+            this.handler.removeCallbacksAndMessages(null);
+        }
         this.handler=handler;
         if (progressDialog != null && progressDialog.isShowing()) {
             progressSET(message);
@@ -174,7 +181,35 @@ public class ApplicationClass extends Application {
         if (progressDialog != null && progressDialog.isShowing()) {
             //Log.i("로딩바OFF", className);
             progressDialog.dismiss();
-            this.handler.removeCallbacksAndMessages(null);
+            //this.handler.removeCallbacksAndMessages(null);
         }
+    }
+
+    public ArrayList<MainMenuItem> getMainMenuItem(){
+
+        ArrayList<MainMenuItem> menuItemArrayList= new ArrayList<>();
+        menuItemArrayList.add(new MainMenuItem(1,1, getString(R.string.menu1),false,-1));
+        menuItemArrayList.add(new MainMenuItem(2,1,getString(R.string.menu2),false, R.drawable.sprinkler_48px));
+        menuItemArrayList.add(new MainMenuItem(2,1,getString(R.string.menu3),true, R.drawable.next_plan_48px));
+
+        menuItemArrayList.add(new MainMenuItem(1,2,getString(R.string.menu4),false, -1));
+        menuItemArrayList.add(new MainMenuItem(2,2,getString(R.string.menu5),false, R.drawable.monitor_weight_48px));
+        menuItemArrayList.add(new MainMenuItem(2,2,getString(R.string.menu6),false, R.drawable.safety_divider_48px));
+        menuItemArrayList.add(new MainMenuItem(2,2,getString(R.string.menu7),false, R.drawable.sprinkler_48px));
+        menuItemArrayList.add(new MainMenuItem(2,2,getString(R.string.menu8),false, R.drawable.list_alt_48px));
+        menuItemArrayList.add(new MainMenuItem(2,2,getString(R.string.menu9),false, R.drawable.local_shipping_48px));
+        menuItemArrayList.add(new MainMenuItem(2,2,getString(R.string.menu16),false, R.drawable.package_48px));
+        menuItemArrayList.add(new MainMenuItem(2,2,getString(R.string.menu17),true, R.drawable.inventory_2_48px));
+
+        menuItemArrayList.add(new MainMenuItem(1,3,getString(R.string.menu10),false,-1));
+        menuItemArrayList.add(new MainMenuItem(2,3,getString(R.string.menu11),false, R.drawable.inventory_2_48px));
+        menuItemArrayList.add(new MainMenuItem(2,3,getString(R.string.menu12),false, R.drawable.inventory_48px));
+        menuItemArrayList.add(new MainMenuItem(2,3,getString(R.string.menu13),false, R.drawable.keyboard_double_arrow_right_48px));
+        menuItemArrayList.add(new MainMenuItem(2,3,getString(R.string.menu18),false, R.drawable.keyboard_double_arrow_left_48px));
+        menuItemArrayList.add(new MainMenuItem(2,3,getString(R.string.menu14),false, R.drawable.local_shipping_48px));
+        menuItemArrayList.add(new MainMenuItem(2,3,getString(R.string.menu19),false, R.drawable.checklist_rtl_48px));
+        menuItemArrayList.add(new MainMenuItem(2,3,getString(R.string.menu15),false, R.drawable.download_48px));
+        menuItemArrayList.add(new MainMenuItem(2,3,getString(R.string.menu20),true, R.drawable.file_upload_48px));
+        return menuItemArrayList;
     }
 }

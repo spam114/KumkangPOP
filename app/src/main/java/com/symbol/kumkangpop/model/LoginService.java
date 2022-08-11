@@ -3,13 +3,10 @@ package com.symbol.kumkangpop.model;
 
 import com.symbol.kumkangpop.R;
 import com.symbol.kumkangpop.model.object.LoginInfo;
+import com.symbol.kumkangpop.model.object.Users;
 import com.symbol.kumkangpop.view.application.ApplicationClass;
 
-import java.util.List;
-
 import io.reactivex.Single;
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -46,13 +43,24 @@ public class LoginService {
         return instance;
     }
 
+    public Single<String> GetUserImage() {
+        SearchCondition sc = new SearchCondition();
+        sc.PhoneNumber = Users.UserID;
+        return api.GetUserImage(sc);
+
+    }
+
     // api가 인터페이스로 존재하는데 해당 인터페이스를 통해 서버와 연결하여 checkAppVersion 으로 연결되어있는 서버 함수를 호출한다.
     // POP 로그인 정보를 확인한다.
-    public Single <LoginInfo> GetLoginInfoData(SearchCondition searchCondition) {// 객체의 사용//todo
+    public Single<LoginInfo> GetLoginInfoData(SearchCondition searchCondition) {// 객체의 사용//todo
         return api.GetLoginInfoData(searchCondition);//todo
     }
 
-    public Single <LoginInfo> GetPrintPCData(SearchCondition searchCondition) {// 객체의 사용//todo
+    public Single<LoginInfo> GetLoginInfoByPhoneNumber(SearchCondition searchCondition) {// 객체의 사용//todo
+        return api.GetLoginInfoByPhoneNumber(searchCondition);//todo
+    }
+
+    public Single<LoginInfo> GetPrintPCData(SearchCondition searchCondition) {// 객체의 사용//todo
         return api.GetPrintPCData(searchCondition);//todo
     }
 }

@@ -21,11 +21,11 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tvShortNo"
+                android:id="@+id/tvWorderLot"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="쇼트번호"
+                android:text="로트번호"
                 android:textColor="#000000"
                 android:textSize="13sp"
                 android:textStyle="bold" />
@@ -81,7 +81,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tvInQty"
+                android:id="@+id/tvReceivedQty"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="수량"

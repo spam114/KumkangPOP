@@ -1,9 +1,7 @@
 <resources>
     <string name="app_name">금강공업 음성공장</string>
-    <string name="service_address">http://211.245.239.53:2224/Service/json/</string>
-    <string name="product_dbname">ERP_Total_TEST</string>
-    <string name="KMURL">Default</string>
-    <string name="SDBN">ERP_Total_TEST</string>
+    <!--<string name="service_address">http://211.245.239.53:2224/Service/json/</string>--><!--본DB-->
+    <string name="service_address">http://211.245.239.53:2228/Service/json/</string><!--테스트DB-->
     <string name="app_code">8</string>
     <string name="qr_state_common">TAG를 인식해주세요.</string>
     <string name="price_format">%,2d</string>
@@ -18,15 +16,25 @@
     <string name="menu_item_share">Share</string>
     <string name="menu_item_send">Send</string>
 
-    <string name="menu1">제품포장</string>
-    <string name="menu2">번들생성</string>
-    <string name="menu3">재고이송</string>
-    <string name="menu4">재고이입</string>
-    <string name="menu5">제품출고</string>
-    <string name="menu6">출고검수</string>
-    <string name="menu7">자료수신</string>
-    <string name="menu8">자료송신</string>
-    <string name="menu9">A급대기</string>
-    <string name="menu10">A급</string>
+    <string name="menu1">생산실적 등록</string>
+    <string name="menu2">쇼트생산 등록(A급 대기)</string>
+    <string name="menu3">계획생산 등록(A급)</string>
+    <string name="menu4">현황보기</string>
+    <string name="menu5">반입 현황(계근)</string>
+    <string name="menu6">반입 현황(분류)</string>
+    <string name="menu7">쇼트생산 현황</string>
+    <string name="menu8">생산실적(신제/보수) 현황</string>
+    <string name="menu9">출고 현황</string>
+    <string name="menu10">포장/출고</string>
+    <string name="menu11">제품 포장</string>
+    <string name="menu12">번들 생성</string>
+    <string name="menu13">재고 이송</string>
+    <string name="menu14">제품 출고</string>
+    <string name="menu15">자료 수신</string>
+    <string name="menu16">포장실적(POP) 현황</string>
+    <string name="menu17">현재고 현황(규격)</string>
+    <string name="menu18">재고 이입</string>
+    <string name="menu19">출고 검수</string>
+    <string name="menu20">자료 송신</string>
 
 </resources>

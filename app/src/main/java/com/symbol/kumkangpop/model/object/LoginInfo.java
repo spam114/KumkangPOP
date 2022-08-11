@@ -19,8 +19,8 @@ public class LoginInfo {
     @SerializedName("BusinessClassCode")
     public int BusinessClassCode;
 
-    @SerializedName("Gboutsourcing")
-    public boolean Gboutsourcing;
+    @SerializedName("GboutSourcing")
+    public boolean GboutSourcing;
 
     @SerializedName("PassWord")
     public String PassWord="";

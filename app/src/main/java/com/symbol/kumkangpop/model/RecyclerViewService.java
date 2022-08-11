@@ -49,6 +49,9 @@ public class RecyclerViewService {
         if (apiName.equals("GetStockInDataPOP")) {
             return api.GetStockInDataPOP(sc);
         }
+        else if (apiName.equals("GetAMaster")) {
+            return api.GetAMaster(sc);
+        }
         else {
             return null;
         }

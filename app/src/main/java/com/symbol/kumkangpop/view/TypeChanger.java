@@ -3,7 +3,9 @@ package com.symbol.kumkangpop.view;
 import com.google.gson.internal.LinkedTreeMap;
 import com.symbol.kumkangpop.model.object.AppVersion;
 import com.symbol.kumkangpop.model.object.BusinessClass;
+import com.symbol.kumkangpop.model.object.Report;
 import com.symbol.kumkangpop.model.object.StockIn;
+import com.symbol.kumkangpop.model.object.WoPartHist;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -14,7 +16,7 @@ import java.util.List;
  */
 public class TypeChanger {
 
-    public static AppVersion chageTypeAppVersion(Object object) {
+    public static AppVersion changeTypeAppVersion(Object object) {
         LinkedTreeMap linkedTreeMap = (LinkedTreeMap) object;
         Field fields[] = AppVersion.class.getFields();
         AppVersion rData = new AppVersion();
@@ -28,7 +30,7 @@ public class TypeChanger {
         return rData;
     }
 
-    public static StockIn chageTypeStockIn(Object object) {
+    public static StockIn changeTypeStockIn(Object object) {
         LinkedTreeMap linkedTreeMap = (LinkedTreeMap) object;
         Field fields[] = StockIn.class.getFields();
         StockIn rData = new StockIn();
@@ -42,7 +44,21 @@ public class TypeChanger {
         return rData;
     }
 
-    public static ArrayList<BusinessClass> chageTypeBusinessClassList(Object object) {
+    public static WoPartHist changeTypeWoPartHist(Object object) {
+        LinkedTreeMap linkedTreeMap = (LinkedTreeMap) object;
+        Field fields[] = WoPartHist.class.getFields();
+        WoPartHist rData = new WoPartHist();
+        try {
+            for (int i = 0; i < fields.length; i++) {
+                fields[i].set(rData, linkedTreeMap.get(fields[i].getName()));
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return rData;
+    }
+
+    public static ArrayList<BusinessClass> changeTypeBusinessClassList(Object object) {
         ArrayList<LinkedTreeMap> arrayList = (ArrayList<LinkedTreeMap>) object;
         ArrayList<BusinessClass> returnList=new ArrayList<>();
         try {
@@ -61,7 +77,7 @@ public class TypeChanger {
         return returnList;
     }
 
-    public static ArrayList<StockIn> chageTypeStockInList(Object object) {
+    public static ArrayList<StockIn> changeTypeStockInList(Object object) {
         ArrayList<LinkedTreeMap> arrayList = (ArrayList<LinkedTreeMap>) object;
         ArrayList<StockIn> returnList=new ArrayList<>();
         try {
@@ -80,4 +96,22 @@ public class TypeChanger {
         return returnList;
     }
 
+    public static ArrayList<WoPartHist> changeTypeWoPartHistList(Object object) {
+        ArrayList<LinkedTreeMap> arrayList = (ArrayList<LinkedTreeMap>) object;
+        ArrayList<WoPartHist> returnList=new ArrayList<>();
+        try {
+            for(int i=0;i<arrayList.size();i++){
+                LinkedTreeMap linkedTreeMap = arrayList.get(i);
+                Field fields[] = WoPartHist.class.getFields();
+                WoPartHist rData = new WoPartHist();
+                for (int j = 0; j < fields.length; j++) {
+                    fields[j].set(rData, linkedTreeMap.get(fields[j].getName()));
+                }
+                returnList.add(rData);
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return returnList;
+    }
 }

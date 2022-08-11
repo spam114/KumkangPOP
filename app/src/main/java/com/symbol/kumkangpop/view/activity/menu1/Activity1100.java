@@ -1,6 +1,5 @@
 package com.symbol.kumkangpop.view.activity.menu1;
 
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -17,7 +16,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.zxing.BarcodeFormat;
@@ -27,16 +25,15 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.symbol.kumkangpop.R;
 import com.symbol.kumkangpop.databinding.Activity1100Binding;
 import com.symbol.kumkangpop.model.SearchCondition;
-import com.symbol.kumkangpop.model.object.Part;
-import com.symbol.kumkangpop.model.object.PartSpec;
-import com.symbol.kumkangpop.model.object.StockIn;
+import com.symbol.kumkangpop.model.object.Users;
+import com.symbol.kumkangpop.model.object.WoPartHist;
 import com.symbol.kumkangpop.view.TypeChanger;
 import com.symbol.kumkangpop.view.activity.BaseActivity;
-import com.symbol.kumkangpop.viewmodel.AWaitingEditModel;
+import com.symbol.kumkangpop.view.activity.menu9.Activity9100;
+import com.symbol.kumkangpop.viewmodel.AEditModel;
 import com.symbol.kumkangpop.viewmodel.SimpleDataViewModel;
 
 import java.text.DecimalFormat;
-import java.util.List;
 
 /**
  * A급
@@ -44,9 +41,9 @@ import java.util.List;
 public class Activity1100 extends BaseActivity {
     Activity1100Binding binding;
     SimpleDataViewModel simpleDataViewModel;
-    AWaitingEditModel aWaitingEditModel;
+    AEditModel aEditModel;
     String tagNo;
-    StockIn stockIn;
+    WoPartHist woPartHist;
     int selectedPartIndex = 0;
     int selectedPartSpecIndex = 0;
     //List<Part> part
@@ -60,21 +57,21 @@ public class Activity1100 extends BaseActivity {
     private void init() {
         setResult(100);
         binding = DataBindingUtil.setContentView(this, R.layout.activity1100);
-        stockIn = new StockIn();
+        woPartHist = new WoPartHist();
         simpleDataViewModel = new ViewModelProvider(this).get(SimpleDataViewModel.class);
-        aWaitingEditModel = new ViewModelProvider(this).get(AWaitingEditModel.class);
+        aEditModel = new ViewModelProvider(this).get(AEditModel.class);
         tagNo = getIntent().getStringExtra("result");
         createQRcode(binding.imvQR, tagNo);
         setListener();
         observerSimpleData();
-        observerAWaiting();
-        GetAWaitingDetail(tagNo);
+        observerA();
+        GetADetail(tagNo);
     }
 
-    private void GetAWaitingDetail(String tagNo) {
+    private void GetADetail(String tagNo) {
         SearchCondition sc = new SearchCondition();
-        sc.ShortNo = tagNo;
-        simpleDataViewModel.GetSimpleData("GetAWaitingDetail", sc);
+        sc.WorderLot = tagNo;
+        simpleDataViewModel.GetSimpleData("GetADetail", sc);
     }
 
     public void createQRcode(ImageView img, String text) {
@@ -90,32 +87,13 @@ public class Activity1100 extends BaseActivity {
     }
 
     private void setListener() {
-        binding.layoutPartName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                aWaitingEditModel.GetPart();
-            }
-        });
-        binding.layoutPartSpec.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SearchCondition sc = new SearchCondition();
-                sc.PartCode = stockIn.PartCode;
-                aWaitingEditModel.GetPartSpec(sc);
-            }
-        });
-        binding.layoutShortNo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
         binding.layoutQty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ShowEditDialog(1);
             }
         });
-        binding.layoutWeight.setOnClickListener(new View.OnClickListener() {
+        binding.layoutBundle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ShowEditDialog(2);
@@ -125,15 +103,20 @@ public class Activity1100 extends BaseActivity {
             @Override
             public void onClick(View v) {
                 SearchCondition sc = new SearchCondition();
-                sc.StockInNo = stockIn.StockInNo;
-                sc.PartCode = stockIn.PartCode;
-                sc.PartSpec = stockIn.PartSpec;
-                sc.InQty = stockIn.InQty;
-                sc.ActualWeight = stockIn.ActualWeight;
-                sc.ShortNo = stockIn.ShortNo;
-                sc.WorkingGroup = stockIn.WorkingGroup;
-                sc.WorkingMachine = stockIn.WorkingMachine;
-                aWaitingEditModel.UpdateShortData(sc);
+                sc.WorderLot = woPartHist.WorderLot;
+                sc.UserID = Users.UserID;
+                sc.WorksOrderNo = woPartHist.WorksOrderNo;
+                sc.WorderRequestNo = woPartHist.WorderRequestNo;
+                sc.PartCode = woPartHist.PartCode;
+                sc.PartSpec= woPartHist.PartSpec;
+                sc.MSpec = woPartHist.MSpec;
+                sc.ProductionType = (int)woPartHist.ProductionType;
+                sc.ReceivedQty = woPartHist.ReceivedQty;
+                sc.AssetsType = (int)woPartHist.AssetsType;
+                sc.WorkDate = woPartHist.WorkDate;
+                sc.BundelQty = woPartHist.BundelQty;
+
+                aEditModel.UpdateADetail(sc);
             }
         });
     }
@@ -142,14 +125,14 @@ public class Activity1100 extends BaseActivity {
         String titleName;
         String msg;
         String hint;
-        if (type == 1) {//수량
-            titleName = "수량 입력";
-            msg = "수량을 입력해주세요.";
+        if (type == 1) {//번들순번
+            titleName = "포장수량 입력";
+            msg = "포장수량을 입력해주세요.";
             hint = "수량";
         } else {//중량
-            titleName = "중량 입력";
-            msg = "중량을 입력해주세요.";
-            hint = "중량";
+            titleName = "번들순번 입력";
+            msg = "번들순번을 입력해주세요.";
+            hint = "순번";
         }
 
         LayoutInflater inflater = LayoutInflater.from(this);
@@ -179,14 +162,26 @@ public class Activity1100 extends BaseActivity {
                     Toast.makeText(Activity1100.this, msg, Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (type == 1) {//수량 확인 버튼
-                    stockIn.InQty = Double.parseDouble(output);
+                if (type == 1) {//포장수량 확인 버튼
+                    double num = Double.parseDouble(output);
+
+                    if(num<=0){
+                        Toast.makeText(Activity1100.this, "수량은 0보다 커야합니다.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if(woPartHist.ReceivedQty-num >10 || woPartHist.ReceivedQty-num < -10){
+                        Toast.makeText(Activity1100.this, "포장수량은 ±10개까지 변경 가능합니다.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    woPartHist.ReceivedQty = num;
                     binding.txtQty.setBackgroundColor(Color.parseColor("#FFF5F5DC"));
-                } else {//중량 확인 버튼
-                    stockIn.ActualWeight = Double.parseDouble(output);
-                    binding.txtWeight.setBackgroundColor(Color.parseColor("#FFF5F5DC"));
+                } else {//번들순번 확인 버튼
+                    woPartHist.BundelQty = Double.parseDouble(output);
+                    binding.txtWorkDate.setBackgroundColor(Color.parseColor("#FFF5F5DC"));
                 }
-                DrawTag(stockIn);
+                DrawTag(woPartHist);
                 dialog.dismiss();
             }
         });
@@ -198,30 +193,9 @@ public class Activity1100 extends BaseActivity {
         });
     }
 
-    public void observerAWaiting() {
-        aWaitingEditModel.partList.observe(this, data -> {
-            if (data != null) {
-                //데이터 불러오기까지 완료 다이얼로그에찍기
-                ShowPartEditDialog(data);
+    public void observerA() {
 
-            } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        });
-
-        aWaitingEditModel.partSpecList.observe(this, data -> {
-            if (data != null) {
-                //데이터 불러오기까지 완료 다이얼로그에찍기
-                ShowPartSpecEditDialog(data);
-
-            } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        });
-
-        aWaitingEditModel.resultMsg.observe(this, models -> {
+        aEditModel.resultMsg.observe(this, models -> {
             if (models != null) {
                 Toast.makeText(this, models, Toast.LENGTH_SHORT).show();
                 ChangeColorWhite();
@@ -230,14 +204,14 @@ public class Activity1100 extends BaseActivity {
         });
 
         //에러메시지
-        aWaitingEditModel.errorMsg.observe(this, models -> {
+        aEditModel.errorMsg.observe(this, models -> {
             if (models != null) {
                 Toast.makeText(this, models, Toast.LENGTH_SHORT).show();
                 progressOFF2();
             }
         });
 
-        aWaitingEditModel.loading.observe(this, isLoading -> {
+        aEditModel.loading.observe(this, isLoading -> {
             if (isLoading != null) {
                 if (isLoading) {//로딩중
                     startProgress();
@@ -248,120 +222,20 @@ public class Activity1100 extends BaseActivity {
         });
     }
 
-    private void ChangeColorWhite(){
+    private void ChangeColorWhite() {
         binding.txtQty.setBackgroundColor(Color.WHITE);
-        binding.txtWeight.setBackgroundColor(Color.WHITE);
-        binding.txtPartSpec.setBackgroundColor(Color.WHITE);
-        binding.txtPartName.setBackgroundColor(Color.WHITE);
-    }
-
-    private void ShowPartEditDialog(List<Part> list) {
-
-        CharSequence[] partNameSequences;
-
-        partNameSequences = new CharSequence[list.size()];
-        for (int i = 0; i < list.size(); i++) {
-            partNameSequences[i] = list.get(i).PartName;
-        }
-
-        new MaterialAlertDialogBuilder(this)
-                .setCancelable(false)
-                .setTitle("품명을 선택하세요")
-                .setSingleChoiceItems(partNameSequences, selectedPartIndex, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        selectedPartIndex = which;
-                    }
-                })
-                .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-
-                        //listview.setFilterText("SPP BPE");
-                        dialog.dismiss();
-                    }
-                })
-                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
-                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        String partCode = list.get(selectedPartIndex).PartCode;
-                        String partName = list.get(selectedPartIndex).PartName;
-
-                        stockIn.PartCode = partCode;
-                        stockIn.PartName = partName;
-
-                        SearchCondition sc = new SearchCondition();
-                        sc.PartCode = partCode;
-                        binding.txtPartName.setBackgroundColor(Color.parseColor("#FFF5F5DC"));
-                        aWaitingEditModel.GetPartSpec(sc);
-                        dialog.dismiss();
-                    }
-                })
-                .show();
-    }
-
-    private void ShowPartSpecEditDialog(List<PartSpec> list) {
-
-        CharSequence[] partSpecNameSequences;
-
-        partSpecNameSequences = new CharSequence[list.size()];
-        for (int i = 0; i < list.size(); i++) {
-            partSpecNameSequences[i] = list.get(i).PartSpec;
-        }
-
-        new MaterialAlertDialogBuilder(this)
-                .setCancelable(false)
-                .setTitle("규격을 선택하세요")
-                .setSingleChoiceItems(partSpecNameSequences, selectedPartSpecIndex, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        selectedPartSpecIndex = which;
-                    }
-                })
-                .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-
-                        //listview.setFilterText("SPP BPE");
-                        dialog.dismiss();
-                    }
-                })
-                /*.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })*/
-                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String partSpec = list.get(selectedPartSpecIndex).PartSpec;
-                        stockIn.PartSpec = partSpec;
-                        binding.txtPartSpec.setBackgroundColor(Color.parseColor("#FFF5F5DC"));
-                        DrawTag(stockIn);
-                        dialog.dismiss();
-                    }
-                })
-                .show();
+        binding.txtWorkDate.setBackgroundColor(Color.WHITE);
     }
 
     public void observerSimpleData() {
         simpleDataViewModel.data.observe(this, data -> {
             if (data != null) {
-                stockIn = TypeChanger.chageTypeStockIn(data);
-
-                if (stockIn.ErrorCheck != null) {
-                    Toast.makeText(this, stockIn.ErrorCheck, Toast.LENGTH_SHORT).show();
+                woPartHist = TypeChanger.changeTypeWoPartHist(data);
+                if (woPartHist.ErrorCheck != null) {
+                    Toast.makeText(this, woPartHist.ErrorCheck, Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
-                    DrawTag(stockIn);
+                    DrawTag(woPartHist);
                 }
             } else {
                 Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_SHORT).show();
@@ -388,30 +262,18 @@ public class Activity1100 extends BaseActivity {
         });
     }
 
-    private void DrawTag(StockIn stockIn) {
-        binding.setStockIn(stockIn);
+    private void DrawTag(WoPartHist woPartHist) {
+        binding.setWopartHist(woPartHist);
         DecimalFormat numFormatter = new DecimalFormat("###,###");
-        binding.txtQty.setText(numFormatter.format(stockIn.InQty) + " EA");
-        binding.txtWeight.setText(numFormatter.format(stockIn.ActualWeight) + " KG");
-        int workingGroup = (int) stockIn.WorkingGroup;
-        int workingMachine = (int) stockIn.WorkingMachine;
-        String groupName;
-        String machineName;
-        if (workingGroup == 1)
-            groupName = "주간";
-        else if (workingGroup == 2)
-            groupName = "야간";
-        else
-            groupName = "";
-        if (workingMachine == 1)
-            machineName = "1호기";
-        else if (workingMachine == 2)
-            machineName = "2호기";
-        else if (workingMachine == 3)
-            machineName = "3호기";
-        else
-            machineName = "";
-        binding.txtWork.setText(groupName + " " + machineName);
+        binding.txtQty.setText(numFormatter.format(woPartHist.ReceivedQty) + " EA");
+        String workDate;
+        try{
+            workDate = woPartHist.WorkDate.split("-")[1]+"/"+woPartHist.WorkDate.split("-")[2];
+        }
+        catch (Exception e){
+            workDate="";
+        }
+        binding.txtWorkDate.setText(workDate+" ("+numFormatter.format(woPartHist.BundelQty)+")");
     }
 
     /**

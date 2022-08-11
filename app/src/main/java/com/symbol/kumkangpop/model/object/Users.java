@@ -26,7 +26,7 @@ public class Users {
     //PC정보
     public static String PCCode = "";
     public static String PCName = "";
-    public static boolean Gboutsourcing = true; //외주처여부
+    public static boolean GboutSourcing = true; //외주처여부
 
     //로그인정보
     public static String UserID;
@@ -36,4 +36,6 @@ public class Users {
     public static int BusinessClassCode;
     public static int LocationNo;
     public static int Language;
+
+    public static String UserImage;
 }

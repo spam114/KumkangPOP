@@ -100,6 +100,7 @@ public class SplashScreenActivity extends BaseActivity {
             if (models != null) {
                 Intent intent;
                 intent = new Intent(SplashScreenActivity.this, LoginActivity.class);
+                intent.putExtra("FirstFlag",true);
                 startActivity(intent);
             } else {
                 Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_LONG).show();
@@ -208,7 +209,7 @@ public class SplashScreenActivity extends BaseActivity {
             //Toast.makeText(getBaseContext(), "test1", Toast.LENGTH_LONG).show();
             uri = uri.substring(7);
             File file = new File(uri);
-            Uri u = FileProvider.getUriForFile(this, BuildConfig.LIBRARY_PACKAGE_NAME + ".provider", file);
+            Uri u = FileProvider.getUriForFile(this, getApplication().getPackageName() + ".provider", file);
             open.setDataAndType(u, mimetype);
         } else {
             open.setDataAndType(Uri.parse(uri), mimetype);

@@ -6,6 +6,9 @@ public class SearchCondition {
     @SerializedName("FromDate")
     public String FromDate;
 
+    @SerializedName("ToDate")
+    public String ToDate;
+
     @SerializedName("ContractNo")
     public String ContractNo;
 
@@ -33,6 +36,9 @@ public class SearchCondition {
     @SerializedName("Remark")
     public String Remark;
 
+    @SerializedName("SaleType")
+    public String SaleType;
+
     @SerializedName("UserID")
     public String UserID;
 
@@ -56,6 +62,9 @@ public class SearchCondition {
 
     @SerializedName("DeptCode")
     public String DeptCode;
+
+    @SerializedName("Type")
+    public int Type;
 
     @SerializedName("StockInType")
     public int StockInType;
@@ -95,6 +104,51 @@ public class SearchCondition {
 
     @SerializedName("WorkingMachine")
     public double WorkingMachine;
+
+    @SerializedName("WorkDate")
+    public String WorkDate;
+
+    @SerializedName("WorderLot")
+    public String WorderLot;
+
+    @SerializedName("WorksOrderNo")
+    public String WorksOrderNo;
+
+    @SerializedName("WorderRequestNo")
+    public String WorderRequestNo;
+
+    @SerializedName("MSpec")
+    public String MSpec;
+
+    @SerializedName("ProductionType")
+    public int ProductionType;
+
+    @SerializedName("ReceivedQty")
+    public double ReceivedQty;
+
+    @SerializedName("AssetsType")
+    public int AssetsType;
+
+    @SerializedName("BundelQty")
+    public double BundelQty;
+
+    @SerializedName("PartFlag")
+    public int PartFlag;
+
+    @SerializedName("SpecFlag")
+    public int SpecFlag;
+
+    @SerializedName("WeightPrint")
+    public boolean WeightPrint;
+
+    @SerializedName("CommodityCode")
+    public String CommodityCode;
+
+    @SerializedName("Barcode")
+    public String Barcode;
+
+    @SerializedName("LocationNo")
+    public int LocationNo;
 
     public SearchCondition(){}
 

@@ -7,6 +7,9 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"
         android:maxSdkVersion="29" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!--쓰기권한-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/><!--오레오 버전 부터 추가된  설치 권한-->
@@ -64,6 +67,40 @@
             android:name="com.symbol.kumkangpop.view.activity.menu9.Activity9100"
             tools:ignore="LockedOrientationActivity"
             android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.symbol.kumkangpop.view.activity.report.ActivityReport1"
+            tools:ignore="LockedOrientationActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.symbol.kumkangpop.view.activity.report.ActivityReport2"
+            tools:ignore="LockedOrientationActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.symbol.kumkangpop.view.activity.report.ActivityReport3"
+            tools:ignore="LockedOrientationActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.symbol.kumkangpop.view.activity.report.ActivityReport4"
+            tools:ignore="LockedOrientationActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.symbol.kumkangpop.view.activity.report.ActivityReport5"
+            tools:ignore="LockedOrientationActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.symbol.kumkangpop.view.activity.report.ActivityReport6"
+            tools:ignore="LockedOrientationActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.symbol.kumkangpop.view.activity.report.ActivityReport7"
+            android:screenOrientation="sensorLandscape">
         </activity>
         <activity
             android:name="com.symbol.kumkangpop.view.activity.LoginActivity"

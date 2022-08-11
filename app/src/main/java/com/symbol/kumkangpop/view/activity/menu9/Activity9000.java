@@ -48,7 +48,7 @@ public class Activity9000 extends BaseActivity {
     private FloatingNavigationView mFloatingNavigationView;
 
 
-    int businessClassCode = 9;
+    //int businessClassCode = 9;
     String deptCode = "92410";
     int stockInType = 63;
 
@@ -72,7 +72,7 @@ public class Activity9000 extends BaseActivity {
         tmonth = calendar.get(Calendar.MONTH);
         tdate = calendar.get(Calendar.DATE);
         binding.txtFromDate.setText("[ " + tyear + "-" + (tmonth + 1) + "-" + tdate + " ]");
-        binding.txtTitle.setText("A급대기");
+        binding.txtTitle.setText("쇼트생산 등록(A급대기)");
         setBar();
         setListener();
         setFloatingNavigationView();
@@ -89,7 +89,7 @@ public class Activity9000 extends BaseActivity {
 
     private void GetRecyclerViewData(String inDate, boolean isChecked) {
         SearchCondition sc = new SearchCondition();
-        sc.BusinessClassCode = businessClassCode;
+        sc.BusinessClassCode = Users.BusinessClassCode;
         sc.InDate = inDate;
         sc.DeptCode = deptCode;
         sc.StockInType = stockInType;
@@ -143,7 +143,7 @@ public class Activity9000 extends BaseActivity {
             if (dataList != null) {
                 binding.recyclerView.setVisibility(View.VISIBLE);
                 // 어뎁터가 리스트를 수정한다.
-                adapter.updateAdapter(TypeChanger.chageTypeStockInList(dataList));
+                adapter.updateAdapter(TypeChanger.changeTypeStockInList(dataList));
             } else {
                 Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_SHORT).show();
                 finish();

@@ -1,6 +1,7 @@
 package com.symbol.kumkangpop.model;
 
 import com.symbol.kumkangpop.R;
+import com.symbol.kumkangpop.model.object.CodeData;
 import com.symbol.kumkangpop.model.object.Users;
 import com.symbol.kumkangpop.view.application.ApplicationClass;
 
@@ -39,12 +40,20 @@ public class SimpleDataService {
         }
     }
 
+
+
     public Single<Object> GetSimpleData(String apiName, SearchCondition sc) {
         if (apiName.equals("CheckAWaitingQR")) {
             return api.CheckAWaitingQR(sc);
         }
         else if (apiName.equals("GetAWaitingDetail")) {
             return api.GetAWaitingDetail(sc);
+        }
+        else if (apiName.equals("GetADetail")) {
+            return api.GetADetail(sc);
+        }
+        else if (apiName.equals("CheckAQR")) {
+            return api.CheckAQR(sc);
         }
         else {
             return null;
@@ -56,6 +65,14 @@ public class SimpleDataService {
         if (apiName.equals("GetBusinessClassData")) {
             sc.UserID = Users.UserID;
             return api.GetBusinessClassData(sc);
+        } else {
+            return null;
+        }
+    }
+
+    public Single<List<CodeData>> GetCodeData(String apiName, SearchCondition sc) {
+        if (apiName.equals("GetSaleTypeByCodeType")) {
+            return api.GetSaleTypeByCodeType(sc);
         } else {
             return null;
         }

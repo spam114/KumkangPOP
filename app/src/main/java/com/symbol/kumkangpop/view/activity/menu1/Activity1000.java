@@ -48,9 +48,9 @@ public class Activity1000 extends BaseActivity {
     private FloatingNavigationView mFloatingNavigationView;
 
 
-    int businessClassCode = 9;
-    String deptCode = "92410";
-    int stockInType = 63;
+    //int businessClassCode = 9;
+    //String deptCode = "92410";
+    //int stockInType = 63;
 
     //달력 날짜
     public int tyear;
@@ -72,7 +72,7 @@ public class Activity1000 extends BaseActivity {
         tmonth = calendar.get(Calendar.MONTH);
         tdate = calendar.get(Calendar.DATE);
         binding.txtFromDate.setText("[ " + tyear + "-" + (tmonth + 1) + "-" + tdate + " ]");
-        binding.txtTitle.setText("A급");
+        binding.txtTitle.setText("계획생산 등록(A급)");
         setBar();
         setListener();
         setFloatingNavigationView();
@@ -87,14 +87,11 @@ public class Activity1000 extends BaseActivity {
     }
 
 
-    private void GetRecyclerViewData(String inDate, boolean isChecked) {
+    private void GetRecyclerViewData(String workDate, boolean isChecked) {
         SearchCondition sc = new SearchCondition();
-        sc.BusinessClassCode = businessClassCode;
-        sc.InDate = inDate;
-        sc.DeptCode = deptCode;
-        sc.StockInType = stockInType;
+        sc.WorkDate = workDate;
         sc.CheckType = (isChecked) ? 0 : 1;
-        recyclerViewModel.Get("GetStockInDataPOP", sc);
+        recyclerViewModel.Get("GetAMaster", sc);
     }
 
     private void setListener() {
@@ -143,7 +140,7 @@ public class Activity1000 extends BaseActivity {
             if (dataList != null) {
                 binding.recyclerView.setVisibility(View.VISIBLE);
                 // 어뎁터가 리스트를 수정한다.
-                adapter.updateAdapter(TypeChanger.chageTypeStockInList(dataList));
+                adapter.updateAdapter(TypeChanger.changeTypeWoPartHistList(dataList));
             } else {
                 Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_SHORT).show();
                 finish();
@@ -229,7 +226,7 @@ public class Activity1000 extends BaseActivity {
                             String scanResult = intentResult.getContents();
                             //scanResult = result.getContents();
                             if (binding.rbNo.isChecked())//미확인 탭에 위치
-                                CheckAWaitingQR(scanResult);
+                                CheckAQR(scanResult);
                             else {//확인 탭에 위치
                                 GoActivity1100(scanResult);
                             }
@@ -258,8 +255,9 @@ public class Activity1000 extends BaseActivity {
     }
 
     public void getKeyInResult(String result) {
+        result="WP-"+result;
         if (binding.rbNo.isChecked())//미확인 탭에 위치
-            CheckAWaitingQR(result);
+            CheckAQR(result);
         else//확인 탭에 위치
             GoActivity1100(result);
     }
@@ -280,14 +278,14 @@ public class Activity1000 extends BaseActivity {
         resultLauncher.launch(intent);
     }
 
-    private void CheckAWaitingQR(String scanResult) {
+    private void CheckAQR(String scanResult) {
         SearchCondition sc = new SearchCondition();
-        sc.ShortNo = scanResult;
+        sc.WorderLot = scanResult;
         sc.SearchYear = tyear;
         sc.SearchMonth = tmonth + 1;
         sc.SearchDay = tdate;
         sc.UserID = Users.UserID;
-        simpleDataViewModel.GetSimpleData("CheckAWaitingQR", sc);
+        simpleDataViewModel.GetSimpleData("CheckAQR", sc);
     }
 
 
