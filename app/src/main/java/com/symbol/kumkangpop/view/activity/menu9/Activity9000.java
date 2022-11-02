@@ -30,7 +30,7 @@ import com.symbol.kumkangpop.view.CommonMethod;
 import com.symbol.kumkangpop.view.TypeChanger;
 import com.symbol.kumkangpop.view.activity.BaseActivity;
 import com.symbol.kumkangpop.view.adapter.Adapter9000;
-import com.symbol.kumkangpop.viewmodel.RecyclerViewModel;
+import com.symbol.kumkangpop.viewmodel.CommonViewModel;
 import com.symbol.kumkangpop.viewmodel.SimpleDataViewModel;
 
 import java.util.ArrayList;
@@ -42,7 +42,7 @@ import java.util.Calendar;
 public class Activity9000 extends BaseActivity {
     Activity9000Binding binding;
     Adapter9000 adapter;
-    RecyclerViewModel recyclerViewModel;
+    CommonViewModel commonViewModel;
     SimpleDataViewModel simpleDataViewModel;
     private ActivityResultLauncher<Intent> resultLauncher;
     private FloatingNavigationView mFloatingNavigationView;
@@ -66,7 +66,7 @@ public class Activity9000 extends BaseActivity {
     private void init() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity9000);
         simpleDataViewModel = new ViewModelProvider(this).get(SimpleDataViewModel.class);
-        recyclerViewModel = new ViewModelProvider(this).get(RecyclerViewModel.class);
+        commonViewModel = new ViewModelProvider(this).get(CommonViewModel.class);
         final Calendar calendar = Calendar.getInstance();
         tyear = calendar.get(Calendar.YEAR);
         tmonth = calendar.get(Calendar.MONTH);
@@ -94,7 +94,7 @@ public class Activity9000 extends BaseActivity {
         sc.DeptCode = deptCode;
         sc.StockInType = stockInType;
         sc.CheckType = (isChecked) ? 0 : 1;
-        recyclerViewModel.Get("GetStockInDataPOP", sc);
+        commonViewModel.Get("GetStockInDataPOP", sc);
     }
 
     private void setListener() {
@@ -139,11 +139,11 @@ public class Activity9000 extends BaseActivity {
     }
 
     public void observerRecycler() {
-        recyclerViewModel.dataList.observe(this, dataList -> {
-            if (dataList != null) {
+        commonViewModel.data.observe(this, data -> {
+            if (data != null) {
                 binding.recyclerView.setVisibility(View.VISIBLE);
                 // 어뎁터가 리스트를 수정한다.
-                adapter.updateAdapter(TypeChanger.changeTypeStockInList(dataList));
+                adapter.updateAdapter(data.StockInList);
             } else {
                 Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_SHORT).show();
                 finish();
@@ -151,14 +151,14 @@ public class Activity9000 extends BaseActivity {
         });
 
         //에러메시지
-        recyclerViewModel.errorMsg.observe(this, models -> {
+        commonViewModel.errorMsg.observe(this, models -> {
             if (models != null) {
                 Toast.makeText(this, models, Toast.LENGTH_SHORT).show();
                 progressOFF2();
             }
         });
 
-        recyclerViewModel.loading.observe(this, isLoading -> {
+        commonViewModel.loading.observe(this, isLoading -> {
             if (isLoading != null) {
                 if (isLoading) {//로딩중
                     startProgress();
@@ -271,7 +271,7 @@ public class Activity9000 extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return CommonMethod.onOptionsItemSelected(this, item, resultLauncher);
+        return CommonMethod.onOptionsItemSelected(this, item, resultLauncher,1);
     }
 
     private void GoActivity9100(String result) {

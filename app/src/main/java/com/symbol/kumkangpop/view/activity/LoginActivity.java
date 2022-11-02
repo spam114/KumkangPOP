@@ -185,6 +185,14 @@ public class LoginActivity extends BaseActivity {
                 if (phoneNumberFlag) {//성공
                     GetPrintPCData();
                 }
+                else{
+                    SearchCondition sc = new SearchCondition();
+                    sc.UserID = CheckInputLoginUserID(); // 아이디 공백 확인
+                    sc.PassWord = CheckInputLoginPassword(); // 패스워드 공백 확인
+                    if (sc.UserID.equals("") || sc.PassWord.equals("")) return;
+
+                    loginViewModel.GetLoginInfoData(sc);
+                }
                 /*else{//PhoneNumber 가 없으니 자동로그인 or 직접로그인
                     LoginByAutoFlag();
                 }*/

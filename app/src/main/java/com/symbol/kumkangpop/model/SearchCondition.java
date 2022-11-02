@@ -1,6 +1,9 @@
 package com.symbol.kumkangpop.model;
 
 import com.google.gson.annotations.SerializedName;
+import com.symbol.kumkangpop.model.object.ScanListViewItem;
+
+import java.util.List;
 
 public class SearchCondition {
     @SerializedName("FromDate")
@@ -149,6 +152,55 @@ public class SearchCondition {
 
     @SerializedName("LocationNo")
     public int LocationNo;
+
+    @SerializedName("PrintNum")
+    public int PrintNum;
+
+    @SerializedName("Ho")
+    public String Ho;
+
+    //IConvetDivision
+    @SerializedName("IConvetDivision")
+    public double IConvetDivision;
+
+    @SerializedName("HoList")
+    public List<String> HoList;
+
+    @SerializedName("PackingNo")
+    public String PackingNo;
+
+    @SerializedName("PrintDivision")
+    public int PrintDivision;
+
+    @SerializedName("PrintNo")
+    public String PrintNo;
+
+    @SerializedName("Language")
+    public int Language;
+
+    @SerializedName("NType")
+    public String NType;
+
+    @SerializedName("ScanList")
+    public List<ScanListViewItem> ScanList;
+
+    @SerializedName("SaleOrderQty")
+    public double SaleOrderQty;
+
+    @SerializedName("PackingQty")
+    public double PackingQty;
+
+    @SerializedName("ScanQty")
+    public double ScanQty;
+
+    @SerializedName("WorkDiv")
+    public int WorkDiv;
+
+    @SerializedName("Tag")
+    public String Tag;
+
+    @SerializedName("ErrorDiv")
+    public int ErrorDiv;
 
     public SearchCondition(){}
 

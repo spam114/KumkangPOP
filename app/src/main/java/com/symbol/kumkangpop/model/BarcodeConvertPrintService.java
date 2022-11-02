@@ -48,4 +48,13 @@ public class BarcodeConvertPrintService {
     public Single<BarcodeConvertPrint> FNBarcodeConvertPrint(SearchCondition searchCondition) {// 객체의 사용//todo
         return api.FNBarcodeConvertPrint(searchCondition);//todo
     }
+
+    public Single<BarcodeConvertPrint> FNSetPrintOrderData(SearchCondition searchCondition) {// 객체의 사용//todo
+        return api.FNSetPrintOrderData(searchCondition);//todo
+    }
+
+    public Single<BarcodeConvertPrint> FNSetPackingPDAData(SearchCondition searchCondition) {// 객체의 사용//todo
+        return api.FNSetPackingPDAData(searchCondition);//todo
+    }
+
 }

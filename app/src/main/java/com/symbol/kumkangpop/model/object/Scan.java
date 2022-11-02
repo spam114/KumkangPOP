@@ -6,13 +6,15 @@ import java.util.List;
 
 public class Scan {
 
-    @SerializedName("ErrorCheck")
+    //@SerializedName("ErrorCheck")
     public String ErrorCheck="";
 
-    @SerializedName("ActivityFlag")
+    //@SerializedName("ActivityFlag")
     public int ActivityFlag;
 
-    @SerializedName("SalesOrderList")
+    //@SerializedName("SalesOrderList")
     public List<SalesOrder> SalesOrderList;
+
+    public String Barcode="";
 
 }

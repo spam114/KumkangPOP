@@ -3,22 +3,26 @@ package com.symbol.kumkangpop.model.object;
 import com.google.gson.annotations.SerializedName;
 
 public class SalesOrder {
+    //@SerializedName("ErrorCheck")
+    public String ErrorCheck = "";
 
-    @SerializedName("SaleOrderNo")
-    public String SaleOrderNo="";
+    //@SerializedName("SaleOrderNo")
+    public String SaleOrderNo = "";
 
-    @SerializedName("LocationName")
+    //@SerializedName("LocationName")
     public String LocationName;
 
-    @SerializedName("CustomerName")
+    //@SerializedName("CustomerName")
     public String CustomerName;
 
-    @SerializedName("Dong")
+    //@SerializedName("Dong")
     public String Dong;
 
-    @SerializedName("LocationNo")
-    public int LocationNo;
+    //@SerializedName("LocationNo")
+    //public double LocationNo;
 
-    @SerializedName("CustomerCode")
+    //@SerializedName("CustomerCode")
     public String CustomerCode;
+    public double StockOutOrderQty;
+    public double PackingCnt;
 }

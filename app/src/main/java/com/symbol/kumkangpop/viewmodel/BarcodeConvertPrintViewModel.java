@@ -27,9 +27,10 @@ public class BarcodeConvertPrintViewModel extends ViewModel {
     // Single 객체를 가로채기 위함
     private CompositeDisposable disposable = new CompositeDisposable();
 
-    public MutableLiveData<BarcodeConvertPrint> data = new MutableLiveData<>();//todo
+    public MutableLiveData<BarcodeConvertPrint> data = new MutableLiveData<>();//FNBarcodeConvertPrint
+    public MutableLiveData<BarcodeConvertPrint> data2 = new MutableLiveData<>();//FNSetPrintOrderData
+    public MutableLiveData<BarcodeConvertPrint> data3 = new MutableLiveData<>();//FNSetPrintOrderData
 
-    // 로그인 정보 호출
     public void FNBarcodeConvertPrint(SearchCondition sc) {
         loading.setValue(true);
         disposable.add(
@@ -62,5 +63,69 @@ public class BarcodeConvertPrintViewModel extends ViewModel {
         );
     }
 
+    public void FNSetPrintOrderData(SearchCondition sc) {
+        loading.setValue(true);
+        disposable.add(
+                service.FNSetPrintOrderData(sc) // POP 로그인 정보를 확인한다.
+                        .subscribeOn(Schedulers.newThread()) // 새로운 스레드에서 통신한다.
+                        .observeOn(AndroidSchedulers.mainThread()) // 응답 값을 가지고 ui update를 하기 위해 필요함, 메인스레드와 소통하기 위
+                        .subscribeWith(new DisposableSingleObserver<BarcodeConvertPrint>() {//todo
+
+                            @Override
+                            public void onSuccess(@NonNull BarcodeConvertPrint models) {//todo
+                                if (models.ErrorCheck != null) {
+                                    errorMsg.setValue(models.ErrorCheck);
+                                    loadError.setValue(true);
+                                    loading.setValue(false);
+                                    return;
+                                }
+                                data2.setValue(models);
+                                loadError.setValue(false);
+                                loading.setValue(false);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                errorMsg.setValue("서버 오류 발생");
+                                loadError.setValue(true);
+                                loading.setValue(false);
+                                e.printStackTrace();
+                            }
+                        })
+        );
+    }
+
+    //
+    public void FNSetPackingPDAData(SearchCondition sc) {
+        loading.setValue(true);
+        disposable.add(
+                service.FNSetPackingPDAData(sc) // POP 로그인 정보를 확인한다.
+                        .subscribeOn(Schedulers.newThread()) // 새로운 스레드에서 통신한다.
+                        .observeOn(AndroidSchedulers.mainThread()) // 응답 값을 가지고 ui update를 하기 위해 필요함, 메인스레드와 소통하기 위
+                        .subscribeWith(new DisposableSingleObserver<BarcodeConvertPrint>() {//todo
+
+                            @Override
+                            public void onSuccess(@NonNull BarcodeConvertPrint models) {//todo
+                                if (models.ErrorCheck != null) {
+                                    errorMsg.setValue(models.ErrorCheck);
+                                    loadError.setValue(true);
+                                    loading.setValue(false);
+                                    return;
+                                }
+                                data3.setValue(models);
+                                loadError.setValue(false);
+                                loading.setValue(false);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                errorMsg.setValue("서버 오류 발생");
+                                loadError.setValue(true);
+                                loading.setValue(false);
+                                e.printStackTrace();
+                            }
+                        })
+        );
+    }
 
 }

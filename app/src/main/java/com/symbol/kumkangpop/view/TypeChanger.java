@@ -3,7 +3,10 @@ package com.symbol.kumkangpop.view;
 import com.google.gson.internal.LinkedTreeMap;
 import com.symbol.kumkangpop.model.object.AppVersion;
 import com.symbol.kumkangpop.model.object.BusinessClass;
+import com.symbol.kumkangpop.model.object.CheckTag;
+import com.symbol.kumkangpop.model.object.NumConvertData;
 import com.symbol.kumkangpop.model.object.Report;
+import com.symbol.kumkangpop.model.object.SalesOrder;
 import com.symbol.kumkangpop.model.object.StockIn;
 import com.symbol.kumkangpop.model.object.WoPartHist;
 
@@ -24,7 +27,7 @@ public class TypeChanger {
             for (int i = 0; i < fields.length; i++) {
                 fields[i].set(rData, linkedTreeMap.get(fields[i].getName()));
             }
-        } catch (IllegalAccessException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return rData;
@@ -38,7 +41,7 @@ public class TypeChanger {
             for (int i = 0; i < fields.length; i++) {
                 fields[i].set(rData, linkedTreeMap.get(fields[i].getName()));
             }
-        } catch (IllegalAccessException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return rData;
@@ -52,7 +55,7 @@ public class TypeChanger {
             for (int i = 0; i < fields.length; i++) {
                 fields[i].set(rData, linkedTreeMap.get(fields[i].getName()));
             }
-        } catch (IllegalAccessException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return rData;
@@ -71,7 +74,7 @@ public class TypeChanger {
                 }
                 returnList.add(rData);
             }
-        } catch (IllegalAccessException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return returnList;
@@ -90,7 +93,7 @@ public class TypeChanger {
                 }
                 returnList.add(rData);
             }
-        } catch (IllegalAccessException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return returnList;
@@ -109,7 +112,66 @@ public class TypeChanger {
                 }
                 returnList.add(rData);
             }
-        } catch (IllegalAccessException e) {
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return returnList;
+    }
+
+
+    public static ArrayList<SalesOrder> changeTypeSalesOrderList(Object object) {
+        ArrayList<LinkedTreeMap> arrayList = (ArrayList<LinkedTreeMap>) object;
+        ArrayList<SalesOrder> returnList=new ArrayList<>();
+        try {
+            for(int i=0;i<arrayList.size();i++){
+                LinkedTreeMap linkedTreeMap = arrayList.get(i);
+                Field fields[] = SalesOrder.class.getFields();
+                SalesOrder rData = new SalesOrder();
+                for (int j = 0; j < fields.length; j++) {
+                    fields[j].set(rData, linkedTreeMap.get(fields[j].getName()));
+                }
+                returnList.add(rData);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return returnList;
+    }
+
+    public static ArrayList<CheckTag> changeTypeCheckTagList(Object object) {
+        ArrayList<LinkedTreeMap> arrayList = (ArrayList<LinkedTreeMap>) object;
+        ArrayList<CheckTag> returnList=new ArrayList<>();
+        try {
+            for(int i=0;i<arrayList.size();i++){
+                LinkedTreeMap linkedTreeMap = arrayList.get(i);
+                Field fields[] = CheckTag.class.getFields();
+                CheckTag rData = new CheckTag();
+                for (int j = 0; j < fields.length; j++) {
+                    fields[j].set(rData, linkedTreeMap.get(fields[j].getName()));
+                }
+                returnList.add(rData);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return returnList;
+    }
+
+
+    public static ArrayList<NumConvertData> changeTypeNumConvertDataList(Object object) {
+        ArrayList<LinkedTreeMap> arrayList = (ArrayList<LinkedTreeMap>) object;
+        ArrayList<NumConvertData> returnList=new ArrayList<>();
+        try {
+            for(int i=0;i<arrayList.size();i++){
+                LinkedTreeMap linkedTreeMap = arrayList.get(i);
+                Field fields[] = NumConvertData.class.getFields();
+                NumConvertData rData = new NumConvertData();
+                for (int j = 0; j < fields.length; j++) {
+                    fields[j].set(rData, linkedTreeMap.get(fields[j].getName()));
+                }
+                returnList.add(rData);
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return returnList;

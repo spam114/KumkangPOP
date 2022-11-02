@@ -2,24 +2,17 @@ package com.symbol.kumkangpop.view.activity;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
@@ -28,8 +21,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.andremion.floatingnavigationview.FloatingNavigationView;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 import com.symbol.kumkangpop.R;
 import com.symbol.kumkangpop.databinding.ActivityMainBinding;
 import com.symbol.kumkangpop.databinding.DialogNoticeBinding;
@@ -37,11 +28,14 @@ import com.symbol.kumkangpop.model.SearchCondition;
 import com.symbol.kumkangpop.model.object.AppVersion;
 import com.symbol.kumkangpop.model.object.BusinessClass;
 import com.symbol.kumkangpop.model.object.MainMenuItem;
+import com.symbol.kumkangpop.model.object.SalesOrder;
 import com.symbol.kumkangpop.model.object.Users;
 import com.symbol.kumkangpop.view.BackPressControl;
 import com.symbol.kumkangpop.view.CommonMethod;
 import com.symbol.kumkangpop.view.PreferenceManager;
 import com.symbol.kumkangpop.view.TypeChanger;
+import com.symbol.kumkangpop.view.activity.menu0.Activity0010;
+import com.symbol.kumkangpop.view.activity.menu2.Activity2300;
 import com.symbol.kumkangpop.view.adapter.MainAdapter;
 import com.symbol.kumkangpop.viewmodel.BarcodeConvertPrintViewModel;
 import com.symbol.kumkangpop.viewmodel.ScanViewModel;
@@ -89,15 +83,8 @@ public class MainActivity extends BaseActivity {
 
 
     private void setListener() {
-        /*binding.button.setOnClickListener(new View.OnClickListener() {//제품포장
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, Activity0000.class);
-                startActivity(intent);
-            }
-        });
 
-        binding.button9.setOnClickListener(new View.OnClickListener() {//A급대기
+        /*binding.button9.setOnClickListener(new View.OnClickListener() {//A급대기
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, Activity9000.class);
@@ -200,53 +187,41 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        /*barcodeConvertPrintViewModel.data.observe(this, barcode -> {
+        barcodeConvertPrintViewModel.data.observe(this, barcode -> {
             if (barcode != null) {
-                if (barcode.equals("")) return;
+                if (barcode.Barcode.equals("")) return;
 
-                int iConvetDivision = 1;
-                //주문번호 1
-                //포장번호 2
-                //번들번호 3
-                //이송번호 4
-                //출고번호 5
-                //컨테이너번호 6
-                if (npopControl.GetNumSeekData(3, barcode))
-                {
-                    //RMwrt2300P nForm = new RMwrt2300P(barcode);
-                    //nForm.ShowDialog();
-                    // 프로그램 시작시 바코드 모듈 ON
-                    //MBBarcode.Power(true);
-                    // 바코드 모듈 제어권 시작
-                    //MBBarcode.ActiveForm = this;
-                    return;
-                }
-
-                DataSet nDataSet = npopControl.GetNumConvertData(iConvetDivision, barcode);
-                if (nDataSet.Tables[0].Rows.Count == 0)
-                {
-                    ////nScaner.fnBeepError();
-                    return;
-                }
-
-                DataTable nDataTable = npopControl.GetSalesOrderData(mclVariable.BusinessClassCode, mclVariable.CustomerCode, nDataSet.Tables[0].Rows[0][0].ToString()).Tables[0];
-                if (nDataTable.Rows.Count != 0)
-                {
-                    //MBBarcode.ActiveForm = null;
-                    //RMwrt0010P nForm = new RMwrt0010P(nDataTable.Rows[0]);
-                    //nForm.ShowDialog();
-                    // 프로그램 시작시 바코드 모듈 ON
-                    //MBBarcode.Power(true);
-                    // 바코드 모듈 제어권 시작
-                    //MBBarcode.ActiveForm = this;
-
-                }
-
+                SearchCondition sc = new SearchCondition();
+                sc.Barcode = barcode.Barcode;
+                sc.BusinessClassCode = Users.BusinessClassCode;
+                sc.CustomerCode = Users.CustomerCode;
+                scanViewModel.GetScanMain(sc);
             }
             else {
                 Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_LONG).show();
             }
-        });*/
+        });
+
+        scanViewModel.data.observe(this, data -> {
+            if (data != null) {
+                int activityFlag = data.ActivityFlag;//1: Activity2300실행, 2: 종료, 3: Activity0010실행 + Get한 주문서 데이터 처리
+                if(activityFlag==1){//1: Activity2300실행 + barcode
+                    String barCode = data.Barcode;
+                    Intent intent = new Intent(MainActivity.this, Activity2300.class);
+                    intent.putExtra("barCode", barCode);
+                    startActivity(intent);
+                }
+                else if(activityFlag==2){//2: 종료
+                    return;
+                }
+                else if(activityFlag==3){//3: Activity0010실행 + Get한 주문서 데이터 처리(SalesOrderList)
+
+                    Intent intent = new Intent(this, Activity0010.class);
+                    intent.putExtra("saleOrderNo", data.SalesOrderList.get(0).SaleOrderNo);
+                    activityResultLauncher.launch(intent);
+                }
+            }
+        });
 
     }
 
@@ -289,37 +264,37 @@ public class MainActivity extends BaseActivity {
     }
 
     private void setResultLauncher() {
-        resultLauncher = registerForActivityResult(
+
+        resultLauncher = CommonMethod.FNBarcodeConvertPrint(this, barcodeConvertPrintViewModel);
+
+        /*resultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
                     @Override
                     public void onActivityResult(ActivityResult result) {
-                        /**
+                        *//**
                          * QR코드 시작
-                         */
+                         *//*
                         IntentResult intentResult = IntentIntegrator.parseActivityResult(result.getResultCode(), result.getData());
                         if (intentResult.getContents() != null) {
-
-                            scanViewModel.GetTest();
-
-                            /*String barcode = intentResult.getContents();
+                            String barcode = intentResult.getContents();
                             Toast.makeText(MainActivity.this, barcode, Toast.LENGTH_SHORT).show();
                             SearchCondition sc = new SearchCondition();
                             sc.Barcode = barcode;
                             sc.LocationNo = Users.LocationNo;
                             sc.PCCode = Users.PCCode;
                             sc.UserID = Users.UserID;
-                            barcodeConvertPrintViewModel.FNBarcodeConvertPrint(sc);*/
+                            barcodeConvertPrintViewModel.FNBarcodeConvertPrint(sc);
                             return;
                         }
-                        /**
+                        *//**
                          * QR코드 끝
-                         */
+                         *//*
                         if (result.getResultCode() == 100) {
 
                         }
                     }
-                });
+                });*/
     }
 
     private void setBar() {
@@ -339,8 +314,21 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return CommonMethod.onOptionsItemSelected(this, item, resultLauncher);
+        return CommonMethod.onOptionsItemSelected(this, item, resultLauncher,2);
     }
+
+    ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                //result.getResultCode()를 통하여 결과값 확인
+                if(result.getResultCode() == RESULT_OK) {
+                    //ToDo
+                }
+                if(result.getResultCode() == RESULT_CANCELED){
+                    //ToDo
+                }
+            }
+    );
 
     /*@Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -358,6 +346,17 @@ public class MainActivity extends BaseActivity {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }*/
+
+    public void getKeyInResult(String result) {
+        if (result.equals(""))
+            return;
+
+        SearchCondition sc = new SearchCondition();
+        sc.Barcode = result;
+        sc.BusinessClassCode = Users.BusinessClassCode;
+        sc.CustomerCode = Users.CustomerCode;
+        scanViewModel.GetScanMain(sc);
+    }
 
     private void startProgress() {
         Handler handler = new Handler();

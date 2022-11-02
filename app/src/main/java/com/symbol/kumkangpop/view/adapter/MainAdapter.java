@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.symbol.kumkangpop.R;
 import com.symbol.kumkangpop.databinding.RowMenuBinding;
 import com.symbol.kumkangpop.model.object.MainMenuItem;
+import com.symbol.kumkangpop.view.activity.MainActivity;
+import com.symbol.kumkangpop.view.activity.menu0.Activity0000;
 import com.symbol.kumkangpop.view.activity.menu1.Activity1000;
 import com.symbol.kumkangpop.view.activity.menu9.Activity9000;
 import com.symbol.kumkangpop.view.activity.report.ActivityReport1;
@@ -174,16 +176,33 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
                         Intent intent = new Intent(context, ActivityReport7.class);
                         context.startActivity(intent);
                     }
-                    else if (item.menuName.equals(context.getString(R.string.menu10))) {
-
-                    } else if (item.menuName.equals(context.getString(R.string.menu11))) {
-
-                    } else if (item.menuName.equals(context.getString(R.string.menu12))) {
-
-                    } else if (item.menuName.equals(context.getString(R.string.menu13))) {
-
-                    } else if (item.menuName.equals(context.getString(R.string.menu14))) {
-
+                    else if (item.menuName.equals(context.getString(R.string.menu11))) {//제품포장
+                        Intent intent = new Intent(context, Activity0000.class);
+                        context.startActivity(intent);
+                    } else if (item.menuName.equals(context.getString(R.string.menu12))) {//번들생성
+                        /*Intent intent = new Intent(context, Activity0000.class);
+                        context.startActivity(intent);*/
+                    } else if (item.menuName.equals(context.getString(R.string.menu13))) {//재고이송
+                        /*Intent intent = new Intent(context, Activity0000.class);
+                        context.startActivity(intent);*/
+                    } else if (item.menuName.equals(context.getString(R.string.menu14))) {//제품출고
+                        /*Intent intent = new Intent(context, Activity0000.class);
+                        context.startActivity(intent);*/
+                    } else if (item.menuName.equals(context.getString(R.string.menu15))) {//자료수신
+                        /*Intent intent = new Intent(context, Activity0000.class);
+                        context.startActivity(intent);*/
+                    }
+                    else if (item.menuName.equals(context.getString(R.string.menu18))) {//재고이입
+                        /*Intent intent = new Intent(context, Activity0000.class);
+                        context.startActivity(intent);*/
+                    }
+                    else if (item.menuName.equals(context.getString(R.string.menu19))) {//출고검수
+                        /*Intent intent = new Intent(context, Activity0000.class);
+                        context.startActivity(intent);*/
+                    }
+                    else if (item.menuName.equals(context.getString(R.string.menu20))) {//자료송신
+                        /*Intent intent = new Intent(context, Activity0000.class);
+                        context.startActivity(intent);*/
                     }
 
                 }

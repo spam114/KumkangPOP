@@ -227,7 +227,7 @@ public class ActivityReport7 extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return CommonMethod.onOptionsItemSelected(this, item, resultLauncher);
+        return CommonMethod.onOptionsItemSelected(this, item, resultLauncher,1);
     }
 
 

@@ -45,4 +45,8 @@ public class ScanService {
         sc.UserID = Users.UserID;
         return api.GetTest(sc);//todo
     }
+
+    public Single<Scan> GetScanMain(SearchCondition sc) {// 객체의 사용//todo
+        return api.GetScanMain(sc);//todo
+    }
 }

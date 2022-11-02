@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.symbol.kumkangpop.model.ScanService;
+import com.symbol.kumkangpop.model.SearchCondition;
 import com.symbol.kumkangpop.model.object.Scan;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -25,7 +26,7 @@ public class ScanViewModel extends ViewModel {
 
     public MutableLiveData<Scan> data = new MutableLiveData<>();//todo
 
-    public void GetTest() {
+    /*public void GetTest() {
         loading.setValue(true);
         disposable.add(service.GetTest()
                 .subscribeOn(Schedulers.newThread()) // 새로운 스레드에서 통신한다.
@@ -33,6 +34,34 @@ public class ScanViewModel extends ViewModel {
                 .subscribeWith(new DisposableSingleObserver<Scan>() {
                     @Override
                     public void onSuccess(@NonNull Scan models) {
+                        data.setValue(models);
+                        loading.setValue(false);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        loadError.setValue(true);
+                        loading.setValue(false);
+                        e.printStackTrace();
+                    }
+                })
+        );
+    }*/
+
+    public void GetScanMain(SearchCondition sc) {
+        loading.setValue(true);
+        disposable.add(service.GetScanMain(sc)
+                .subscribeOn(Schedulers.newThread()) // 새로운 스레드에서 통신한다.
+                .observeOn(AndroidSchedulers.mainThread()) // 응답 값을 가지고 ui update를 하기 위해 필요함, 메인스레드와 소통하기 위
+                .subscribeWith(new DisposableSingleObserver<Scan>() {
+                    @Override
+                    public void onSuccess(@NonNull Scan models) {
+                        if (models.ErrorCheck != null) {
+                            //errorMsg.setValue(models.ErrorCheck);
+                            loadError.setValue(true);
+                            loading.setValue(false);
+                            return;
+                        }
                         data.setValue(models);
                         loading.setValue(false);
                     }

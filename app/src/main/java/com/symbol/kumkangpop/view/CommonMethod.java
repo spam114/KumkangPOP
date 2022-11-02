@@ -1,5 +1,6 @@
 package com.symbol.kumkangpop.view;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -19,10 +20,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
@@ -33,12 +38,19 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.symbol.kumkangpop.R;
 import com.symbol.kumkangpop.model.SearchCondition;
 import com.symbol.kumkangpop.model.object.Users;
 import com.symbol.kumkangpop.view.activity.BaseActivity;
 import com.symbol.kumkangpop.view.activity.LoginActivity;
+import com.symbol.kumkangpop.view.activity.menu0.Activity0120;
+import com.symbol.kumkangpop.view.activity.menu0.Activity0300;
+import com.symbol.kumkangpop.viewmodel.BarcodeConvertPrintViewModel;
 import com.symbol.kumkangpop.viewmodel.LoginViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CommonMethod {
     public static String keyResult;
@@ -84,11 +96,15 @@ public class CommonMethod {
         return true;
     }
 
-    public static boolean onOptionsItemSelected(BaseActivity activity, MenuItem item, ActivityResultLauncher<Intent> resultLauncher) {
+    public static boolean onOptionsItemSelected(BaseActivity activity, MenuItem item, ActivityResultLauncher<Intent> resultLauncher, int type) {
         switch (item.getItemId()) {
             case R.id.itemKeyboard:
                 LayoutInflater inflater = LayoutInflater.from(activity);
-                final View dialogView = inflater.inflate(R.layout.dialog_key_in, null);
+                final View dialogView;
+                if (type == 1)
+                    dialogView = inflater.inflate(R.layout.dialog_key_in, null);
+                else
+                    dialogView = inflater.inflate(R.layout.dialog_key_in2, null);
                 AlertDialog.Builder buider = new AlertDialog.Builder(activity); //AlertDialog.Builder 객체 생성
                 //  buider.setIcon(android.R.drawable.ic_menu_add); //제목옆의 아이콘 이미지(원하는 이미지 설정)
                 buider.setView(dialogView); //위에서 inflater가 만든 dialogView 객체 세팅 (Customize)
@@ -152,7 +168,7 @@ public class CommonMethod {
                 IntentIntegrator intentIntegrator = new IntentIntegrator(activity);
                 intentIntegrator.setBeepEnabled(true);//바코드 인식시 소리
                 intentIntegrator.setPrompt(activity.getString(R.string.qr_state_common));
-                intentIntegrator.setOrientationLocked(false);
+                intentIntegrator.setOrientationLocked(true);
                 // intentIntegrator.setCaptureActivity(QRReaderActivityStockOutMaster.class);
                 //intentIntegrator.initiateScan();
                 intentIntegrator.setRequestCode(7);
@@ -180,6 +196,13 @@ public class CommonMethod {
         actionBar.setHomeAsUpIndicator(newdrawable);
     }
 
+    /*public static String GetPackingNo(){
+
+        commonViewModel.GetStr("GetPackingNo",new SearchCondition());
+
+
+        return "";
+    }*/
 
     public static FloatingNavigationView setFloatingNavigationView(BaseActivity activity) {
         View fnvHeader;
@@ -340,6 +363,114 @@ public class CommonMethod {
 
 
         return mFloatingNavigationView;
+
+    }
+
+    /**
+     * QR코드로 인식
+     *
+     * @param context
+     * @param barcodeConvertPrintViewModel
+     * @return
+     */
+    public static ActivityResultLauncher<Intent> FNBarcodeConvertPrint(Context context, BarcodeConvertPrintViewModel barcodeConvertPrintViewModel) {
+        /**
+         * QR코드 시작
+         */
+        /**
+         * QR코드 끝
+         */
+        ActivityResultLauncher<Intent> resultLauncher = ((BaseActivity) context).registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        /**
+                         * QR코드 시작
+                         */
+                        IntentResult intentResult = IntentIntegrator.parseActivityResult(result.getResultCode(), result.getData());
+                        if (intentResult.getContents() != null) {
+                            String barcode = intentResult.getContents();
+                            FNBarcodeConvertPrint(barcode, barcodeConvertPrintViewModel);
+                            return;
+                        }
+                        /**
+                         * QR코드 끝
+                         */
+                        if (result.getResultCode() == 100) {
+
+                        }
+                    }
+                });
+
+        return resultLauncher;
+    }
+
+    /**
+     * 직접인식
+     *
+     * @param barcode
+     * @param barcodeConvertPrintViewModel
+     */
+    public static void FNBarcodeConvertPrint(String barcode, BarcodeConvertPrintViewModel barcodeConvertPrintViewModel) {
+        SearchCondition sc = new SearchCondition();
+        sc.Barcode = barcode;
+        sc.LocationNo = Users.LocationNo;
+        sc.PCCode = Users.PCCode;
+        sc.UserID = Users.UserID;
+        barcodeConvertPrintViewModel.FNBarcodeConvertPrint(sc);
+        return;
+    }
+
+    /**
+     * Print 공통
+     * @param context
+     * @param barcodeConvertPrintViewModel
+     * @param printDivision
+     * @param printNo
+     */
+    public static void FNSetPrintOrderData(Context context, BarcodeConvertPrintViewModel barcodeConvertPrintViewModel, int printDivision, String printNo) {
+        new MaterialAlertDialogBuilder(context)
+                .setTitle("TAG 출력")
+                .setMessage("TAG번호: "+printNo+"\n출력작업을 진행하시겠습니까?")
+                .setCancelable(true)
+                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Toast.makeText(getBaseContext(), "삭제되었습니다.", Toast.LENGTH_SHORT).show();
+
+                        if (Users.PCCode.equals("")) {
+                            Toast.makeText(context, "출력 PC가 연결되어 있지 않습니다.", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        SearchCondition sc = new SearchCondition();
+                        sc.PCCode = Users.PCCode;
+                        sc.PrintDivision = printDivision;
+                        sc.PrintNo = printNo;
+                        sc.UserID = Users.UserID;
+                        barcodeConvertPrintViewModel.FNSetPrintOrderData(sc);
+                        return;
+                    }
+                })
+                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).show();
+    }
+
+
+    public static void FNSetPackingPDAData(BarcodeConvertPrintViewModel barcodeConvertPrintViewModel, int WorkDiv, String PackingNo, String Tag, int ErrorDiv) {
+        SearchCondition sc = new SearchCondition();
+        sc.WorkDiv = WorkDiv;
+        sc.PackingNo=PackingNo;
+        sc.Tag= Tag;
+        sc.ErrorDiv = ErrorDiv;
+        sc.LocationNo = Users.LocationNo;
+        sc.UserID = Users.UserID;
+        barcodeConvertPrintViewModel.FNSetPackingPDAData(sc);
 
     }
 }

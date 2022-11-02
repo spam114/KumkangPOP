@@ -49,12 +49,62 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
+            android:name="com.symbol.kumkangpop.view.activity.menu0.Activity0010"
+            tools:ignore="LockedOrientationActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.symbol.kumkangpop.view.activity.menu0.Activity0100"
+            tools:ignore="LockedOrientationActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.symbol.kumkangpop.view.activity.menu0.Activity0120"
+            tools:ignore="LockedOrientationActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.symbol.kumkangpop.view.activity.menu0.Activity0122"
+            tools:ignore="LockedOrientationActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.symbol.kumkangpop.view.activity.menu0.Activity0300"
+            tools:ignore="LockedOrientationActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.symbol.kumkangpop.view.activity.menu0.Activity0400"
+            tools:ignore="LockedOrientationActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.symbol.kumkangpop.view.activity.menu0.Activity0410"
+            tools:ignore="LockedOrientationActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.symbol.kumkangpop.view.activity.menu0.Activity0411"
+            tools:ignore="LockedOrientationActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.symbol.kumkangpop.view.activity.menu0.Activity0412"
+            tools:ignore="LockedOrientationActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
             android:name="com.symbol.kumkangpop.view.activity.menu1.Activity1000"
             tools:ignore="LockedOrientationActivity"
             android:screenOrientation="portrait">
         </activity>
         <activity
             android:name="com.symbol.kumkangpop.view.activity.menu1.Activity1100"
+            tools:ignore="LockedOrientationActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.symbol.kumkangpop.view.activity.menu2.Activity2300"
             tools:ignore="LockedOrientationActivity"
             android:screenOrientation="portrait">
         </activity>

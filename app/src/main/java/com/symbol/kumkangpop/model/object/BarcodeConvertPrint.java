@@ -9,4 +9,7 @@ public class BarcodeConvertPrint{
 
     @SerializedName("Barcode")
     public String Barcode;
+
+    @SerializedName("Result")
+    public String Result;
 }

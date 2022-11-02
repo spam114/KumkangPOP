@@ -3,11 +3,14 @@ package com.symbol.kumkangpop.model;
 import com.symbol.kumkangpop.model.object.AppVersion;
 import com.symbol.kumkangpop.model.object.BarcodeConvertPrint;
 import com.symbol.kumkangpop.model.object.CodeData;
+import com.symbol.kumkangpop.model.object.Common;
 import com.symbol.kumkangpop.model.object.Dong;
 import com.symbol.kumkangpop.model.object.LoginInfo;
+import com.symbol.kumkangpop.model.object.NumConvertData;
 import com.symbol.kumkangpop.model.object.Part;
 import com.symbol.kumkangpop.model.object.PartSpec;
 import com.symbol.kumkangpop.model.object.Report;
+import com.symbol.kumkangpop.model.object.SData;
 import com.symbol.kumkangpop.model.object.Scan;
 
 import java.util.List;
@@ -51,11 +54,8 @@ public interface DataApi {
     @POST("GetBusinessClassData")
     Single<List<Object>> GetBusinessClassData(@Body SearchCondition searchCondition);
 
-    @POST("GetSalesOrderData")
-    Single<List<Object>> GetSalesOrderData(@Body SearchCondition searchCondition);
-
     @POST("GetStockInDataPOP")
-    Single<List<Object>> GetStockInDataPOP(@Body SearchCondition searchCondition);
+    Single<Common> GetStockInDataPOP(@Body SearchCondition searchCondition);
 
     @POST("CheckAWaitingQR")
     Single<Object> CheckAWaitingQR(@Body SearchCondition searchCondition);
@@ -81,7 +81,10 @@ public interface DataApi {
 
 
     @POST("GetAMaster")
-    Single<List<Object>> GetAMaster(@Body SearchCondition searchCondition);
+    Single<Common> GetAMaster(@Body SearchCondition searchCondition);
+
+    @POST("GetSalesOrderData")
+    Single<Common> GetSalesOrderData(@Body SearchCondition searchCondition);
 
     @POST("CheckAQR")
     Single<Object> CheckAQR(@Body SearchCondition searchCondition);
@@ -116,7 +119,52 @@ public interface DataApi {
     @POST("FNBarcodeConvertPrint")
     Single<BarcodeConvertPrint> FNBarcodeConvertPrint(@Body SearchCondition searchCondition);
 
+    @POST("FNSetPrintOrderData")
+    Single<BarcodeConvertPrint> FNSetPrintOrderData(@Body SearchCondition searchCondition);
+
+    @POST("FNSetPackingPDAData")
+    Single<BarcodeConvertPrint> FNSetPackingPDAData(@Body SearchCondition searchCondition);
+
     @POST("GetTest")
     Single<Scan> GetTest(@Body SearchCondition searchCondition);
+
+    @POST("GetScanMain")
+    Single<Scan> GetScanMain(@Body SearchCondition searchCondition);
+
+    @POST("GetNumConvertData")
+    Single<Common> GetNumConvertData(@Body SearchCondition searchCondition);
+
+    @POST("GetItemTagCheck")
+    Single<Common> GetItemTagCheck(@Body SearchCondition searchCondition);
+
+    @POST("GetSalesOrderDataHo")
+    Single<Common> GetSalesOrderDataHo(@Body SearchCondition searchCondition);
+
+    @POST("PrintPacking")
+    Single<Common> PrintPacking(@Body SearchCondition searchCondition);
+
+    @POST("GetPackingData")
+    Single<Common> GetPackingData(@Body SearchCondition searchCondition);
+
+    @POST("GetPackingNo")
+    Single<SData> GetPackingNo();
+
+    @POST("GetSalesOrderDataCnt")
+    Single<Common> GetSalesOrderDataCnt(@Body SearchCondition searchCondition);
+
+    @POST("ScanPacking")
+    Single<Common> ScanPacking(@Body SearchCondition searchCondition);
+
+    @POST("GetPackingDataExists")
+    Single<Common> GetPackingDataExists(@Body SearchCondition searchCondition);
+
+    @POST("GetPackingDetailDataSum")
+    Single<Common> GetPackingDetailDataSum(@Body SearchCondition searchCondition);
+
+    @POST("GetPackingDetailData")
+    Single<Common> GetPackingDetailData(@Body SearchCondition searchCondition);
+
+    @POST("GetItemTagData")
+    Single<Common> GetItemTagData(@Body SearchCondition searchCondition);
 }
 
