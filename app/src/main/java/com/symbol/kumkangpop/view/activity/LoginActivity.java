@@ -17,6 +17,7 @@ import com.symbol.kumkangpop.databinding.ActivityLoginBinding;
 import com.symbol.kumkangpop.model.SearchCondition;
 import com.symbol.kumkangpop.model.object.Users;
 import com.symbol.kumkangpop.view.BackPressControl;
+import com.symbol.kumkangpop.view.CommonMethod;
 import com.symbol.kumkangpop.view.PreferenceManager;
 import com.symbol.kumkangpop.viewmodel.LoginViewModel;
 
@@ -34,10 +35,21 @@ public class LoginActivity extends BaseActivity {
         binding.tlID.setErrorEnabled(true);
         binding.tlPW.setErrorEnabled(true);
         backpressed = new BackPressControl(this);
+        setView();
         initEvent();
         observerViewModel();
         if(getIntent().getBooleanExtra("FirstFlag",true)){
             StartLogin();
+        }
+    }
+
+    private void setView() {
+        int langInt= PreferenceManager.getInt(this, "Language");
+        if(langInt==0){
+            binding.rbKor.setChecked(true);
+        }
+        else{
+            binding.rbEng.setChecked(true);
         }
     }
 
@@ -48,8 +60,8 @@ public class LoginActivity extends BaseActivity {
         sc.PCCode = PreferenceManager.getString(this, "PCCode");
         if(sc.PCCode.equals(""))//저장되어 있는 PCCode가 없다면,
             sc.PCCode = binding.edtPC.getText().toString();
-
         loginViewModel.GetPrintPCData(sc, this);
+        sc.Language = PreferenceManager.getInt(this, "Language");
         if (binding.checkAuto.isChecked()) {
             PreferenceManager.setBoolean(this, "AutoLogin", true);
             PreferenceManager.setString(this, "ID", binding.edtID.getText().toString());
@@ -72,10 +84,19 @@ public class LoginActivity extends BaseActivity {
         binding.edtPW.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) { // IME_ACTION_SEARCH , IME_ACTION_GO
+                /*if (actionId == EditorInfo.IME_ACTION_DONE) { // IME_ACTION_SEARCH , IME_ACTION_GO
+                    if (binding.rbKor.isChecked())
+                        PreferenceManager.setInt(LoginActivity.this, "Language", 0);
+                    else
+                        PreferenceManager.setInt(LoginActivity.this, "Language", 1);
                     binding.btnLogin.performClick();
                 }
+                return false;*/
+                /*if (actionId == EditorInfo.IME_ACTION_DONE) { // IME_ACTION_SEARCH , IME_ACTION_GO
+                    HideKeyBoard();
+                }*/
                 return false;
+
             }
         });
 
@@ -111,6 +132,10 @@ public class LoginActivity extends BaseActivity {
      * @param v
      */
     public void btnLoginClick(View v) {
+        if (binding.rbKor.isChecked())
+            PreferenceManager.setInt(this, "Language", 0);
+        else
+            PreferenceManager.setInt(this, "Language", 1);
         StartLogin();
     }
 
@@ -120,6 +145,7 @@ public class LoginActivity extends BaseActivity {
         if (autoLoginFlag) {
             sc.UserID = PreferenceManager.getString(this, "ID");
             sc.PassWord = PreferenceManager.getString(this, "PW");
+            sc.Language = PreferenceManager.getInt(this, "Language");
         }
         else{
             if(getIntent().getBooleanExtra("FirstFlag",true)){
@@ -129,6 +155,10 @@ public class LoginActivity extends BaseActivity {
             else{
                 sc.UserID = CheckInputLoginUserID(); // 아이디 공백 확인
                 sc.PassWord = CheckInputLoginPassword(); // 패스워드 공백 확인
+                if (binding.rbKor.isChecked())
+                    sc.Language=0;
+                else
+                    sc.Language=1;
                 if (sc.UserID.equals("") || sc.PassWord.equals("")) return;
             }
         }
@@ -138,6 +168,7 @@ public class LoginActivity extends BaseActivity {
     private void GetLoginInfoByPhoneNumber() {
         SearchCondition sc = new SearchCondition();
         sc.UserID = Users.PhoneNumber;
+        sc.Language = PreferenceManager.getInt(this, "Language");
         loginViewModel.GetLoginInfoByPhoneNumber(sc);
     }
 
@@ -191,6 +222,10 @@ public class LoginActivity extends BaseActivity {
                     sc.PassWord = CheckInputLoginPassword(); // 패스워드 공백 확인
                     if (sc.UserID.equals("") || sc.PassWord.equals("")) return;
 
+                    if (binding.rbKor.isChecked())
+                        sc.Language=0;
+                    else
+                        sc.Language=1;
                     loginViewModel.GetLoginInfoData(sc);
                 }
                 /*else{//PhoneNumber 가 없으니 자동로그인 or 직접로그인
@@ -211,11 +246,12 @@ public class LoginActivity extends BaseActivity {
         //에러메시지
         loginViewModel.errorMsg.observe(this, models -> {
             if (models != null) {
-                Toast.makeText(this, models, Toast.LENGTH_LONG).show();
+                Toast.makeText(this, models, Toast.LENGTH_SHORT).show();
                 PreferenceManager.setBoolean(this, "AutoLogin", false);
                 PreferenceManager.setString(this, "ID", "");
                 PreferenceManager.setString(this, "PW", "");
                 PreferenceManager.setString(this, "PCCode", "");
+                PreferenceManager.setInt(this, "Language", 0);
                 progressOFF2();
             }
         });

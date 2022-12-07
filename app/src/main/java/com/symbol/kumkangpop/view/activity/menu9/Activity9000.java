@@ -72,7 +72,8 @@ public class Activity9000 extends BaseActivity {
         tmonth = calendar.get(Calendar.MONTH);
         tdate = calendar.get(Calendar.DATE);
         binding.txtFromDate.setText("[ " + tyear + "-" + (tmonth + 1) + "-" + tdate + " ]");
-        binding.txtTitle.setText("쇼트생산 등록(A급대기)");
+        binding.txtTitle.setText(Users.Language == 0 ? getString(R.string.menu2):getString(R.string.menu2_eng));
+        setView();
         setBar();
         setListener();
         setFloatingNavigationView();
@@ -84,6 +85,18 @@ public class Activity9000 extends BaseActivity {
         binding.recyclerView.setAdapter(adapter);
         String inDate = tyear + "-" + (tmonth + 1) + "-" + tdate;
         GetRecyclerViewData(inDate, binding.rbNo.isChecked());
+    }
+
+    private void setView() {
+        if(Users.Language==1){
+            binding.txtFromDate2.setText("Date");
+            binding.rbNo.setText("unconfirmed");
+            binding.rbYes.setText("confirmed");
+            binding.textViewWorkDate4.setText("NO");
+            binding.textViewWorkDate.setText("Item");
+            binding.textViewWorkType.setText("Size");
+            binding.textViewLocation.setText("Qty");
+        }
     }
 
 
@@ -145,8 +158,7 @@ public class Activity9000 extends BaseActivity {
                 // 어뎁터가 리스트를 수정한다.
                 adapter.updateAdapter(data.StockInList);
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_SHORT).show();
-                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
             }
         });
 
@@ -177,13 +189,12 @@ public class Activity9000 extends BaseActivity {
                     //다시조회
                     String inDate = tyear + "-" + (tmonth + 1) + "-" + tdate;
                     GetRecyclerViewData(inDate, binding.rbNo.isChecked());
-                    Toast.makeText(this, "확인 되었습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, Users.Language==0 ? "확인 되었습니다.": "It's been confirmed.", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(this, data.toString(), Toast.LENGTH_SHORT).show();
                 }
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_SHORT).show();
-                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
             }
         });
 

@@ -33,7 +33,6 @@ import com.symbol.kumkangpop.view.adapter.AdapterReport5_2;
 import com.symbol.kumkangpop.viewmodel.ReportViewModel;
 import com.symbol.kumkangpop.viewmodel.SimpleDataViewModel;
 
-import java.lang.reflect.Array;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -78,7 +77,8 @@ public class ActivityReport5 extends BaseActivity {
         tmonth = calendar.get(Calendar.MONTH);
         tdate = calendar.get(Calendar.DATE);
         binding.txtFromDate.setText("[ " + tyear + "-" + (tmonth + 1) + "-" + tdate + " ]");
-        binding.txtTitle.setText(getString(R.string.menu9));
+        binding.txtTitle.setText(Users.Language == 0 ? getString(R.string.menu9) : getString(R.string.menu9_eng));
+        setView();
         setBar();
         setListener();
         setFloatingNavigationView();
@@ -92,6 +92,24 @@ public class ActivityReport5 extends BaseActivity {
         GetSaleType();
         setRadioButton();
         setFieldState(R.id.rbQty);
+    }
+
+    private void setView() {
+        if(Users.Language==1){
+            binding.txtFromDate2.setText("Date");
+            binding.chkCustomer.setText("By Customer");
+            binding.txtFromDate77.setText("Print");
+            binding.rbQty.setText("Qty");
+            binding.rbVolumn.setText("Volumn");
+            binding.rbWeight.setText("Weight");
+            binding.txtFromDate4.setText("Sale Type");
+            binding.txtSaleTypeName.setText("Select");
+            binding.textViewField1.setText("InvoiceNo");
+            binding.textViewField2.setText("ItemType");
+            binding.textViewField3.setText("Qty");
+            binding.textViewField4.setText("TotalQty");
+            binding.textView3.setText("Total");
+        }
     }
 
     private void GetSaleType() {
@@ -127,9 +145,9 @@ public class ActivityReport5 extends BaseActivity {
         binding.txtTotal7.setVisibility(View.GONE);
         binding.txtTotal8.setVisibility(View.GONE);
         binding.txtTotal9.setVisibility(View.GONE);
-        if(!binding.chkCustomer.isChecked()){
-            param.weight=3.5f;
-            param2.weight=2f;
+        if (!binding.chkCustomer.isChecked()) {
+            param.weight = 3.5f;
+            param2.weight = 2f;
             binding.txtTotal1.setLayoutParams(param2);
             binding.txtTotal2.setLayoutParams(param2);
             binding.txtTotal3.setLayoutParams(param2);
@@ -151,10 +169,9 @@ public class ActivityReport5 extends BaseActivity {
             adapter.setChekedRadioIndex(index);
             //binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
             binding.recyclerView.setAdapter(adapter);
-        }
-        else{
-            param.weight=6.5f;
-            param2.weight=3f;
+        } else {
+            param.weight = 6.5f;
+            param2.weight = 3f;
             binding.txtTotal1.setLayoutParams(param2);
             binding.txtTotal2.setLayoutParams(param2);
             binding.txtTotal3.setLayoutParams(param2);
@@ -194,12 +211,11 @@ public class ActivityReport5 extends BaseActivity {
         sc.BusinessClassCode = Users.BusinessClassCode;
         sc.SaleType = saleType;
 
-        String apiName="";
-        if(!binding.chkCustomer.isChecked()){
-            apiName="GetReport5Data";
-        }
-        else{
-            apiName="GetReport5Data2";//거래처별보기
+        String apiName = "";
+        if (!binding.chkCustomer.isChecked()) {
+            apiName = "GetReport5Data";
+        } else {
+            apiName = "GetReport5Data2";//거래처별보기
         }
         reportViewModel.Get(apiName, sc);
     }
@@ -221,21 +237,20 @@ public class ActivityReport5 extends BaseActivity {
                 LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
                         0,
                         LinearLayout.LayoutParams.MATCH_PARENT);
-                if(isChecked){//거래처별
-                    param.weight=3;
+                if (isChecked) {//거래처별
+                    param.weight = 3;
                     binding.textViewField4.setVisibility(View.GONE);
-                    binding.textViewField1.setText("송장번호");
-                    binding.textViewField2.setText("품목분류");
-                    binding.textViewField3.setText("중량");
-                }
-                else{
-                    param.weight=2;
+                    binding.textViewField1.setText(Users.Language==0 ? "송장번호": "InvoiceNo");
+                    binding.textViewField2.setText(Users.Language==0 ? "품목분류": "ItemType");
+                    binding.textViewField3.setText(Users.Language==0 ? "중량": "Weight");
+                } else {
+                    param.weight = 2;
                     binding.textViewField4.setVisibility(View.VISIBLE);
-                    binding.textViewField1.setText("품명/규격");
-                    binding.textViewField2.setText("보수출고");
-                    binding.textViewField3.setText("신제출고");
+                    binding.textViewField1.setText(Users.Language==0 ? "품목/규격": "Item/Size");
+                    binding.textViewField2.setText(Users.Language==0 ? "보수출고": "Output(Repair)");
+                    binding.textViewField3.setText(Users.Language==0 ? "신제출고": "Output(New)");
                 }
-                param.rightMargin=6;
+                param.rightMargin = 6;
                 binding.textViewField2.setLayoutParams(param);
                 binding.textViewField3.setLayoutParams(param);
                 setFieldState(binding.radioGroup.getCheckedRadioButtonId());
@@ -314,11 +329,9 @@ public class ActivityReport5 extends BaseActivity {
                 dataList.remove(dataList.size() - 1);
                 adapter.updateAdapter((ArrayList<Report>) dataList);
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_SHORT).show();
-                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
             }
         });
-
 
 
         reportViewModel.dataList2.observe(this, dataList -> {
@@ -342,30 +355,28 @@ public class ActivityReport5 extends BaseActivity {
                 binding.txtTotal3.setText(numFormatter.format(totalM2));
                 dataList.remove(dataList.size() - 1);
                 String locationNo = "";
-                boolean colorFlag=false;
-                try{
-                    for(int i=0;i<dataList.size();i++){
-                        if (!locationNo.equals(dataList.get(i).LocationNo)){
-                            Report report= new Report();
-                            report.CustomerName=dataList.get(i).CustomerName;
-                            report.LocationName=dataList.get(i).LocationName;
+                boolean colorFlag = false;
+                try {
+                    for (int i = 0; i < dataList.size(); i++) {
+                        if (!locationNo.equals(dataList.get(i).LocationNo)) {
+                            Report report = new Report();
+                            report.CustomerName = dataList.get(i).CustomerName;
+                            report.LocationName = dataList.get(i).LocationName;
                             locationNo = dataList.get(i).LocationNo;
                             dataList.add(i, report);
-                            colorFlag=!colorFlag;
-                            dataList.get(i).ColorFlag=colorFlag;
+                            colorFlag = !colorFlag;
+                            dataList.get(i).ColorFlag = colorFlag;
                             continue;
                         }
                         locationNo = dataList.get(i).LocationNo;
-                        dataList.get(i).ColorFlag=colorFlag;
+                        dataList.get(i).ColorFlag = colorFlag;
                     }
-                }
-                catch (Exception et){
-                    String test="4";
+                } catch (Exception et) {
+                    String test = "4";
                 }
                 adapter2.updateAdapter((ArrayList<Report>) dataList);
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_SHORT).show();
-                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
             }
         });
         //에러메시지
@@ -411,7 +422,7 @@ public class ActivityReport5 extends BaseActivity {
 
                         final AlertDialog.Builder build = new AlertDialog.Builder(ActivityReport5.this);
                         build.create();
-                        build.setTitle("판매구분 선택");
+                        build.setTitle(Users.Language==0 ? "판매구분 선택": "Select Sale Type");
 
                         final String[] items = new String[models.size()];
                         for (int i = 0; i < models.size(); i++)
@@ -450,12 +461,12 @@ public class ActivityReport5 extends BaseActivity {
 
                                 } else {
                                     checkedItems = tempItems;
-                                    Toast.makeText(ActivityReport5.this, "취소되었습니다.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(ActivityReport5.this, Users.Language==0 ? "취소 되었습니다.": "It's been canceled.", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         };
-                        build.setPositiveButton("선택", listener);
-                        build.setNegativeButton("취소", listener);
+                        build.setPositiveButton(Users.Language==0 ? "선택": "OK", listener);
+                        build.setNegativeButton(Users.Language==0 ? "취소": "Cancel", listener);
                         AlertDialog dialog = build.create();
                         dialog.show();
 
@@ -469,8 +480,8 @@ public class ActivityReport5 extends BaseActivity {
                                     }
                                 }
 
-                                if(selectCount==0) {
-                                    Toast.makeText(ActivityReport5.this, "하나이상의 조건을 선택하여야 합니다..", Toast.LENGTH_SHORT).show();
+                                if (selectCount == 0) {
+                                    Toast.makeText(ActivityReport5.this, Users.Language==0 ? "하나 이상의 조건을 선택하여야 합니다.": "At least one condition must be selected.", Toast.LENGTH_SHORT).show();
                                     return;
                                 }
 
@@ -547,7 +558,7 @@ public class ActivityReport5 extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return CommonMethod.onOptionsItemSelected(this, item, resultLauncher,1);
+        return CommonMethod.onOptionsItemSelected(this, item, resultLauncher, 1);
     }
 
 

@@ -21,6 +21,10 @@ public class BaseActivity extends AppCompatActivity {
         ApplicationClass.getInstance().progressON(this, null);
     }
 
+    public void HideKeyBoard() {
+        ApplicationClass.getInstance().HideKeyBoard(this);
+    }
+
     public void progressON(String message) {
         ApplicationClass.getInstance().progressON(this, message);
     }

@@ -30,6 +30,7 @@ public class BarcodeConvertPrintViewModel extends ViewModel {
     public MutableLiveData<BarcodeConvertPrint> data = new MutableLiveData<>();//FNBarcodeConvertPrint
     public MutableLiveData<BarcodeConvertPrint> data2 = new MutableLiveData<>();//FNSetPrintOrderData
     public MutableLiveData<BarcodeConvertPrint> data3 = new MutableLiveData<>();//FNSetPrintOrderData
+    public MutableLiveData<BarcodeConvertPrint> data4 = new MutableLiveData<>();//FNSetBundleData
 
     public void FNBarcodeConvertPrint(SearchCondition sc) {
         loading.setValue(true);
@@ -54,7 +55,7 @@ public class BarcodeConvertPrintViewModel extends ViewModel {
 
                             @Override
                             public void onError(@NonNull Throwable e) {
-                                errorMsg.setValue("서버 오류 발생");
+                                errorMsg.setValue(Users.Language==0 ? "서버 오류 발생": "Server error occurred");
                                 loadError.setValue(true);
                                 loading.setValue(false);
                                 e.printStackTrace();
@@ -86,7 +87,7 @@ public class BarcodeConvertPrintViewModel extends ViewModel {
 
                             @Override
                             public void onError(@NonNull Throwable e) {
-                                errorMsg.setValue("서버 오류 발생");
+                                errorMsg.setValue(Users.Language==0 ? "서버 오류 발생": "Server error occurred");
                                 loadError.setValue(true);
                                 loading.setValue(false);
                                 e.printStackTrace();
@@ -119,7 +120,39 @@ public class BarcodeConvertPrintViewModel extends ViewModel {
 
                             @Override
                             public void onError(@NonNull Throwable e) {
-                                errorMsg.setValue("서버 오류 발생");
+                                errorMsg.setValue(Users.Language==0 ? "서버 오류 발생": "Server error occurred");
+                                loadError.setValue(true);
+                                loading.setValue(false);
+                                e.printStackTrace();
+                            }
+                        })
+        );
+    }
+
+    public void FNSetBundleData(SearchCondition sc) {
+        loading.setValue(true);
+        disposable.add(
+                service.FNSetBundleData(sc) // POP 로그인 정보를 확인한다.
+                        .subscribeOn(Schedulers.newThread()) // 새로운 스레드에서 통신한다.
+                        .observeOn(AndroidSchedulers.mainThread()) // 응답 값을 가지고 ui update를 하기 위해 필요함, 메인스레드와 소통하기 위
+                        .subscribeWith(new DisposableSingleObserver<BarcodeConvertPrint>() {//todo
+
+                            @Override
+                            public void onSuccess(@NonNull BarcodeConvertPrint models) {//todo
+                                if (models.ErrorCheck != null) {
+                                    errorMsg.setValue(models.ErrorCheck);
+                                    loadError.setValue(true);
+                                    loading.setValue(false);
+                                    return;
+                                }
+                                data4.setValue(models);
+                                loadError.setValue(false);
+                                loading.setValue(false);
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable e) {
+                                errorMsg.setValue(Users.Language==0 ? "서버 오류 발생": "Server error occurred");
                                 loadError.setValue(true);
                                 loading.setValue(false);
                                 e.printStackTrace();

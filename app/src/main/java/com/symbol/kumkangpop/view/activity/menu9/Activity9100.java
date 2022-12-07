@@ -30,6 +30,7 @@ import com.symbol.kumkangpop.model.SearchCondition;
 import com.symbol.kumkangpop.model.object.Part;
 import com.symbol.kumkangpop.model.object.PartSpec;
 import com.symbol.kumkangpop.model.object.StockIn;
+import com.symbol.kumkangpop.model.object.Users;
 import com.symbol.kumkangpop.view.TypeChanger;
 import com.symbol.kumkangpop.view.activity.BaseActivity;
 import com.symbol.kumkangpop.viewmodel.AWaitingEditModel;
@@ -65,10 +66,17 @@ public class Activity9100 extends BaseActivity {
         aWaitingEditModel = new ViewModelProvider(this).get(AWaitingEditModel.class);
         tagNo = getIntent().getStringExtra("result");
         createQRcode(binding.imvQR, tagNo);
+        setView();
         setListener();
         observerSimpleData();
         observerAWaiting();
         GetAWaitingDetail(tagNo);
+    }
+
+    private void setView() {
+        if(Users.Language==1){
+            binding.btnSave.setText("SAVE");
+        }
     }
 
     private void GetAWaitingDetail(String tagNo) {
@@ -143,13 +151,13 @@ public class Activity9100 extends BaseActivity {
         String msg;
         String hint;
         if (type == 1) {//수량
-            titleName = "수량 입력";
-            msg = "수량을 입력해주세요.";
-            hint = "수량";
+            titleName = Users.Language==0 ? "수량 입력": "Enter quantity";
+            msg = Users.Language==0 ? "수량을 입력해 주세요": "Please enter quantity";
+            hint = Users.Language==0 ? "수량": "Quantity";
         } else {//중량
-            titleName = "중량 입력";
-            msg = "중량을 입력해주세요.";
-            hint = "중량";
+            titleName = Users.Language==0 ? "중량 입력": "Enter weight";
+            msg = Users.Language==0 ? "중량을 입력해 주세요": "Please enter weight";
+            hint = Users.Language==0 ? "중량": "Weight";
         }
 
         LayoutInflater inflater = LayoutInflater.from(this);
@@ -181,7 +189,7 @@ public class Activity9100 extends BaseActivity {
                 }
                 if (type == 1) {//수량 확인 버튼
                     if(Double.parseDouble(output)<=0){
-                        Toast.makeText(Activity9100.this, "수량은 0보다 커야합니다.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Activity9100.this, Users.Language==0 ? "수량은 0보다 커야합니다.": "Quantity must be greater than zero.", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     stockIn.InQty = Double.parseDouble(output);
@@ -209,8 +217,7 @@ public class Activity9100 extends BaseActivity {
                 ShowPartEditDialog(data);
 
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_SHORT).show();
-                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
             }
         });
 
@@ -220,8 +227,7 @@ public class Activity9100 extends BaseActivity {
                 ShowPartSpecEditDialog(data);
 
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_SHORT).show();
-                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
             }
         });
 
@@ -270,7 +276,7 @@ public class Activity9100 extends BaseActivity {
 
         new MaterialAlertDialogBuilder(this)
                 .setCancelable(false)
-                .setTitle("품명을 선택하세요")
+                .setTitle(Users.Language==0 ? "품명을 선택하세요.": "Please select a item.")
                 .setSingleChoiceItems(partNameSequences, selectedPartIndex, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -285,13 +291,13 @@ public class Activity9100 extends BaseActivity {
                         dialog.dismiss();
                     }
                 })
-                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                .setNegativeButton(Users.Language==0 ? "취소": "Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                     }
                 })
-                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                .setPositiveButton(Users.Language==0 ? "확인": "OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
@@ -322,7 +328,7 @@ public class Activity9100 extends BaseActivity {
 
         new MaterialAlertDialogBuilder(this)
                 .setCancelable(false)
-                .setTitle("규격을 선택하세요")
+                .setTitle(Users.Language==0 ? "규격을 선택하세요.": "Please select size.")
                 .setSingleChoiceItems(partSpecNameSequences, selectedPartSpecIndex, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -343,7 +349,7 @@ public class Activity9100 extends BaseActivity {
                         dialog.dismiss();
                     }
                 })*/
-                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                .setPositiveButton(Users.Language==0 ? "확인": "OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String partSpec = list.get(selectedPartSpecIndex).PartSpec;
@@ -368,8 +374,7 @@ public class Activity9100 extends BaseActivity {
                     DrawTag(stockIn);
                 }
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_SHORT).show();
-                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
             }
         });
 
@@ -402,17 +407,17 @@ public class Activity9100 extends BaseActivity {
         String groupName;
         String machineName;
         if (workingGroup == 1)
-            groupName = "주간";
+            groupName = Users.Language==0 ? "주간": "daytime";
         else if (workingGroup == 2)
-            groupName = "야간";
+            groupName = Users.Language==0 ? "야간": "night time";
         else
             groupName = "";
         if (workingMachine == 1)
-            machineName = "1호기";
+            machineName = Users.Language==0 ? "1호기": "Unit1";
         else if (workingMachine == 2)
-            machineName = "2호기";
+            machineName = Users.Language==0 ? "2호기": "Unit2";
         else if (workingMachine == 3)
-            machineName = "3호기";
+            machineName = Users.Language==0 ? "3호기": "Unit3";
         else
             machineName = "";
         binding.txtWork.setText(groupName + " " + machineName);

@@ -1,6 +1,5 @@
 package com.symbol.kumkangpop.view.activity;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
@@ -24,16 +23,15 @@ import android.telephony.TelephonyManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.viewbinding.BuildConfig;
 
 import com.symbol.kumkangpop.R;
 import com.symbol.kumkangpop.databinding.ActivitySplashScreenBinding;
 import com.symbol.kumkangpop.model.object.Users;
+import com.symbol.kumkangpop.view.PermissionUtil;
 import com.symbol.kumkangpop.viewmodel.AppVersionViewModel;
 
 import java.io.File;
@@ -59,7 +57,6 @@ public class SplashScreenActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        //CheckPermission();
         binding = DataBindingUtil.setContentView(this, R.layout.activity_splash_screen);
         _pref = getSharedPreferences("kumkang", MODE_PRIVATE);//sharedPreferences 이름: "kumkang"에 저장
         isShortcut = _pref.getBoolean("isShortcut", false);//"isShortcut"에 들어있는값을 가져온다.
@@ -100,18 +97,17 @@ public class SplashScreenActivity extends BaseActivity {
             if (models != null) {
                 Intent intent;
                 intent = new Intent(SplashScreenActivity.this, LoginActivity.class);
-                intent.putExtra("FirstFlag",true);
+                intent.putExtra("FirstFlag", true);
                 startActivity(intent);
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_LONG).show();
-            }
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
             finish();
         });
 
         //에러발생
         viewModel.errorMsg.observe(this, models -> {
             if (models != null) {
-                Toast.makeText(this, models, Toast.LENGTH_LONG).show();
+                Toast.makeText(this, models, Toast.LENGTH_SHORT).show();
                 progressOFF2();
             }
         });
@@ -157,7 +153,7 @@ public class SplashScreenActivity extends BaseActivity {
         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(SplashScreenActivity.this, "최신버전으로 업데이트 하시기 바랍니다.", Toast.LENGTH_LONG).show();
+                Toast.makeText(SplashScreenActivity.this, "최신버전으로 업데이트 하시기 바랍니다.", Toast.LENGTH_SHORT).show();
                 //showErrorDialog(SplashScreenActivity.this, "최신버전으로 업데이트 하시기 바랍니다.", 2);
                 ActivityCompat.finishAffinity(SplashScreenActivity.this);
             }
@@ -201,15 +197,15 @@ public class SplashScreenActivity extends BaseActivity {
         open.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
         /*if(open.getFlags()!=Intent.FLAG_GRANT_READ_URI_PERMISSION){//권한 허락을 안한다면
-            Toast.makeText(getBaseContext(), "Look!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(), "Look!", Toast.LENGTH_SHORT).show();
             finish();
         }*/
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {//누가 버전 이상이라면 FileProvider를 사용한다.
-            //Toast.makeText(getBaseContext(), "test1", Toast.LENGTH_LONG).show();
+            //Toast.makeText(getBaseContext(), "test1", Toast.LENGTH_SHORT).show();
             uri = uri.substring(7);
             File file = new File(uri);
-            Uri u = FileProvider.getUriForFile(this, getApplication().getPackageName() + ".provider", file);
+            Uri u = FileProvider.getUriForFile(this, getApplication().getPackageName() + ".fileprovider", file);
             open.setDataAndType(u, mimetype);
         } else {
             open.setDataAndType(Uri.parse(uri), mimetype);
@@ -220,154 +216,96 @@ public class SplashScreenActivity extends BaseActivity {
         }
 
 
-        Toast.makeText(getBaseContext(), "설치 완료 후, 어플리케이션을 다시 시작하여 주십시요.", Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), "설치 완료 후, 어플리케이션을 다시 시작하여 주십시요.", Toast.LENGTH_SHORT).show();
         startActivity(open);
         // finish();//startActivity 전일까 후일까 잘판단
 
     }
 
     private void CheckPermission() {
-        TelephonyManager systemService = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED &&
-                    checkSelfPermission(Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED) {
-                try {
-                    //권한이없으면 여기
-                    if (shouldShowRequestPermissionRationale(Manifest.permission.READ_PHONE_STATE)) {// 이전에 권한 요청 거절을 했는지 안했는지 검사: 이전에도 했으면 true
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_NUMBERS}, 1);
-                        } else {
-                            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, 1);
-                        }
-                    } else {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_NUMBERS}, 1);
-                        } else {
-                            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, 1);
-                        }
-                    }
-                } catch (Exception et) {
-                    String str = et.getMessage();
-                    String str2 = str;
-                } finally {
-
-                }
-            } else {//권한이 있으면, 번호받기
-                try {
-                    Users.AndroidID = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-                    if (Users.AndroidID == null)
-                        Users.AndroidID = "";
-                    Users.Model = Build.MODEL;
-                    if (Users.Model == null)
-                        Users.Model = "";
-                    Users.PhoneNumber = systemService.getLine1Number();//없으면 null이들어갈수도있다 -> if(Users.PhoneNumber==null) 으로 활용가능
-                    //Users.PhoneNumber = "010-6737-5288";//없으면 null이들어갈수도있다 -> if(Users.PhoneNumber==null) 으로 활용가능
-                    if (Users.PhoneNumber == null)
-                        Users.PhoneNumber = "";
-                    else
-                        Users.PhoneNumber = Users.PhoneNumber.replace("+82", "0");
-                    Users.DeviceOS = Build.VERSION.RELEASE;
-                    if (Users.DeviceOS == null)
-                        Users.DeviceOS = "";
-                    Users.Remark = "";
-                    Users.DeviceName = BluetoothAdapter.getDefaultAdapter().getName();//블루투스 권한 필요 manifest확인: 블루투스가 없으면 에러남
-                } catch (Exception e) {
-                    String str = e.getMessage();
-                    String str2 = str;
-                } finally {
-                    viewModel.InsertAppLoginHistory();
-
-                }
+            if (PermissionUtil.haveAllpermission(this, PermissionUtil.permissionList)) {//모든 퍼미션 허용
+                insertAppLoginHistory();
+            } else {//퍼미션 하나라도 허용 안함
+                ActivityCompat.requestPermissions(this, PermissionUtil.permissionList, PermissionUtil.MY_PERMISSIONS_REQUEST_READ_PHONE_STATE);
             }
         } else {//낮은 버전이면 바로 번호 받기가능
-            try {
-                Users.AndroidID = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-                if (Users.AndroidID == null)
-                    Users.AndroidID = "";
-                Users.Model = Build.MODEL;
-                if (Users.Model == null)
-                    Users.Model = "";
-                Users.PhoneNumber = systemService.getLine1Number();//없으면 null이들어갈수도있다 -> if(Users.PhoneNumber==null) 으로 활용가능
-                //Users.PhoneNumber = "010-6737-5288";//없으면 null이들어갈수도있다 -> if(Users.PhoneNumber==null) 으로 활용가능
-                if (Users.PhoneNumber == null)
-                    Users.PhoneNumber = "";
-                else
-                    Users.PhoneNumber = Users.PhoneNumber.replace("+82", "0");
-                Users.DeviceOS = Build.VERSION.RELEASE;
-                if (Users.DeviceOS == null)
-                    Users.DeviceOS = "";
-                Users.Remark = "";
-                Users.DeviceName = BluetoothAdapter.getDefaultAdapter().getName();//블루투스 권한 필요 manifest확인: 블루투스가 없으면 에러남
-            } catch (Exception e) {
-                String str = e.getMessage();
-                String str2 = str;
-            } finally {
-                viewModel.InsertAppLoginHistory();
-            }
+            insertAppLoginHistory();
         }
     }
 
+    @SuppressLint("MissingPermission")
+    private void insertAppLoginHistory() {
+        try {
+            TelephonyManager systemService = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+            Users.AndroidID = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+            if (Users.AndroidID == null)
+                Users.AndroidID = "";
+            Users.Model = Build.MODEL;
+            if (Users.Model == null)
+                Users.Model = "";
+            Users.PhoneNumber = systemService.getLine1Number();//없으면 null이들어갈수도있다 -> if(Users.PhoneNumber==null) 으로 활용가능
+            //Users.PhoneNumber = "010-6737-5288";//없으면 null이들어갈수도있다 -> if(Users.PhoneNumber==null) 으로 활용가능
+            if (Users.PhoneNumber == null)
+                Users.PhoneNumber = "";
+            else
+                Users.PhoneNumber = Users.PhoneNumber.replace("+82", "0");
+            Users.DeviceOS = Build.VERSION.RELEASE;
+            if (Users.DeviceOS == null)
+                Users.DeviceOS = "";
+            Users.Remark = "";
+            Users.DeviceName = BluetoothAdapter.getDefaultAdapter().getName();//블루투스 권한(BLUETOOTH_CONNECT) 필요
+        } catch (Exception e) {
+            String str = e.getMessage();
+            String str2 = str;
+        } finally {
+            viewModel.InsertAppLoginHistory();
+        }
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PermissionUtil.MY_PERMISSIONS_REQUEST_READ_PHONE_STATE &&
+                grantResults.length == PermissionUtil.permissionList.length) {
 
-        if (requestCode == 1) {
-            if (grantResults.length > 0) {
-                for (int i = 0; i < grantResults.length; ++i) {
-                    if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
-                        // 하나라도 거부한다면.
-                        new AlertDialog.Builder(this).setTitle("알림").setMessage("권한을 허용해주셔야 앱을 이용할 수 있습니다.")
-                                .setPositiveButton("종료", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                        finish();
-                                    }
-                                }).setCancelable(false).show();
+            boolean check_result = true;
 
-                        return;
-                    } else {//권한 다받았다면, 여기, 최초 권한 받았을때만 들어옴
-                        TelephonyManager systemService = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-                        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED &&
-                                ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED &&
-                                ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-                            // TODO: Consider calling
-                            //    ActivityCompat#requestPermissions
-                            // here to request the missing permissions, and then overriding
-                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                            //                                          int[] grantResults)
-                            // to handle the case where the user grants the permission. See the documentation
-                            // for ActivityCompat#requestPermissions for more details.
-                            return;
-                        }
-                        try {
-                            Users.AndroidID = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-                            if (Users.AndroidID == null)
-                                Users.AndroidID = "";
-                            Users.Model = Build.MODEL;
-                            if (Users.Model == null)
-                                Users.Model = "";
-                            Users.PhoneNumber = systemService.getLine1Number();//없으면 null이들어갈수도있다 -> if(Users.PhoneNumber==null) 으로 활용가능
-                            //Users.PhoneNumber = "010-6737-5288";//없으면 null이들어갈수도있다 -> if(Users.PhoneNumber==null) 으로 활용가능
-                            if (Users.PhoneNumber == null)
-                                Users.PhoneNumber = "";
-                            else
-                                Users.PhoneNumber = Users.PhoneNumber.replace("+82", "0");
-                            Users.DeviceOS = Build.VERSION.RELEASE;
-                            if (Users.DeviceOS == null)
-                                Users.DeviceOS = "";
-                            Users.Remark = "";
-                            Users.DeviceName = BluetoothAdapter.getDefaultAdapter().getName();//블루투스 권한 필요 manifest확인: 블루투스가 없으면 에러남
-                        } catch (Exception e) {
-                    /*String str=e.getMessage();
-                    String str2=str;*/
-                        } finally {
-                            viewModel.InsertAppLoginHistory();
-                        }
-                    }
+            // 모든 퍼미션을 허용했는지 체크합니다.
+            for (int result : grantResults) {
+                if (result != PackageManager.PERMISSION_GRANTED) {
+                    check_result = false;
+                    break;
+                }
+            }
+
+            //허용
+            if (check_result) {
+                //허용했을때 로직
+                insertAppLoginHistory();
+            }
+            //거부 ,재거부
+            else {
+                if (PermissionUtil.recheckPermission(this, PermissionUtil.permissionList)) {
+                    //거부 눌렀을 때 로직
+                    Toast.makeText(this, "앱에 로그인하기 위해 반드시 필요합니다.", Toast.LENGTH_LONG).show();
+
+                    Intent intent = getIntent();
+                    setResult(RESULT_CANCELED, intent);
+                    finish();
+
+                } else {
+                    //재거부 눌렀을 때 로직
+                    Toast.makeText(this, "앱에 로그인하기 위해 반드시 필요합니다.", Toast.LENGTH_LONG).show();
+
+                    Intent intent = getIntent();
+                    setResult(RESULT_CANCELED, intent);
+                    finish();
                 }
             }
         }
+        //end region
+
     }
 
     public int getCurrentVersion() {

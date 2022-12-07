@@ -45,8 +45,9 @@ public class Activity0400 extends BaseActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity0400);
         barcodeConvertPrintViewModel = new ViewModelProvider(this).get(BarcodeConvertPrintViewModel.class);
         commonViewModel = new ViewModelProvider(this).get(CommonViewModel.class);
-        binding.txtTitle.setText(getString(R.string.detail_menu_0400));
+        binding.txtTitle.setText(Users.Language == 0 ? getString(R.string.detail_menu_0400) : getString(R.string.detail_menu_0400_eng));
         saleOrderNo = getIntent().getStringExtra("saleOrderNo");
+        setView();
         setBar();
         setListener();
         setFloatingNavigationView();
@@ -56,6 +57,15 @@ public class Activity0400 extends BaseActivity {
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerView.setAdapter(adapter);
         GetMainData();
+    }
+
+    private void setView() {
+        if (Users.Language == 1) {
+            binding.tvName.setText("PackingNo");
+            binding.textViewWorkDate.setText("Block");
+            binding.textViewWorkType.setText("Zone");
+            binding.textViewWorkType4.setText("NO");
+        }
     }
 
     private void GetMainData() {
@@ -77,8 +87,7 @@ public class Activity0400 extends BaseActivity {
                 //recyclerViewModel.cData = sc.Barcode;
                 commonViewModel.Get2("GetNumConvertData", sc);
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_LONG).show();
-            }
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
         });
 
         commonViewModel.data.observe(this, data -> {
@@ -87,8 +96,7 @@ public class Activity0400 extends BaseActivity {
                 // 어뎁터가 리스트를 수정한다.
                 adapter.updateAdapter(data.PackingList);
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_SHORT).show();
-                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
             }
         });
 
@@ -96,9 +104,9 @@ public class Activity0400 extends BaseActivity {
             if (data != null) {
                 if (data.NumConvertDataList.size() == 0) {
                     if (Users.Language == 0) {
-                        Toast.makeText(this, "해당 포장번호의 정보를 찾을 수 없습니다.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "해당 포장번호의 정보를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(this, "Number of packaging information that can not be found.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "Number of packaging information that can not be found.", Toast.LENGTH_SHORT).show();
                     }
                     return;
                 }
@@ -111,8 +119,7 @@ public class Activity0400 extends BaseActivity {
                 sc.PackingNo = packingNo;
                 commonViewModel.Get3("GetPackingDataExists", sc);
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_LONG).show();
-            }
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
         });
 
         commonViewModel.data3.observe(this, data -> {
@@ -120,9 +127,9 @@ public class Activity0400 extends BaseActivity {
                 if (data.PackingList.size() == 0) {//nDataSet.Tables[0].Rows.Count == 0
                     // //nScaner.fnBeepError();
                     if (Users.Language == 0) {
-                        Toast.makeText(this, "해당 포장번호의 주문정보를 찾을 수 없습니다.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "해당 포장번호의 주문정보를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(this, "Order number of packages that you can not find the information.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "Order number of packages that you can not find the information.", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Intent intent = new Intent(getBaseContext(), Activity0410.class);
@@ -134,16 +141,15 @@ public class Activity0400 extends BaseActivity {
 
 
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_SHORT).show();
-                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
             }
         });
 
         /*barcodeConvertPrintViewModel.data2.observe(this, result -> {
             if (result != null) {
-                Toast.makeText(this, result.Result, Toast.LENGTH_LONG).show();
+                Toast.makeText(this, result.Result, Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_SHORT).show();
             }
         });*/
 
@@ -174,7 +180,7 @@ public class Activity0400 extends BaseActivity {
 
 
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_SHORT).show();
             }
         });*/
 

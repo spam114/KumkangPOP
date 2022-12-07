@@ -125,6 +125,9 @@ public interface DataApi {
     @POST("FNSetPackingPDAData")
     Single<BarcodeConvertPrint> FNSetPackingPDAData(@Body SearchCondition searchCondition);
 
+    @POST("FNSetBundleData")
+    Single<BarcodeConvertPrint> FNSetBundleData(@Body SearchCondition searchCondition);
+
     @POST("GetTest")
     Single<Scan> GetTest(@Body SearchCondition searchCondition);
 
@@ -166,5 +169,77 @@ public interface DataApi {
 
     @POST("GetItemTagData")
     Single<Common> GetItemTagData(@Body SearchCondition searchCondition);
+
+    @POST("UpdatePackingData")
+    Single<Common> UpdatePackingData(@Body SearchCondition searchCondition);
+
+    @POST("GetBusinessClassDataAll")
+    Single<Common> GetBusinessClassDataAll(@Body SearchCondition searchCondition);
+
+    @POST("GetLocationDataBusinessClass")
+    Single<Common> GetLocationDataBusinessClass(@Body SearchCondition searchCondition);
+
+    @POST("GetContainerData")
+    Single<Common> GetContainerData(@Body SearchCondition searchCondition);
+
+    @POST("SetContainerData")
+    Single<Common> SetContainerData(@Body SearchCondition searchCondition);
+
+    @POST("InsertContainerPictureData")
+    Single<Common> InsertContainerPictureData(@Body SearchCondition searchCondition);
+
+    @POST("GetStockOutDataCnt")
+    Single<Common> GetStockOutDataCnt(@Body SearchCondition searchCondition);
+    
+    @POST("ScanStockOut")
+    Single<Common> ScanStockOut(@Body SearchCondition searchCondition);
+
+    @POST("GetStockInFlag")
+    Single<Common> GetStockInFlag(@Body SearchCondition searchCondition);
+
+    @POST("InsertStockOutPictureData")
+    Single<Common> InsertStockOutPictureData(@Body SearchCondition searchCondition);
+
+    @POST("GetStockOutData")
+    Single<Common> GetStockOutData(@Body SearchCondition searchCondition);
+
+    @POST("UpdateStockOutData")
+    Single<Common> UpdateStockOutData(@Body SearchCondition searchCondition);
+
+    @POST("GetDeptDataBusiness")
+    Single<Common> GetDeptDataBusiness(@Body SearchCondition searchCondition);
+
+    @POST("GetCustomersDataClass")
+    Single<Common> GetCustomersDataClass(@Body SearchCondition searchCondition);
+
+    @POST("GetRegionData")
+    Single<Common> GetRegionData(@Body SearchCondition searchCondition);
+
+    @POST("GetStockOutDataExists")
+    Single<Common> GetStockOutDataExists(@Body SearchCondition searchCondition);
+
+    @POST("GetStockOutDetailData")
+    Single<Common> GetStockOutDetailData(@Body SearchCondition searchCondition);
+
+    @POST("EditStockOut")
+    Single<Common> EditStockOut(@Body SearchCondition searchCondition);
+
+    @POST("GetSalesOrderDataLocation")
+    Single<Common> GetSalesOrderDataLocation(@Body SearchCondition searchCondition);
+
+    @POST("ScanStockOutTag")
+    Single<Common> ScanStockOutTag(@Body SearchCondition searchCondition);
+
+    @POST("ScanBundle")
+    Single<Common> ScanBundle(@Body SearchCondition searchCondition);
+
+    @POST("GetBundleDataBundleNo")
+    Single<Common> GetBundleDataBundleNo(@Body SearchCondition searchCondition);
+
+    @POST("GetBundleDataPackingNo")
+    Single<Common> GetBundleDataPackingNo(@Body SearchCondition searchCondition);
+
+    @POST("EditBundle")
+    Single<Common> EditBundle(@Body SearchCondition searchCondition);
 }
 

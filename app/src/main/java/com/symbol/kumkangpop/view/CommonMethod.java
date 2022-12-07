@@ -20,7 +20,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,13 +44,9 @@ import com.symbol.kumkangpop.model.SearchCondition;
 import com.symbol.kumkangpop.model.object.Users;
 import com.symbol.kumkangpop.view.activity.BaseActivity;
 import com.symbol.kumkangpop.view.activity.LoginActivity;
-import com.symbol.kumkangpop.view.activity.menu0.Activity0120;
-import com.symbol.kumkangpop.view.activity.menu0.Activity0300;
+import com.symbol.kumkangpop.view.activity.MainActivity;
 import com.symbol.kumkangpop.viewmodel.BarcodeConvertPrintViewModel;
 import com.symbol.kumkangpop.viewmodel.LoginViewModel;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class CommonMethod {
     public static String keyResult;
@@ -114,7 +110,12 @@ public class CommonMethod {
                 //Dialog 보이기
                 dialog.show();
                 TextView tvTitle = dialogView.findViewById(R.id.tvTitle);
-                tvTitle.setText("TAG번호 입력");
+                if(Users.Language ==0){
+                    tvTitle.setText("TAG번호 입력");
+                }
+                else{
+                    tvTitle.setText("Enter TAG number");
+                }
                 Button btnOK = dialogView.findViewById(R.id.btnOK);
                 Button btnCancel = dialogView.findViewById(R.id.btnCancel);
                 TextInputEditText edtTagNo = dialogView.findViewById(R.id.edtTagNo);
@@ -124,7 +125,7 @@ public class CommonMethod {
                         String tagNo = edtTagNo.getText().toString();
 
                         if (tagNo.equals("")) {
-                            Toast.makeText(activity, "TAG번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(activity, "Please enter TAG number.", Toast.LENGTH_SHORT).show();
                             return;
                         }
                         activity.getKeyInResult(tagNo);
@@ -215,12 +216,28 @@ public class CommonMethod {
         Menu menu = mFloatingNavigationView.getMenu();
         MenuItem mi = menu.findItem(R.id.logOut);
         MenuItem mi2 = menu.findItem(R.id.pcPrinter);
+        MenuItem mi3 = menu.findItem(R.id.language);
+
+        if(Users.Language ==0){
+            mi.setTitle("로그아웃");
+            mi2.setTitle("출력PC 연결");
+            mi3.setTitle("언어설정(Language)");
+        }
+        else{
+            mi.setTitle("Sign Out");
+            mi2.setTitle("Link Output PC");
+            mi3.setTitle("언어설정(Language)");
+        }
+
         SpannableString s = new SpannableString(mi.getTitle());
         SpannableString s2 = new SpannableString(mi2.getTitle());
+        SpannableString s3 = new SpannableString(mi3.getTitle());
         s.setSpan(new ForegroundColorSpan(Color.WHITE), 0, s.length(), 0);
         s2.setSpan(new ForegroundColorSpan(Color.WHITE), 0, s2.length(), 0);
+        s3.setSpan(new ForegroundColorSpan(Color.WHITE), 0, s3.length(), 0);
         mi.setTitle(s);
         mi2.setTitle(s2);
+        mi3.setTitle(s3);
 
         TextView txtUserName = fnvHeader.findViewById(R.id.txtUserName);
         txtUserName.setText(Users.UserName);
@@ -228,8 +245,15 @@ public class CommonMethod {
         txtUserID.setText(Users.UserID);
         ImageView userImage = fnvHeader.findViewById(R.id.userImage);
         TextView txtPCName = fnvHeader.findViewById(R.id.txtPCName);
-        if (Users.PCCode.equals(""))
-            txtPCName.setText("출력PC 없음");
+        if (Users.PCCode.equals("")){
+            if(Users.Language ==0){
+                txtPCName.setText("출력PC 없음");
+            }
+            else{
+                txtPCName.setText("NO PC connected");
+            }
+        }
+
         else
             txtPCName.setText(Users.PCName + "(" + Users.PCCode + ")");
 
@@ -243,8 +267,14 @@ public class CommonMethod {
                 if (isLoading) {//로딩중
 
                 } else {//로딩끝
-                    if (Users.PCCode.equals(""))
-                        txtPCName.setText("출력PC 없음");
+                    if (Users.PCCode.equals("")){
+                        if(Users.Language ==0){
+                            txtPCName.setText("출력PC 없음");
+                        }
+                        else{
+                            txtPCName.setText("NO PC connected");
+                        }
+                    }
                     else
                         txtPCName.setText(Users.PCName + "(" + Users.PCCode + ")");
                 }
@@ -289,9 +319,37 @@ public class CommonMethod {
                 if (item.getItemId() == R.id.logOut) {
                     //로그아웃
                     MaterialAlertDialogBuilder alertBuilder = new MaterialAlertDialogBuilder(activity, R.style.Body_ThemeOverlay_MaterialComponents_MaterialAlertDialog);
-                    alertBuilder.setTitle("로그아웃");
-                    alertBuilder.setMessage("로그아웃 하시겠습니까?");
-                    alertBuilder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+
+                    String titleKor="로그아웃";
+                    String titleEng="Sign Out";
+                    String messageKor="로그아웃 하시겠습니까?";
+                    String messageEng="Are you sure you want to Sign out?";
+                    String poButtonKor="확인";
+                    String poButtonEng="OK";
+                    String negaButtonKor="취소";
+                    String negaButtonEng="Cancel";
+
+                    String strTitle;
+                    String strMessage;
+                    String strPoButton;
+                    String strNegaButton;
+
+                    if(Users.Language ==0){
+                        strTitle=titleKor;
+                        strMessage=messageKor;
+                        strPoButton=poButtonKor;
+                        strNegaButton=negaButtonKor;
+                    }
+                    else{
+                        strTitle=titleEng;
+                        strMessage=messageEng;
+                        strPoButton=poButtonEng;
+                        strNegaButton=negaButtonEng;
+                    }
+
+                    alertBuilder.setTitle(strTitle);
+                    alertBuilder.setMessage(strMessage);
+                    alertBuilder.setPositiveButton(strPoButton, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             PreferenceManager.setBoolean(activity, "AutoLogin", false);
@@ -308,7 +366,7 @@ public class CommonMethod {
                             dialog.dismiss();
                         }
                     });
-                    alertBuilder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    alertBuilder.setNegativeButton(strNegaButton, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
@@ -328,11 +386,23 @@ public class CommonMethod {
                     //Dialog 보이기
                     dialog.show();
                     TextView tvTitle = dialogView.findViewById(R.id.tvTitle);
-                    tvTitle.setText("PC번호 입력");
-                    com.google.android.material.textfield.TextInputLayout textInputLayout = dialogView.findViewById(R.id.textInputLayout);
-                    textInputLayout.setHint("PC번호");
                     Button btnOK = dialogView.findViewById(R.id.btnOK);
                     Button btnCancel = dialogView.findViewById(R.id.btnCancel);
+                    com.google.android.material.textfield.TextInputLayout textInputLayout = dialogView.findViewById(R.id.textInputLayout);
+                    if(Users.Language ==0){
+                        textInputLayout.setHint("PC번호");
+                        tvTitle.setText("PC번호 입력");
+                        btnOK.setText("확인");
+                        btnCancel.setText("취소");
+                    }
+                    else{
+                        textInputLayout.setHint("PC NO");
+                        tvTitle.setText("Enter PC number");
+                        btnOK.setText("OK");
+                        btnCancel.setText("Cancel");
+                    }
+
+
                     TextInputEditText edtTagNo = dialogView.findViewById(R.id.edtTagNo);
                     btnOK.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -340,7 +410,13 @@ public class CommonMethod {
                             String pcNo = edtTagNo.getText().toString();
 
                             if (pcNo.equals("")) {
-                                Toast.makeText(activity, "연결할 PC의 번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
+
+                                if(Users.Language ==0){
+                                    Toast.makeText(activity, "연결할 PC의 번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                                }
+                                else{
+                                    Toast.makeText(activity, "Enter the number of the PC to be connected.", Toast.LENGTH_SHORT).show();
+                                }
                                 return;
                             }
                             sc.PCCode = pcNo;
@@ -356,7 +432,58 @@ public class CommonMethod {
                         }
                     });
                 }
+                else if (item.getItemId() == R.id.language) {
+                    //언어설정
+                    LayoutInflater inflater = LayoutInflater.from(activity);
+                    final View dialogView = inflater.inflate(R.layout.dialog_language, null);
+                    AlertDialog.Builder buider = new AlertDialog.Builder(activity); //AlertDialog.Builder 객체 생성
+                    //  buider.setIcon(android.R.drawable.ic_menu_add); //제목옆의 아이콘 이미지(원하는 이미지 설정)
+                    buider.setView(dialogView); //위에서 inflater가 만든 dialogView 객체 세팅 (Customize)
+                    final AlertDialog dialog = buider.create();
+                    //Dialog의 바깥쪽을 터치했을 때 Dialog를 없앨지 설정
+                    dialog.setCanceledOnTouchOutside(false);//없어지지 않도록 설정
+                    //Dialog 보이기
+                    dialog.show();
+                    TextView tvTitle = dialogView.findViewById(R.id.tvTitle);
+                    tvTitle.setText("언어(Language)");
+                    RadioButton rbKor = dialogView.findViewById(R.id.rbKor);
+                    RadioButton rbEng = dialogView.findViewById(R.id.rbEng);
+                    Button btnOK = dialogView.findViewById(R.id.btnOK);
+                    Button btnCancel = dialogView.findViewById(R.id.btnCancel);
 
+                    if(Users.Language==0){
+                        rbKor.setChecked(true);
+                    }
+
+                    else {
+                        rbEng.setChecked(true);
+                    }
+
+                    btnOK.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (rbKor.isChecked()) {
+                                PreferenceManager.setInt(activity, "Language", 0);
+                                Users.Language = 0;
+                            }
+                            else {
+                                PreferenceManager.setInt(activity, "Language", 1);
+                                Users.Language = 1;
+                            }
+                            dialog.dismiss();
+
+                            Intent i = new Intent(activity, MainActivity.class);
+                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            activity.startActivity(i);
+                        }
+                    });
+                    btnCancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
+                }
                 return false;
             }
         });
@@ -424,23 +551,60 @@ public class CommonMethod {
 
     /**
      * Print 공통
+     *
      * @param context
      * @param barcodeConvertPrintViewModel
      * @param printDivision
      * @param printNo
      */
     public static void FNSetPrintOrderData(Context context, BarcodeConvertPrintViewModel barcodeConvertPrintViewModel, int printDivision, String printNo) {
+
+        String titleKor="출력";
+        String titleEng="Print";
+        String messageKor="출력 번호: " + printNo + "\n출력작업을 진행하시겠습니까?";
+        String messageEng="Print No: " + printNo + "\nDo you want to print?";
+        String poButtonKor="확인";
+        String poButtonEng="OK";
+        String negaButtonKor="취소";
+        String negaButtonEng="Cancel";
+
+        String strTitle;
+        String strMessage;
+        String strPoButton;
+        String strNegaButton;
+
+        if(Users.Language ==0){
+            strTitle=titleKor;
+            strMessage=messageKor;
+            strPoButton=poButtonKor;
+            strNegaButton=negaButtonKor;
+        }
+        else{
+            strTitle=titleEng;
+            strMessage=messageEng;
+            strPoButton=poButtonEng;
+            strNegaButton=negaButtonEng;
+        }
+
+
+
+
         new MaterialAlertDialogBuilder(context)
-                .setTitle("TAG 출력")
-                .setMessage("TAG번호: "+printNo+"\n출력작업을 진행하시겠습니까?")
+                .setTitle(strTitle)
+                .setMessage(strMessage)
                 .setCancelable(true)
-                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                .setPositiveButton(strPoButton, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //Toast.makeText(getBaseContext(), "삭제되었습니다.", Toast.LENGTH_SHORT).show();
 
                         if (Users.PCCode.equals("")) {
-                            Toast.makeText(context, "출력 PC가 연결되어 있지 않습니다.", Toast.LENGTH_SHORT).show();
+                            if(Users.Language ==0){
+                                Toast.makeText(context, "출력 PC가 연결되어 있지 않습니다.", Toast.LENGTH_SHORT).show();
+                            }
+                            else{
+                                Toast.makeText(context, "There is no PC connected.", Toast.LENGTH_SHORT).show();
+                            }
                             return;
                         }
 
@@ -449,11 +613,12 @@ public class CommonMethod {
                         sc.PrintDivision = printDivision;
                         sc.PrintNo = printNo;
                         sc.UserID = Users.UserID;
+                        sc.Language = Users.Language;
                         barcodeConvertPrintViewModel.FNSetPrintOrderData(sc);
                         return;
                     }
                 })
-                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                .setNegativeButton(strNegaButton, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
@@ -465,12 +630,21 @@ public class CommonMethod {
     public static void FNSetPackingPDAData(BarcodeConvertPrintViewModel barcodeConvertPrintViewModel, int WorkDiv, String PackingNo, String Tag, int ErrorDiv) {
         SearchCondition sc = new SearchCondition();
         sc.WorkDiv = WorkDiv;
-        sc.PackingNo=PackingNo;
-        sc.Tag= Tag;
+        sc.PackingNo = PackingNo;
+        sc.Tag = Tag;
         sc.ErrorDiv = ErrorDiv;
         sc.LocationNo = Users.LocationNo;
         sc.UserID = Users.UserID;
         barcodeConvertPrintViewModel.FNSetPackingPDAData(sc);
+    }
 
+    public static void FNSetBundleData(BarcodeConvertPrintViewModel barcodeConvertPrintViewModel, int WorkDiv, String BundleNo, String PackingNo) {
+        SearchCondition sc = new SearchCondition();
+        sc.WorkDiv = WorkDiv;
+        sc.BundleNo = BundleNo;
+        sc.PackingNo = PackingNo;
+        sc.UserID = Users.UserID;
+        sc.Language = Users.Language;
+        barcodeConvertPrintViewModel.FNSetBundleData(sc);
     }
 }

@@ -57,7 +57,8 @@ public class ActivityReport6 extends BaseActivity {
         tmonth = calendar.get(Calendar.MONTH);
         tdate = calendar.get(Calendar.DATE);
         binding.txtFromDate.setText("[ " + tyear + "-" + (tmonth + 1) + "-" + tdate + " ]");
-        binding.txtTitle.setText(getString(R.string.menu16));
+        binding.txtTitle.setText(Users.Language == 0 ? getString(R.string.menu16):getString(R.string.menu16_eng));
+        setView();
         setBar();
         setListener();
         setFloatingNavigationView();
@@ -67,6 +68,22 @@ public class ActivityReport6 extends BaseActivity {
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerView.setAdapter(adapter);
         GetRecyclerViewData();
+    }
+
+    private void setView() {
+        if(Users.Language==1){
+            binding.txtFromDate2.setText("Date");
+            binding.textViewWorkDate4.setText("PackingNo");
+            binding.textViewWorkDate2.setText("Block");
+            binding.textViewWorkDate.setText("Qty");
+            binding.textViewWorkType.setText("Volumn");
+            binding.textViewWorkType2.setText("Weight");
+
+            binding.textView3.setText("Total");
+            binding.txtTotal1.setText("Total");
+            binding.txtTotal2.setText("Total2");
+            binding.txtTotal3.setText("Total3");
+        }
     }
 
 
@@ -160,8 +177,7 @@ public class ActivityReport6 extends BaseActivity {
                 }
                 adapter.updateAdapter((ArrayList<Report>) dataList);
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_SHORT).show();
-                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
             }
         });
         //에러메시지

@@ -52,7 +52,8 @@ public class Activity0000 extends BaseActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity0000);
         barcodeConvertPrintViewModel = new ViewModelProvider(this).get(BarcodeConvertPrintViewModel.class);
         commonViewModel = new ViewModelProvider(this).get(CommonViewModel.class);
-        binding.txtTitle.setText(getString(R.string.menu11));
+        binding.txtTitle.setText(Users.Language == 0 ? getString(R.string.detail_menu_0000):getString(R.string.detail_menu_0000_eng));
+        setView();
         setBar();
         setListener();
         setFloatingNavigationView();
@@ -62,6 +63,15 @@ public class Activity0000 extends BaseActivity {
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerView.setAdapter(adapter);
         GetMainData();
+    }
+
+    private void setView() {
+        if (Users.Language == 1) {
+            binding.textInputLayout.setHint("SaleOrderNo");
+            binding.textView1.setText("SaleOrderNo");
+            binding.textView2.setText("Customer/Jobsite");
+            binding.textView3.setText("Block");
+        }
     }
 
     private void GetMainData() {
@@ -85,8 +95,7 @@ public class Activity0000 extends BaseActivity {
                 commonViewModel.Get2("GetNumConvertData", sc);
             }
             else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_LONG).show();
-            }
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
         });
 
         //1: 기초 주문정보 가져오기
@@ -96,8 +105,7 @@ public class Activity0000 extends BaseActivity {
                 // 어뎁터가 리스트를 수정한다.
                 adapter.updateAdapter(data.SalesOrderList);
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_SHORT).show();
-                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
             }
         });
 
@@ -105,7 +113,7 @@ public class Activity0000 extends BaseActivity {
         commonViewModel.data2.observe(this, data -> {
             if (data != null) {
                 if (data.NumConvertDataList.size()==0) {
-                    Toast.makeText(this, "해당 TAG의 주문정보를 찾을 수 없습니다.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, Users.Language==0 ? "해당 TAG의 주문정보를 찾을 수 없습니다.": "Ordering information for the appropriate TAG can not be found.", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 SearchCondition sc = new SearchCondition();
@@ -115,14 +123,13 @@ public class Activity0000 extends BaseActivity {
                 commonViewModel.Get3("GetSalesOrderData", sc);
             }
             else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_LONG).show();
-            }
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
         });
 
         commonViewModel.data3.observe(this, data -> {
             if (data != null) {
                 if (data.SalesOrderList.size()==0) {
-                    Toast.makeText(this, "해당 TAG의 주문정보를 찾을 수 없습니다.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, Users.Language==0 ? "해당 TAG의 주문정보를 찾을 수 없습니다.": "Ordering information for the appropriate TAG can not be found.", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -133,8 +140,7 @@ public class Activity0000 extends BaseActivity {
                 activityResultLauncher.launch(intent);
             }
             else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_LONG).show();
-            }
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
         });
 
 

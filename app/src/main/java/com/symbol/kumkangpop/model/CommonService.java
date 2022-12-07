@@ -90,6 +90,79 @@ public class CommonService {
         else if(apiName.equals("GetItemTagData")){
             return api.GetItemTagData(sc);
         }
+        else if(apiName.equals("UpdatePackingData")){
+            return api.UpdatePackingData(sc);
+        }
+        else if(apiName.equals("GetBusinessClassDataAll")){
+            return api.GetBusinessClassDataAll(sc);
+        }
+        else if(apiName.equals("GetLocationDataBusinessClass")){
+            return api.GetLocationDataBusinessClass(sc);
+        }
+        else if(apiName.equals("GetContainerData")){
+            return api.GetContainerData(sc);
+        }
+        else if(apiName.equals("SetContainerData")){
+            return api.SetContainerData(sc);
+        }
+        else if(apiName.equals("InsertContainerPictureData")){
+            return api.InsertContainerPictureData(sc);
+        }
+        else if(apiName.equals("GetStockOutDataCnt")){
+            return api.GetStockOutDataCnt(sc);
+        }
+        else if(apiName.equals("ScanStockOut")){
+            return api.ScanStockOut(sc);
+        }
+        else if(apiName.equals("GetStockInFlag")){
+            return api.GetStockInFlag(sc);
+        }
+        else if(apiName.equals("InsertStockOutPictureData")){
+            return api.InsertStockOutPictureData(sc);
+        }
+        else if(apiName.equals("GetStockOutData")){
+            return api.GetStockOutData(sc);
+        }
+        else if(apiName.equals("UpdateStockOutData")){
+            return api.UpdateStockOutData(sc);
+        }
+        else if(apiName.equals("GetDeptDataBusiness")){
+            return api.GetDeptDataBusiness(sc);
+        }
+        else if(apiName.equals("GetCustomersDataClass")){
+            return api.GetCustomersDataClass(sc);
+        }
+        else if(apiName.equals("GetRegionData")){
+            return api.GetRegionData(sc);
+        }
+        else if(apiName.equals("GetStockOutDataExists")){
+            return api.GetStockOutDataExists(sc);
+        }
+        else if(apiName.equals("GetStockOutDetailData")){
+            return api.GetStockOutDetailData(sc);
+        }
+        else if(apiName.equals("EditStockOut")){
+            return api.EditStockOut(sc);
+        }
+        else if(apiName.equals("GetSalesOrderDataLocation")){
+            return api.GetSalesOrderDataLocation(sc);
+        }
+        else if(apiName.equals("ScanStockOutTag")){
+            return api.ScanStockOutTag(sc);
+        }
+        else if(apiName.equals("ScanBundle")){
+            return api.ScanBundle(sc);
+        }
+        else if(apiName.equals("GetBundleDataBundleNo")){
+            return api.GetBundleDataBundleNo(sc);
+        }
+        else if(apiName.equals("GetBundleDataPackingNo")){
+            return api.GetBundleDataPackingNo(sc);
+        }
+        else if(apiName.equals("EditBundle")){
+            return api.EditBundle(sc);
+        }
+
         else {
             return null;
         }

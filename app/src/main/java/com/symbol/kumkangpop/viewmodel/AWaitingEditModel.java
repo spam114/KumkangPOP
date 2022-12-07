@@ -7,6 +7,7 @@ import com.symbol.kumkangpop.model.AWaitingEditService;
 import com.symbol.kumkangpop.model.SearchCondition;
 import com.symbol.kumkangpop.model.object.Part;
 import com.symbol.kumkangpop.model.object.PartSpec;
+import com.symbol.kumkangpop.model.object.Users;
 
 import java.util.List;
 
@@ -55,7 +56,7 @@ public class AWaitingEditModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        errorMsg.setValue("서버 오류 발생");
+                        errorMsg.setValue(Users.Language==0 ? "서버 오류 발생": "Server error occurred");
                         loadError.setValue(true);
                         loading.setValue(false);
                         e.printStackTrace();
@@ -87,7 +88,7 @@ public class AWaitingEditModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        errorMsg.setValue("서버 오류 발생");
+                        errorMsg.setValue(Users.Language==0 ? "서버 오류 발생": "Server error occurred");
                         loadError.setValue(true);
                         loading.setValue(false);
                         e.printStackTrace();
@@ -111,7 +112,7 @@ public class AWaitingEditModel extends ViewModel {
                             loadError.setValue(true);
                         }
                         else{
-                            resultMsg.setValue("저장되었습니다.");
+                            resultMsg.setValue(Users.Language==0 ? "저장 되었습니다.": "Saved successfully.");
                             loadError.setValue(false);
                         }
                         loading.setValue(false);
@@ -119,7 +120,7 @@ public class AWaitingEditModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        errorMsg.setValue("서버 오류 발생");
+                        errorMsg.setValue(Users.Language==0 ? "서버 오류 발생": "Server error occurred");
                         loadError.setValue(true);
                         loading.setValue(false);
                         e.printStackTrace();

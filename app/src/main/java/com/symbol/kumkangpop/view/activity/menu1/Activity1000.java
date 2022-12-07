@@ -72,7 +72,8 @@ public class Activity1000 extends BaseActivity {
         tmonth = calendar.get(Calendar.MONTH);
         tdate = calendar.get(Calendar.DATE);
         binding.txtFromDate.setText("[ " + tyear + "-" + (tmonth + 1) + "-" + tdate + " ]");
-        binding.txtTitle.setText("계획생산 등록(A급)");
+        binding.txtTitle.setText(Users.Language == 0 ? getString(R.string.menu3):getString(R.string.menu3_eng));
+        setView();
         setBar();
         setListener();
         setFloatingNavigationView();
@@ -84,6 +85,18 @@ public class Activity1000 extends BaseActivity {
         binding.recyclerView.setAdapter(adapter);
         String inDate = tyear + "-" + (tmonth + 1) + "-" + tdate;
         GetRecyclerViewData(inDate, binding.rbNo.isChecked());
+    }
+
+    private void setView() {
+        if(Users.Language==1){
+            binding.txtFromDate2.setText("Date");
+            binding.rbNo.setText("unconfirmed");
+            binding.rbYes.setText("confirmed");
+            binding.textViewWorkDate4.setText("NO");
+            binding.textViewWorkDate.setText("Item");
+            binding.textViewWorkType.setText("Size");
+            binding.textViewLocation.setText("Qty");
+        }
     }
 
 
@@ -142,8 +155,7 @@ public class Activity1000 extends BaseActivity {
                 // 어뎁터가 리스트를 수정한다.
                 adapter.updateAdapter(data.WoPartHistList);
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_SHORT).show();
-                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
             }
         });
 
@@ -179,8 +191,7 @@ public class Activity1000 extends BaseActivity {
                     Toast.makeText(this, data.toString(), Toast.LENGTH_SHORT).show();
                 }
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_SHORT).show();
-                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
             }
         });
 

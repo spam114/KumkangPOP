@@ -75,10 +75,10 @@ public class MainActivity extends BaseActivity {
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerView.setAdapter(mainAdapter);
         backpressed = new BackPressControl(this);
-        if (Users.GboutSourcing) {//외주처의 경우 출고검수 사용금지
+        /*if (Users.GboutSourcing) {//외주처의 경우 출고검수 사용금지
             mainAdapter.removeItem(17);
             //mainAdapter.notifyDataSetChanged();
-        }
+        }*/
     }
 
 
@@ -109,7 +109,7 @@ public class MainActivity extends BaseActivity {
                 AppVersion appVersion = TypeChanger.changeTypeAppVersion(data);
                 Object errorCheck = appVersion.ErrorCheck;
                 if (errorCheck != null) {// SimpleDataViewModel 은 에러처리를 각각의 View에서 처리한다.(각각 다르므로)
-                    Toast.makeText(this, errorCheck.toString(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, errorCheck.toString(), Toast.LENGTH_SHORT).show();
                 } else {
                     boolean noticeFlag = PreferenceManager.getBoolean(this, "NoShowNotice");
                     //Object remark = linkedTreeMap.get("Remark");
@@ -118,8 +118,7 @@ public class MainActivity extends BaseActivity {
                         viewNotice(remark.toString());
                 }
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_LONG).show();
-                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
             }
         });
 
@@ -128,7 +127,7 @@ public class MainActivity extends BaseActivity {
                 businessClassList = TypeChanger.changeTypeBusinessClassList(list);
                 Object errorCheck = businessClassList.get(0).ErrorCheck;
                 if (errorCheck != null) {// SimpleDataViewModel 은 에러처리를 각각의 View에서 처리한다.(각각 다르므로)
-                    Toast.makeText(this, errorCheck.toString(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, errorCheck.toString(), Toast.LENGTH_SHORT).show();
                 } else {
                     ArrayList<String> stringArrayList = new ArrayList<>();
                     for (int i = 0; i < businessClassList.size(); i++) {
@@ -161,15 +160,14 @@ public class MainActivity extends BaseActivity {
                     //Log.i("스피너순서", "구성");
                 }
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_LONG).show();
-                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
             }
         });
 
         //에러메시지
         simpleDataViewModel.errorMsg.observe(this, models -> {
             if (models != null) {
-                Toast.makeText(this, models, Toast.LENGTH_LONG).show();
+                Toast.makeText(this, models, Toast.LENGTH_SHORT).show();
                 PreferenceManager.setBoolean(this, "AutoLogin", false);
                 PreferenceManager.setString(this, "ID", "");
                 PreferenceManager.setString(this, "PW", "");
@@ -198,8 +196,7 @@ public class MainActivity extends BaseActivity {
                 scanViewModel.GetScanMain(sc);
             }
             else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_LONG).show();
-            }
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
         });
 
         scanViewModel.data.observe(this, data -> {

@@ -57,4 +57,8 @@ public class BarcodeConvertPrintService {
         return api.FNSetPackingPDAData(searchCondition);//todo
     }
 
+    public Single<BarcodeConvertPrint> FNSetBundleData(SearchCondition searchCondition) {// 객체의 사용//todo
+        return api.FNSetBundleData(searchCondition);//todo
+    }
+
 }

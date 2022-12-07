@@ -65,7 +65,7 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="TAG NO"
+                    android:hint="ITEMTAG"
                     android:textColorHint="@color/medium_gray">
 
                     <com.symbol.kumkangpop.view.BackPressEditText
@@ -184,6 +184,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
+                android:scrollbars="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:background="@drawable/borderline"

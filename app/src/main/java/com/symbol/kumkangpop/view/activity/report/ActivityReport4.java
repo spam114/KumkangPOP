@@ -61,7 +61,8 @@ public class ActivityReport4 extends BaseActivity {
         tmonth = calendar.get(Calendar.MONTH);
         tdate = calendar.get(Calendar.DATE);
         binding.txtFromDate.setText("[ " + tyear + "-" + (tmonth + 1) + "-" + tdate + " ]");
-        binding.txtTitle.setText(getString(R.string.menu8));
+        binding.txtTitle.setText(Users.Language == 0 ? getString(R.string.menu8):getString(R.string.menu8_eng));
+        setView();
         setBar();
         setListener();
         setFloatingNavigationView();
@@ -73,6 +74,24 @@ public class ActivityReport4 extends BaseActivity {
         GetRecyclerViewData();
         setRadioButton();
         setFieldState(R.id.rbQty);
+    }
+
+    private void setView() {
+        if(Users.Language==1){
+            binding.txtFromDate2.setText("Date");
+            binding.txtFromDate4.setText("Print");
+            binding.rbQty.setText("Qty");
+            binding.rbVolumn.setText("Volumn");
+            binding.rbWeight.setText("Weight");
+            binding.textViewWorkDate4.setText("Item/Size");
+            binding.textView4.setText("NewItem");
+            binding.textView5.setText("Repair");
+
+            binding.textViewWorkDate.setText("Original");//순수
+            binding.textViewWorkType.setText("Processing");//가공
+            binding.textViewWorkType2.setText("Repair");//보수
+            binding.textViewWorkType3.setText("Processing/Repair");//가공보수
+        }
     }
 
     private void setRadioButton() {
@@ -237,8 +256,7 @@ public class ActivityReport4 extends BaseActivity {
                 dataList.remove(dataList.size() - 1);
                 adapter.updateAdapter((ArrayList<Report>) dataList);
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_SHORT).show();
-                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
             }
         });
 

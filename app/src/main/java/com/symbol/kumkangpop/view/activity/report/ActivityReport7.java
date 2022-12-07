@@ -56,6 +56,7 @@ public class ActivityReport7 extends BaseActivity {
         tyear = calendar.get(Calendar.YEAR);
         tmonth = calendar.get(Calendar.MONTH);
         tdate = calendar.get(Calendar.DATE);
+        setView();
         setListener();
         setResultLauncher();
         adapter = new AdapterReport7(new ArrayList<>(), this, resultLauncher);
@@ -65,6 +66,32 @@ public class ActivityReport7 extends BaseActivity {
         setRadioButton();
         setCheckBox();
         GetRecyclerViewData();
+    }
+
+    private void setView() {
+        if(Users.Language==1){
+            binding.txtFromDate2.setText("Stock(Spec)");
+            binding.txtFromDate77.setText("Print");
+            binding.rbQty.setText("Qty");
+            binding.rbWeight.setText("Weight");
+            binding.chkViewAlForm.setText("Alform");
+
+            binding.textViewWorkDate4.setText("Spec");
+            binding.textViewWorkDate5.setText("Total");
+            binding.textViewWorkDate2.setText("Class C");
+            binding.textViewWorkDate.setText("A Wait");
+
+            binding.textViewWorpe6.setText("Class A");
+            binding.textViekType2.setText("Order");
+            binding.textViekType.setText("Plan");
+
+            binding.textViewWorkType6.setText("New");
+            binding.textViewWorkType2.setText("Order");
+            binding.textViewWorkType.setText("Plan");
+
+            binding.textView3.setText("Total");
+
+        }
     }
 
     private void setRadioButton() {
@@ -180,8 +207,7 @@ public class ActivityReport7 extends BaseActivity {
                 }
                 adapter.updateAdapter((ArrayList<Report>) dataList);
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_SHORT).show();
-                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
             }
         });
         //에러메시지

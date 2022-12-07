@@ -66,7 +66,8 @@ public class ActivityReport2 extends BaseActivity {
         tmonth = calendar.get(Calendar.MONTH);
         tdate = calendar.get(Calendar.DATE);
         binding.txtFromDate.setText("[ " + tyear + "-" + (tmonth + 1) + "-" + tdate + " ]");
-        binding.txtTitle.setText(getString(R.string.menu6));
+        binding.txtTitle.setText(Users.Language == 0 ? getString(R.string.menu6):getString(R.string.menu6_eng));
+        setView();
         setBar();
         setListener();
         setFloatingNavigationView();
@@ -79,6 +80,33 @@ public class ActivityReport2 extends BaseActivity {
         setSpinnerData();
         setRadioButton();
         setFieldState(R.id.rbQty);
+    }
+
+    private void setView() {
+        if(Users.Language==1){
+            binding.txtFromDate2.setText("Date");
+            binding.txtFromDate3.setText("Type");
+            binding.txtFromDate4.setText("Print");
+            binding.rbQty.setText("Qty");
+            binding.rbVolumn.setText("Volumn");
+            binding.rbWeight.setText("Weight");
+            binding.textViewWorkDate4.setText("Item/Size");
+            binding.textViewWorkDate.setText("Input");
+            binding.textViewWorkType.setText("Repair");
+            binding.textViewWorkType2.setText("Damaged");
+
+            binding.textView3.setText("Total");
+            binding.txtTotal1.setText("Total");
+            binding.txtTotal2.setText("Total2");
+            binding.txtTotal3.setText("Total3");
+            binding.txtTotal4.setText("Total");
+            binding.txtTotal5.setText("Total2");
+            binding.txtTotal6.setText("Total3");
+            binding.txtTotal7.setText("Total");
+            binding.txtTotal8.setText("Total2");
+            binding.txtTotal9.setText("Total3");
+
+        }
     }
 
     private void setRadioButton() {
@@ -124,9 +152,9 @@ public class ActivityReport2 extends BaseActivity {
 
     private void setSpinnerData() {
         ArrayList<String> partFlagList = new ArrayList<>();
-        partFlagList.add("규격");
-        partFlagList.add("비규격");
-        partFlagList.add("규격전환");
+        partFlagList.add(Users.Language==0 ? "규격": "Spec");
+        partFlagList.add(Users.Language==0 ? "비규격": "NonSpec");
+        partFlagList.add(Users.Language==0 ? "규격전환": "Spec Change");
 
         ArrayAdapter adapter = new ArrayAdapter<String>(this,
                 R.layout.spinner_item, partFlagList);
@@ -250,8 +278,7 @@ public class ActivityReport2 extends BaseActivity {
                 dataList.remove(dataList.size() - 1);
                 adapter.updateAdapter((ArrayList<Report>) dataList);
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_SHORT).show();
-                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
             }
         });
 

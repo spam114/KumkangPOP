@@ -50,7 +50,7 @@ public class Activity0100 extends BaseActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity0100);
         barcodeConvertPrintViewModel = new ViewModelProvider(this).get(BarcodeConvertPrintViewModel.class);
         commonViewModel = new ViewModelProvider(this).get(CommonViewModel.class);
-        binding.txtTitle.setText(getString(R.string.detail_menu_0100));
+        binding.txtTitle.setText(Users.Language == 0 ? getString(R.string.detail_menu_0100):getString(R.string.detail_menu_0100_eng));
         saleOrderNo = getIntent().getStringExtra("saleOrderNo");
         setView();
         setBar();
@@ -70,6 +70,45 @@ public class Activity0100 extends BaseActivity {
         binding.edtInput7.setEnabled(false);
         binding.edtInput8.setEnabled(false);
         binding.edtInput9.setEnabled(false);
+
+
+        if(Users.Language == 1){
+            binding.textView47.setText("  ");
+            binding.textView6.setText("TAGNO");//태그번호
+            binding.textInputLayout1.setHint("TAGNO");
+
+            binding.textView46.setText("");
+            binding.textView7.setText("OrderNo");//주문번호
+            binding.textInputLayout2.setHint("OrderNo");
+
+            binding.textView11.setText("      ");
+            binding.textView8.setText("Code");//코드
+            binding.textInputLayout3.setHint("Code");
+
+            binding.textView12.setText("       ");
+            binding.textView13.setText("Item");//품명
+            binding.textInputLayout4.setHint("Item");
+
+            binding.textView14.setText("       ");
+            binding.textView15.setText("Size");//규격
+            binding.textInputLayout5.setHint("Size");
+
+            binding.textView16.setText("      ");
+            binding.textView17.setText("Spec");//제작사양
+            binding.textInputLayout6.setHint("Spec");
+
+            binding.textView18.setText("      ");
+            binding.textView19.setText("DWG");//도면번호
+            binding.textInputLayout7.setHint("DWG");
+
+            binding.textView20.setText("     ");
+            binding.textView21.setText("R-Qty");//지시량
+            binding.textInputLayout8.setHint("R-Qty");
+
+            binding.textView22.setText("     ");
+            binding.textView23.setText("C-Qty");//검수량
+            binding.textInputLayout9.setHint("C-Qty");
+        }
     }
 
     private void GetMainData(String barCode) {
@@ -88,8 +127,7 @@ public class Activity0100 extends BaseActivity {
                 sc.Barcode = barcode.Barcode;
                 commonViewModel.Get("GetItemTagCheck", sc);
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_LONG).show();
-            }
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
         });
 
         commonViewModel.data.observe(this, data -> {
@@ -97,7 +135,7 @@ public class Activity0100 extends BaseActivity {
                 ArrayList<CheckTag> tempArrayList = data.CheckTagList;
 
                 if (tempArrayList.get(0).ErrorCheck != null) {
-                    Toast.makeText(this, tempArrayList.get(0).ErrorCheck, Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, tempArrayList.get(0).ErrorCheck, Toast.LENGTH_SHORT).show();
                 } else {
                     DecimalFormat numFormatter = new DecimalFormat("###,###");
                     binding.edtInput1.setText(tempArrayList.get(0).ItemTag);
@@ -110,14 +148,13 @@ public class Activity0100 extends BaseActivity {
 
                     binding.textInputLayout8.setHint(numFormatter.format(tempArrayList.get(0).StockOutOrderQty));
                     binding.textInputLayout9.setHint(numFormatter.format(tempArrayList.get(0).StockOutCheckQty));
-                    Toast.makeText(this, "검수 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, Users.Language==0 ? "검수 완료되었습니다.": "The inspection is complete.", Toast.LENGTH_SHORT).show();
                 }
                 /*binding.recyclerView.setVisibility(View.VISIBLE);
                 // 어뎁터가 리스트를 수정한다.
                 adapter.updateAdapter(TypeChanger.changeTypeSalesOrderList(dataList));*/
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_SHORT).show();
-                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
             }
         });
 

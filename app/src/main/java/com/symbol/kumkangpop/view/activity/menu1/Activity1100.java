@@ -238,8 +238,7 @@ public class Activity1100 extends BaseActivity {
                     DrawTag(woPartHist);
                 }
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_SHORT).show();
-                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
             }
         });
 

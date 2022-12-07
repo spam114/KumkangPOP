@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.symbol.kumkangpop.R;
 import com.symbol.kumkangpop.databinding.Row0412Binding;
 import com.symbol.kumkangpop.model.object.Packing;
+import com.symbol.kumkangpop.view.CommonMethod;
+import com.symbol.kumkangpop.viewmodel.BarcodeConvertPrintViewModel;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -34,12 +36,15 @@ public class Adapter0412 extends RecyclerView.Adapter<Adapter0412.ViewHolder>  i
     ArrayList<Packing> unFilteredlist;//for filter
     ArrayList<Packing> filteredList;//for filter
 
-    public Adapter0412(ArrayList<Packing> items, Context context, ActivityResultLauncher<Intent> resultLauncher) {
+    BarcodeConvertPrintViewModel barcodeConvertPrintViewModel;
+
+    public Adapter0412(ArrayList<Packing> items, Context context, ActivityResultLauncher<Intent> resultLauncher, BarcodeConvertPrintViewModel barcodeConvertPrintViewModel) {
         this.context = context;
         this.items = items;
         this.resultLauncher = resultLauncher;
         this.unFilteredlist = items;
         this.filteredList = items;
+        this.barcodeConvertPrintViewModel = barcodeConvertPrintViewModel;
     }
 
 
@@ -139,6 +144,12 @@ public class Adapter0412 extends RecyclerView.Adapter<Adapter0412.ViewHolder>  i
                 @Override
                 public void onClick(View v) {
 
+
+                    if (item.ItemTag.equals(""))
+                        return;
+                    CommonMethod.FNBarcodeConvertPrint(item.ItemTag, barcodeConvertPrintViewModel);
+
+
                     //ㄴㅇㄹ
 
                     /*if(confirmFlag)
@@ -161,6 +172,10 @@ public class Adapter0412 extends RecyclerView.Adapter<Adapter0412.ViewHolder>  i
 
     public Packing getItem(int position) {
         return items.get(position);
+    }
+
+    public ArrayList<Packing> getItemList() {
+        return items;
     }
 
     public void setItem(int position, Packing item) {

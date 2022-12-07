@@ -8,11 +8,15 @@
         >
         <item
             android:id="@+id/logOut"
-            android:title="로그아웃"/>
+            android:title="로그아웃(Sign Out)"/>
 
         <item
             android:id="@+id/pcPrinter"
-            android:title="출력PC 연결"/>
+            android:title="출력PC 연결(Link Output PC)"/>
+
+        <item
+            android:id="@+id/language"
+            android:title="언어설정(Language)"/>
 
     </group>
 

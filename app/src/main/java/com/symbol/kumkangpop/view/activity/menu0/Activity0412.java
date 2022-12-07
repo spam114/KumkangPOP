@@ -8,7 +8,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListAdapter;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -22,8 +22,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.symbol.kumkangpop.R;
 import com.symbol.kumkangpop.databinding.Activity0412Binding;
 import com.symbol.kumkangpop.model.SearchCondition;
-import com.symbol.kumkangpop.model.object.ItemTag;
-import com.symbol.kumkangpop.model.object.Packing;
 import com.symbol.kumkangpop.model.object.Users;
 import com.symbol.kumkangpop.view.CommonMethod;
 import com.symbol.kumkangpop.view.activity.BaseActivity;
@@ -32,7 +30,6 @@ import com.symbol.kumkangpop.viewmodel.BarcodeConvertPrintViewModel;
 import com.symbol.kumkangpop.viewmodel.CommonViewModel;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Activity0412 extends BaseActivity {
     Activity0412Binding binding;
@@ -42,6 +39,7 @@ public class Activity0412 extends BaseActivity {
     private ActivityResultLauncher<Intent> resultLauncher;//QR ResultLauncher
     private FloatingNavigationView mFloatingNavigationView;
     String packingNo;
+    String dFlag = "개별";//일괄, 개별 삭제 구분
     //String saleOrderNo;
     //String ho;
     //ArrayList<ItemTag> tempItemTagArrayList = new ArrayList<>();
@@ -56,17 +54,30 @@ public class Activity0412 extends BaseActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity0412);
         barcodeConvertPrintViewModel = new ViewModelProvider(this).get(BarcodeConvertPrintViewModel.class);
         commonViewModel = new ViewModelProvider(this).get(CommonViewModel.class);
-        binding.txtTitle.setText(getString(R.string.detail_menu_0412));
+        binding.txtTitle.setText(Users.Language == 0 ? getString(R.string.detail_menu_0412) : getString(R.string.detail_menu_0412_eng));
         packingNo = getIntent().getStringExtra("packingNo");
+        setView();
         setBar();
         setListener();
         setFloatingNavigationView();
         setResultLauncher();
-        adapter = new Adapter0412(new ArrayList<>(), this, resultLauncher);
+        adapter = new Adapter0412(new ArrayList<>(), this, resultLauncher, barcodeConvertPrintViewModel);
         observerViewModel();
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerView.setAdapter(adapter);
         GetMainData();
+    }
+
+    private void setView() {
+        if (Users.Language == 1) {
+            binding.textViewWorkDate1.setText("ITEM TAG");//제품TAG
+            binding.textViewWorkType42.setText("SPEC");//사양
+            binding.textViewWorkType5.setText("DWG");//도면
+            binding.textViewWorkDate.setText("ITEM");//품명
+            binding.textViewWorkType4.setText("SIZE");//규격
+
+            binding.btnDeleteAll.setText("DELETE ALL");
+        }
     }
 
     private void GetMainData() {
@@ -76,20 +87,45 @@ public class Activity0412 extends BaseActivity {
     }
 
     private void scanning(String barcode) {
+        String titleKor=getString(R.string.detail_menu_0412);
+        String titleEng=getString(R.string.detail_menu_0412_eng);
+        String messageKor="제품TAG \"" + barcode + "\"\n를 제외하겠습니까?";
+        String messageEng="Do you want to exclude ITEMTAG"+"("+barcode+")?";
+        String poButtonKor="확인";
+        String poButtonEng="OK";
+        String negaButtonKor="취소";
+        String negaButtonEng="Cancel";
 
+        String strTitle;
+        String strMessage;
+        String strPoButton;
+        String strNegaButton;
+
+        if(Users.Language ==0){
+            strTitle=titleKor;
+            strMessage=messageKor;
+            strPoButton=poButtonKor;
+            strNegaButton=negaButtonKor;
+        }
+        else{
+            strTitle=titleEng;
+            strMessage=messageEng;
+            strPoButton=poButtonEng;
+            strNegaButton=negaButtonEng;
+        }
 
         new MaterialAlertDialogBuilder(this)
-                .setTitle(getString(R.string.detail_menu_0412))
-                .setMessage("제품TAG: "+barcode+"\n를 제외하겠습니까?")
+                .setTitle(strTitle)
+                .setMessage(strMessage)
                 .setCancelable(true)
-                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                .setPositiveButton(strPoButton, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //Toast.makeText(getBaseContext(), "삭제되었습니다.", Toast.LENGTH_SHORT).show();
                         fnRemoveList(barcode);
                     }
                 })
-                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                .setNegativeButton(strNegaButton, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
@@ -99,7 +135,7 @@ public class Activity0412 extends BaseActivity {
 
     private void fnRemoveList(String barcode) {
         //tempItemTagArrayList = itemTagList;
-        CommonMethod.FNSetPackingPDAData(barcodeConvertPrintViewModel,4, packingNo, barcode, 0);
+        CommonMethod.FNSetPackingPDAData(barcodeConvertPrintViewModel, 4, packingNo, barcode, 0);
     }
 
     public void observerViewModel() {
@@ -110,8 +146,7 @@ public class Activity0412 extends BaseActivity {
                     return;
                 scanning(barcode.Barcode);
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_LONG).show();
-            }
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
         });
 
         //FNSetPackingPDAData 반환 데이터
@@ -128,7 +163,9 @@ public class Activity0412 extends BaseActivity {
                     packing.PartCode = tempItemTagArrayList.get(0).PartCode;*/
 
                     GetMainData();
-                    Toast.makeText(this, "제외되었습니다.", Toast.LENGTH_LONG).show();
+                    if (dFlag.equals("개별")) {
+                        Toast.makeText(this, Users.Language==0 ? "제외 되었습니다.": "It's excluded", Toast.LENGTH_SHORT).show();
+                    }
                      /*packing.ItemTag = tempItemTagArrayList.get(0).
 
                      adapter.addItem();
@@ -146,8 +183,7 @@ public class Activity0412 extends BaseActivity {
                 }
 
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_LONG).show();
-            }
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
         });
 
         //에러메시지
@@ -174,9 +210,9 @@ public class Activity0412 extends BaseActivity {
                 binding.tvStockOutOrderQty.setText(numFormatter.format(num1));
                 binding.tvStockOutQty.setText(numFormatter.format(num2));*/
                 adapter.updateAdapter(data.PackingList);
+                adapter.getFilter().filter(binding.edtInput.getText().toString());
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_SHORT).show();
-                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
             }
         });
 
@@ -187,7 +223,7 @@ public class Activity0412 extends BaseActivity {
 
 
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_SHORT).show();
             }
         });*/
 
@@ -228,6 +264,66 @@ public class Activity0412 extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        binding.btnDeleteAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String titleKor="제품 일괄 제외";
+                String titleEng="ITEM Exclude ALL";
+                String messageKor="\"모든\" 제품TAG를 제외하겠습니까?";
+                String messageEng="Exclude \"all\" TAGs?";
+                String poButtonKor="확인";
+                String poButtonEng="OK";
+                String negaButtonKor="취소";
+                String negaButtonEng="Cancel";
+
+                String strTitle;
+                String strMessage;
+                String strPoButton;
+                String strNegaButton;
+
+                if(Users.Language ==0){
+                    strTitle=titleKor;
+                    strMessage=messageKor;
+                    strPoButton=poButtonKor;
+                    strNegaButton=negaButtonKor;
+                }
+                else{
+                    strTitle=titleEng;
+                    strMessage=messageEng;
+                    strPoButton=poButtonEng;
+                    strNegaButton=negaButtonEng;
+                }
+                try {
+                    new MaterialAlertDialogBuilder(Activity0412.this)
+                            .setTitle(strTitle)
+                            .setMessage(strMessage)
+                            .setCancelable(true)
+                            .setPositiveButton(strPoButton, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dFlag = "일괄";
+                                    for (int i = 0; i < adapter.getItemList().size(); i++) {
+                                        fnRemoveList(adapter.getItemList().get(i).ItemTag);
+                                    }
+                                    Toast.makeText(getBaseContext(), Users.Language==0 ? "제외 되었습니다.": "It's excluded", Toast.LENGTH_SHORT).show();
+                                    GetMainData();
+                                }
+                            })
+                            .setNegativeButton(strNegaButton, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            }).show();
+                } catch (Exception et) {
+
+                } finally {
+                    dFlag = "개별";
+                }
 
             }
         });

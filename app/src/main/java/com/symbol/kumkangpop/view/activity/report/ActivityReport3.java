@@ -64,7 +64,8 @@ public class ActivityReport3 extends BaseActivity {
         tmonth = calendar.get(Calendar.MONTH);
         tdate = calendar.get(Calendar.DATE);
         binding.txtFromDate.setText("[ " + tyear + "-" + (tmonth + 1) + "-" + tdate + " ]");
-        binding.txtTitle.setText(getString(R.string.menu7));
+        binding.txtTitle.setText(Users.Language == 0 ? getString(R.string.menu7) : getString(R.string.menu7_eng));
+        setView();
         setBar();
         setListener();
         setFloatingNavigationView();
@@ -77,10 +78,25 @@ public class ActivityReport3 extends BaseActivity {
         setSpinnerData();
     }
 
+    private void setView() {
+        if (Users.Language == 1) {
+            binding.txtFromDate2.setText("Date");
+            binding.txtFromDate3.setText("Type");
+            binding.textViewWorkDate4.setText("Item/Size");
+            binding.textViewWorkDate.setText("Qty");
+            binding.textViewWorkType.setText("Weight");
+            binding.textViewWorkType2.setText("ActualWeight");
+            binding.textView3.setText("Total");
+            binding.txtTotal1.setText("Total");
+            binding.txtTotal2.setText("Total2");
+            binding.txtTotal3.setText("Total3");
+        }
+    }
+
     private void setSpinnerData() {
         ArrayList<String> partFlagList = new ArrayList<>();
-        partFlagList.add("규격");
-        partFlagList.add("비규격");
+        partFlagList.add(Users.Language == 0 ? "규격" : "Spec");
+        partFlagList.add(Users.Language == 0 ? "비규격" : "NonSpec");
 
         ArrayAdapter adapter = new ArrayAdapter<String>(this,
                 R.layout.spinner_item, partFlagList);
@@ -178,8 +194,7 @@ public class ActivityReport3 extends BaseActivity {
                 dataList.remove(dataList.size() - 1);
                 adapter.updateAdapter((ArrayList<Report>) dataList);
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_SHORT).show();
-                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
             }
         });
 
@@ -232,7 +247,7 @@ public class ActivityReport3 extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return CommonMethod.onOptionsItemSelected(this, item, resultLauncher,1);
+        return CommonMethod.onOptionsItemSelected(this, item, resultLauncher, 1);
     }
 
 

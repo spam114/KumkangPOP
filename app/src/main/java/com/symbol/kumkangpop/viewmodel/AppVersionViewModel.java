@@ -64,7 +64,7 @@ public class AppVersionViewModel extends ViewModel {// 사용자에게 보여줄
 
                             @Override
                             public void onError(@NonNull Throwable e) {
-                                errorMsg.setValue("서버 오류 발생");
+                                errorMsg.setValue(Users.Language==0 ? "서버 오류 발생": "Server error occurred");
                                 loadError.setValue(true);
                                 loading.setValue(false);
                                 e.printStackTrace();
@@ -111,7 +111,7 @@ public class AppVersionViewModel extends ViewModel {// 사용자에게 보여줄
 
                             @Override
                             public void onError(@NonNull Throwable e) {
-                                errorMsg.setValue("서버 오류 발생");
+                                errorMsg.setValue(Users.Language==0 ? "서버 오류 발생": "Server error occurred");
                                 loadError.setValue(true);
                                 loading.setValue(false);
                                 e.printStackTrace();

@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.symbol.kumkangpop.R;
 import com.symbol.kumkangpop.model.object.MainMenuItem;
+import com.symbol.kumkangpop.model.object.Users;
 
 import java.util.ArrayList;
 
@@ -188,26 +189,27 @@ public class ApplicationClass extends Application {
     public ArrayList<MainMenuItem> getMainMenuItem(){
 
         ArrayList<MainMenuItem> menuItemArrayList= new ArrayList<>();
-        menuItemArrayList.add(new MainMenuItem(1,1, getString(R.string.menu1),false,-1));
-        menuItemArrayList.add(new MainMenuItem(2,1,getString(R.string.menu2),false, R.drawable.sprinkler_48px));
-        menuItemArrayList.add(new MainMenuItem(2,1,getString(R.string.menu3),true, R.drawable.next_plan_48px));
 
-        menuItemArrayList.add(new MainMenuItem(1,2,getString(R.string.menu4),false, -1));
-        menuItemArrayList.add(new MainMenuItem(2,2,getString(R.string.menu5),false, R.drawable.monitor_weight_48px));
-        menuItemArrayList.add(new MainMenuItem(2,2,getString(R.string.menu6),false, R.drawable.safety_divider_48px));
-        menuItemArrayList.add(new MainMenuItem(2,2,getString(R.string.menu7),false, R.drawable.sprinkler_48px));
-        menuItemArrayList.add(new MainMenuItem(2,2,getString(R.string.menu8),false, R.drawable.list_alt_48px));
-        menuItemArrayList.add(new MainMenuItem(2,2,getString(R.string.menu9),false, R.drawable.local_shipping_48px));
-        menuItemArrayList.add(new MainMenuItem(2,2,getString(R.string.menu16),false, R.drawable.package_48px));
-        menuItemArrayList.add(new MainMenuItem(2,2,getString(R.string.menu17),true, R.drawable.inventory_2_48px));
+        menuItemArrayList.add(new MainMenuItem(1,1, Users.Language == 0 ? getString(R.string.menu1):getString(R.string.menu1_eng),false,-1));
+        menuItemArrayList.add(new MainMenuItem(2,1,Users.Language == 0 ? getString(R.string.menu2):getString(R.string.menu2_eng),false, R.drawable.sprinkler_48px));
+        menuItemArrayList.add(new MainMenuItem(2,1,Users.Language == 0 ? getString(R.string.menu3):getString(R.string.menu3_eng),true, R.drawable.next_plan_48px));
 
-        menuItemArrayList.add(new MainMenuItem(1,3,getString(R.string.menu10),false,-1));
-        menuItemArrayList.add(new MainMenuItem(2,3,getString(R.string.menu11),false, R.drawable.inventory_2_48px));
-        menuItemArrayList.add(new MainMenuItem(2,3,getString(R.string.menu12),false, R.drawable.inventory_48px));
-        menuItemArrayList.add(new MainMenuItem(2,3,getString(R.string.menu13),false, R.drawable.keyboard_double_arrow_right_48px));
-        menuItemArrayList.add(new MainMenuItem(2,3,getString(R.string.menu18),false, R.drawable.keyboard_double_arrow_left_48px));
-        menuItemArrayList.add(new MainMenuItem(2,3,getString(R.string.menu14),false, R.drawable.local_shipping_48px));
-        menuItemArrayList.add(new MainMenuItem(2,3,getString(R.string.menu19),false, R.drawable.checklist_rtl_48px));
+        menuItemArrayList.add(new MainMenuItem(1,2,Users.Language == 0 ? getString(R.string.menu4):getString(R.string.menu4_eng),false, -1));
+        menuItemArrayList.add(new MainMenuItem(2,2,Users.Language == 0 ? getString(R.string.menu5):getString(R.string.menu5_eng),false, R.drawable.monitor_weight_48px));
+        menuItemArrayList.add(new MainMenuItem(2,2,Users.Language == 0 ? getString(R.string.menu6):getString(R.string.menu6_eng),false, R.drawable.safety_divider_48px));
+        menuItemArrayList.add(new MainMenuItem(2,2,Users.Language == 0 ? getString(R.string.menu7):getString(R.string.menu7_eng),false, R.drawable.sprinkler_48px));
+        menuItemArrayList.add(new MainMenuItem(2,2,Users.Language == 0 ? getString(R.string.menu8):getString(R.string.menu8_eng),false, R.drawable.list_alt_48px));
+        menuItemArrayList.add(new MainMenuItem(2,2,Users.Language == 0 ? getString(R.string.menu9):getString(R.string.menu9_eng),false, R.drawable.local_shipping_48px));
+        menuItemArrayList.add(new MainMenuItem(2,2,Users.Language == 0 ? getString(R.string.menu16):getString(R.string.menu16_eng),false, R.drawable.package_48px));
+        menuItemArrayList.add(new MainMenuItem(2,2,Users.Language == 0 ? getString(R.string.menu17):getString(R.string.menu17_eng),true, R.drawable.inventory_2_48px));
+
+        menuItemArrayList.add(new MainMenuItem(1,3,Users.Language == 0 ? getString(R.string.menu10):getString(R.string.menu10_eng),false,-1));
+        menuItemArrayList.add(new MainMenuItem(2,3,Users.Language == 0 ? getString(R.string.menu11):getString(R.string.menu11_eng),false, R.drawable.inventory_2_48px));
+        menuItemArrayList.add(new MainMenuItem(2,3,Users.Language == 0 ? getString(R.string.menu12):getString(R.string.menu12_eng),false, R.drawable.inventory_48px));
+        //menuItemArrayList.add(new MainMenuItem(2,3,getString(R.string.menu13),false, R.drawable.keyboard_double_arrow_right_48px));
+        //menuItemArrayList.add(new MainMenuItem(2,3,getString(R.string.menu18),false, R.drawable.keyboard_double_arrow_left_48px));
+        menuItemArrayList.add(new MainMenuItem(2,3,Users.Language == 0 ? getString(R.string.menu14):getString(R.string.menu14_eng),false, R.drawable.local_shipping_48px));
+        //menuItemArrayList.add(new MainMenuItem(2,3,getString(R.string.menu19),false, R.drawable.checklist_rtl_48px));
         //menuItemArrayList.add(new MainMenuItem(2,3,getString(R.string.menu15),false, R.drawable.download_48px));
         //menuItemArrayList.add(new MainMenuItem(2,3,getString(R.string.menu20),true, R.drawable.file_upload_48px));
         return menuItemArrayList;

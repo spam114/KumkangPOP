@@ -67,7 +67,8 @@ public class ActivityReport1 extends BaseActivity {
         tmonth = calendar.get(Calendar.MONTH);
         tdate = calendar.get(Calendar.DATE);
         binding.txtFromDate.setText("[ " + tyear + "-" + (tmonth + 1) + "-" + tdate + " ]");
-        binding.txtTitle.setText("반입 현황(계근)");
+        binding.txtTitle.setText(Users.Language == 0 ? getString(R.string.menu5):getString(R.string.menu5_eng));
+        setView();
         setBar();
         setListener();
         setFloatingNavigationView();
@@ -80,17 +81,29 @@ public class ActivityReport1 extends BaseActivity {
         setSpinnerData();
     }
 
+    private void setView() {
+        if(Users.Language==1){
+            binding.txtFromDate2.setText("Date");
+            binding.txtFromDate3.setText("Type");
+            binding.textViewWorkDate4.setText("CarNo");
+            binding.textViewWorkDate.setText("Type");
+            binding.textViewWorkType.setText("Weight");
+            binding.textView3.setText("Total");
+            binding.txtTotal.setText("Total");
+        }
+    }
+
     private void setSpinnerData() {
         ArrayList<String> partFlagList = new ArrayList<>();
-        partFlagList.add("전체");
-        partFlagList.add("알폼");
-        partFlagList.add("스틸");
-        partFlagList.add("스틸서포트");
-        partFlagList.add("핀류");
-        partFlagList.add("시스템");
-        partFlagList.add("AL서포트");
+        partFlagList.add(Users.Language==0 ? "전체": "All");
+        partFlagList.add(Users.Language==0 ? "알폼": "AL-Form");
+        partFlagList.add(Users.Language==0 ? "스틸": "Steel");
+        partFlagList.add(Users.Language==0 ? "스틸서포트": "Steel-Support");
+        partFlagList.add(Users.Language==0 ? "핀류": "Pins");
+        partFlagList.add(Users.Language==0 ? "시스템": "System");
+        partFlagList.add(Users.Language==0 ? "AL-서포트": "AL-Support");
         partFlagList.add("KSBEAM");
-        partFlagList.add("KD서포트");
+        partFlagList.add(Users.Language==0 ? "KD-서포트": "KD-Support");
 
         ArrayAdapter adapter = new ArrayAdapter<String>(this,
                 R.layout.spinner_item, partFlagList);
@@ -198,8 +211,7 @@ public class ActivityReport1 extends BaseActivity {
 
                 adapter.updateAdapter((ArrayList<Report>) dataList);
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_SHORT).show();
-                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
             }
         });
 

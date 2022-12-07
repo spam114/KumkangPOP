@@ -2,19 +2,22 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.symbol.kumkangpop">
+    <!--명시해야할 권한 = 위험 권한 = 런타임 권한-->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!--<uses-permission android:name="android.permission.READ_SMS" />-->
+
+    <!--여기만으로 OK-->
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"
-        android:maxSdkVersion="29" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <!--쓰기권한-->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
-    <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/><!--오레오 버전 부터 추가된  설치 권한-->
     <uses-permission android:name="android.permission.BLUETOOTH"/><!--핸드폰정보 이름 설정값을 알아오기위한 블루투스 권한-->
     <application
+        android:requestLegacyExternalStorage="true"
         android:name="com.symbol.kumkangpop.view.application.ApplicationClass"
         android:allowBackup="true"
         android:icon="@drawable/logo2"
@@ -78,8 +81,84 @@
             tools:ignore="LockedOrientationActivity"
             android:screenOrientation="portrait">
         </activity>
+
+        <activity
+            android:name="com.symbol.kumkangpop.view.activity.menu0.Activity0500"
+            tools:ignore="LockedOrientationActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.symbol.kumkangpop.view.activity.menu2.Activity2000"
+            tools:ignore="LockedOrientationActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.symbol.kumkangpop.view.activity.menu2.Activity2100"
+            tools:ignore="LockedOrientationActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.symbol.kumkangpop.view.activity.menu2.Activity2200"
+            tools:ignore="LockedOrientationActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.symbol.kumkangpop.view.activity.menu5.Activity5000"
+            tools:ignore="LockedOrientationActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.symbol.kumkangpop.view.activity.menu5.Activity5010"
+            tools:ignore="LockedOrientationActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.symbol.kumkangpop.view.activity.menu5.Activity5100"
+            tools:ignore="LockedOrientationActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.symbol.kumkangpop.view.activity.menu5.Activity5110"
+            tools:ignore="LockedOrientationActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.symbol.kumkangpop.view.activity.menu5.Activity5200"
+            tools:ignore="LockedOrientationActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.symbol.kumkangpop.view.activity.menu5.Activity5210"
+            tools:ignore="LockedOrientationActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.symbol.kumkangpop.view.activity.menu5.Activity5300"
+            tools:ignore="LockedOrientationActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.symbol.kumkangpop.view.activity.menu5.Activity5310"
+            tools:ignore="LockedOrientationActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.symbol.kumkangpop.view.activity.menu5.Activity5400"
+            tools:ignore="LockedOrientationActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.symbol.kumkangpop.view.activity.menu5.Activity5410"
+            tools:ignore="LockedOrientationActivity"
+            android:screenOrientation="portrait">
+        </activity>
         <activity
             android:name="com.symbol.kumkangpop.view.activity.menu0.Activity0410"
+            tools:ignore="LockedOrientationActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.symbol.kumkangpop.view.activity.menu0.Activity0510"
             tools:ignore="LockedOrientationActivity"
             android:screenOrientation="portrait">
         </activity>
@@ -163,7 +242,7 @@
             tools:replace="screenOrientation" />
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.provider"
+            android:authorities="${applicationId}.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

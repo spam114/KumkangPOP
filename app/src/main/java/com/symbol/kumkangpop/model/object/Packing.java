@@ -5,6 +5,7 @@ public class Packing {
     public String Dong;
     public String Ho;
     public double HoSeqNo;
+    public double DongSeqNo;
     public double PackingDivision;
     public double Weight;
     public String PalletType;
@@ -20,4 +21,10 @@ public class Packing {
     public String PartCode;
     public String ItemTag;
     public double ItemCnt;
+
+    public String CustomerName;
+    public String LocationName;
+    public String SaleOrderNo;
+    public String SaleOrderLocationNo;
+
 }

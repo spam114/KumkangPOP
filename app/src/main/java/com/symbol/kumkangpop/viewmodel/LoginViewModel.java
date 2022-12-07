@@ -61,13 +61,14 @@ public class LoginViewModel extends ViewModel {
                                 Users.CustomerCode = models.CustomerCode;
                                 Users.BusinessClassCode = models.BusinessClassCode;
                                 Users.GboutSourcing = models.GboutSourcing;
+                                Users.Language = sc.Language;
                                 loadError.setValue(false);
                                 loading.setValue(false);
                             }
 
                             @Override
                             public void onError(@NonNull Throwable e) {
-                                errorMsg.setValue("서버 오류 발생");
+                                errorMsg.setValue(Users.Language==0 ? "서버 오류 발생": "Server error occurred");
                                 loadError.setValue(true);
                                 loading.setValue(false);
                                 e.printStackTrace();
@@ -90,7 +91,7 @@ public class LoginViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        errorMsg.setValue("서버 오류 발생");
+                        errorMsg.setValue(Users.Language==0 ? "서버 오류 발생": "Server error occurred");
                         loadError.setValue(true);
                         loading.setValue(false);
                         e.printStackTrace();
@@ -121,6 +122,7 @@ public class LoginViewModel extends ViewModel {
                                 Users.CustomerCode = models.CustomerCode;
                                 Users.BusinessClassCode = models.BusinessClassCode;
                                 Users.GboutSourcing = models.GboutSourcing;
+                                Users.Language = sc.Language;
                                 phoneNumberFlag.setValue(true);
                                 loading.setValue(false);
                             }
@@ -128,7 +130,7 @@ public class LoginViewModel extends ViewModel {
                             @Override
                             public void onError(@NonNull Throwable e) {
                                 phoneNumberFlag.setValue(false);
-                                errorMsg.setValue("서버 오류 발생");
+                                errorMsg.setValue(Users.Language==0 ? "서버 오류 발생": "Server error occurred");
                                 loading.setValue(false);
                                 e.printStackTrace();
                             }
@@ -164,7 +166,7 @@ public class LoginViewModel extends ViewModel {
 
                             @Override
                             public void onError(@NonNull Throwable e) {
-                                errorMsg.setValue("서버 오류 발생");
+                                errorMsg.setValue(Users.Language==0 ? "서버 오류 발생": "Server error occurred");
                                 //loadError.setValue(true);
                                 //loading.setValue(false);
                                 loading.setValue(false);

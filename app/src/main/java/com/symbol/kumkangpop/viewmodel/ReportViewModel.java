@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel;
 import com.symbol.kumkangpop.model.ReportService;
 import com.symbol.kumkangpop.model.SearchCondition;
 import com.symbol.kumkangpop.model.object.Report;
+import com.symbol.kumkangpop.model.object.Users;
 
 import java.util.List;
 
@@ -94,7 +95,7 @@ public class ReportViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        errorMsg.setValue("서버 오류 발생");
+                        errorMsg.setValue(Users.Language==0 ? "서버 오류 발생": "Server error occurred");
                         loadError.setValue(true);
                         loading.setValue(false);
                         e.printStackTrace();

@@ -3,6 +3,8 @@ package com.symbol.kumkangpop.view;
 import android.app.Activity;
 import android.widget.Toast;
 
+import com.symbol.kumkangpop.model.object.Users;
+
 public class BackPressControl {
     private long backKeyPressedTime = 0;
     private Toast toast;
@@ -32,7 +34,7 @@ public class BackPressControl {
 
 
     public void showGuide() {
-        toast = Toast.makeText(activity, "뒤로가기 버튼을 한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT);
+        toast = Toast.makeText(activity, Users.Language==0 ? "뒤로가기 버튼을 한번 더 누르면 종료됩니다.": "Press the Back button one more time to exit.", Toast.LENGTH_SHORT);
         toast.show();
     }
 

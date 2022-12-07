@@ -2,6 +2,8 @@ package com.symbol.kumkangpop.model;
 
 import com.google.gson.annotations.SerializedName;
 import com.symbol.kumkangpop.model.object.ScanListViewItem;
+import com.symbol.kumkangpop.model.object.ScanListViewItem2;
+import com.symbol.kumkangpop.model.object.StockOutDetail;
 
 import java.util.List;
 
@@ -184,6 +186,9 @@ public class SearchCondition {
     @SerializedName("ScanList")
     public List<ScanListViewItem> ScanList;
 
+    @SerializedName("ScanList2")
+    public List<ScanListViewItem2> ScanList2;
+
     @SerializedName("SaleOrderQty")
     public double SaleOrderQty;
 
@@ -201,6 +206,117 @@ public class SearchCondition {
 
     @SerializedName("ErrorDiv")
     public int ErrorDiv;
+
+    @SerializedName("BundleNo")
+    public String BundleNo;
+
+    @SerializedName("PackingDivision")
+    public int PackingDivision;
+
+    @SerializedName("Weight")
+    public double Weight;
+
+    @SerializedName("PalletType")
+    public String PalletType;
+
+    @SerializedName("Bin")
+    public String Bin;
+
+    @SerializedName("LocationName")
+    public String LocationName;
+
+    @SerializedName("SearchDivision")
+    public int SearchDivision;
+
+    @SerializedName("ContainerNo")
+    public String ContainerNo;
+
+    @SerializedName("OutDate")
+    public String OutDate;
+
+    @SerializedName("SilNo")
+    public String SilNo;
+
+    @SerializedName("ContainerTon")
+    public double ContainerTon;
+
+    @SerializedName("CarNumber")
+    public String CarNumber;
+
+    @SerializedName("ContainerNo2")
+    public String ContainerNo2;
+
+    @SerializedName("Image")
+    public String Image;
+
+    @SerializedName("ImageName")
+    public String ImageName;
+
+    @SerializedName("StockOutNo")
+    public String StockOutNo;
+
+    @SerializedName("StockOutType")
+    public int StockOutType;
+
+    @SerializedName("GPackingNo")
+    public String GPackingNo;
+
+    @SerializedName("GLocationNo")
+    public int GLocationNo;
+
+    @SerializedName("ALQty")
+    public double ALQty;
+
+    @SerializedName("ACQty")
+    public double ACQty;
+
+    @SerializedName("STQty")
+    public double STQty;
+
+    @SerializedName("StockInFlag")
+    public int StockInFlag;
+
+    @SerializedName("AreaCode")
+    public String AreaCode;
+
+    @SerializedName("TransportDivision")
+    public int TransportDivision;
+
+    @SerializedName("CarTon")
+    public double CarTon;
+
+    @SerializedName("TransportAmt")
+    public double TransportAmt;
+
+    @SerializedName("Remark1")
+    public String Remark1;
+
+    @SerializedName("Remark2")
+    public String Remark2;
+
+    @SerializedName("CustomerClass")
+    public int CustomerClass;
+
+    @SerializedName("ItemType")
+    public int ItemType;
+
+    @SerializedName("BoolRadio1")
+    public boolean BoolRadio1;
+
+    @SerializedName("BoolRadio2")
+    public boolean BoolRadio2;
+
+    @SerializedName("NumPrint")
+    public int NumPrint;
+
+    @SerializedName("BReturn")
+    public boolean BReturn;
+
+    @SerializedName("StockOrderLocationNo")
+    public int StockOrderLocationNo;
+
+    @SerializedName("SaleOrderLocationNo")
+    public int SaleOrderLocationNo;
 
     public SearchCondition(){}
 

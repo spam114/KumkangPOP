@@ -48,14 +48,41 @@ public class Activity0010 extends BaseActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity0010);
         barcodeConvertPrintViewModel = new ViewModelProvider(this).get(BarcodeConvertPrintViewModel.class);
         commonViewModel = new ViewModelProvider(this).get(CommonViewModel.class);
-        binding.txtTitle.setText(getString(R.string.menu11));
+        binding.txtTitle.setText(Users.Language == 0 ? getString(R.string.detail_menu_0010):getString(R.string.detail_menu_0010_eng));
         saleOrderNo = getIntent().getStringExtra("saleOrderNo");
+        setView();
         setBar();
         setListener();
         setFloatingNavigationView();
         setResultLauncher();
         observerViewModel();
         GetMainData(saleOrderNo);
+    }
+
+    private void setView() {
+        if(Users.Language == 1){
+            binding.textView6.setText("SaleOrderNo");//주문번호
+            binding.textInputLayout1.setHint("SaleOrderNo");
+
+            binding.textView45.setText(" aa");
+            binding.textView7.setText("Customer");//거래처명
+            binding.textInputLayout2.setHint("CustomerName");
+
+            binding.textView11.setText("Aaaa");
+            binding.textView8.setText("Jobsite");//현장명
+            binding.textInputLayout3.setHint("Jobsite");
+
+            binding.textView12.setText("aaaaaa");
+            binding.textView10.setText("Block");//동
+            binding.textInputLayout4.setHint("Block");
+
+            binding.btn1.setText("Inspection");//제품검수
+            binding.btn2.setText("Print Zone");//세대출력
+            binding.btn3.setText("Packing");//제품포장
+            binding.btn4.setText("Edit Packing");//포장수정
+            binding.btn5.setText("Weigh Packing");//포장계근
+            binding.btn6.setText("Exit");//취소
+        }
     }
 
     private void GetMainData(String tSaleOrderNo) {
@@ -77,8 +104,7 @@ public class Activity0010 extends BaseActivity {
                 commonViewModel.Get2("GetNumConvertData", sc);
             }
             else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_LONG).show();
-            }
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
         });
 
         commonViewModel.data.observe(this, data -> {
@@ -99,15 +125,14 @@ public class Activity0010 extends BaseActivity {
                 // 어뎁터가 리스트를 수정한다.
                 adapter.updateAdapter(TypeChanger.changeTypeSalesOrderList(dataList));*/
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_SHORT).show();
-                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
             }
         });
 
         commonViewModel.data2.observe(this, data -> {
             if (data != null) {
                 if (data.NumConvertDataList.size()==0) {
-                    Toast.makeText(this, "해당 TAG의 주문정보를 찾을 수 없습니다.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, Users.Language==0 ? "해당 TAG의 주문정보를 찾을 수 없습니다.": "Ordering information for the appropriate TAG can not be found.", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 //SearchCondition sc = new SearchCondition();
@@ -115,8 +140,7 @@ public class Activity0010 extends BaseActivity {
                 GetMainData(data.NumConvertDataList.get(0).DestNum);
             }
             else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_LONG).show();
-            }
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
         });
 
         //에러메시지
@@ -190,7 +214,9 @@ public class Activity0010 extends BaseActivity {
         binding.btn5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(getBaseContext(), Activity0500.class);
+                intent.putExtra("saleOrderNo", saleOrderNo);
+                activityResultLauncher.launch(intent);
             }
         });
         //취소: 뒤로가기

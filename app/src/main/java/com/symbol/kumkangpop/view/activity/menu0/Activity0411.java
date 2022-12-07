@@ -20,7 +20,6 @@ import com.symbol.kumkangpop.R;
 import com.symbol.kumkangpop.databinding.Activity0411Binding;
 import com.symbol.kumkangpop.model.SearchCondition;
 import com.symbol.kumkangpop.model.object.ItemTag;
-import com.symbol.kumkangpop.model.object.Packing;
 import com.symbol.kumkangpop.model.object.Users;
 import com.symbol.kumkangpop.view.CommonMethod;
 import com.symbol.kumkangpop.view.activity.BaseActivity;
@@ -52,10 +51,11 @@ public class Activity0411 extends BaseActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity0411);
         barcodeConvertPrintViewModel = new ViewModelProvider(this).get(BarcodeConvertPrintViewModel.class);
         commonViewModel = new ViewModelProvider(this).get(CommonViewModel.class);
-        binding.txtTitle.setText(getString(R.string.detail_menu_0411));
+        binding.txtTitle.setText(Users.Language == 0 ? getString(R.string.detail_menu_0411) : getString(R.string.detail_menu_0411_eng));
         saleOrderNo = getIntent().getStringExtra("saleOrderNo");
         ho = getIntent().getStringExtra("ho");
         packingNo = getIntent().getStringExtra("packingNo");
+        setView();
         setBar();
         setListener();
         setFloatingNavigationView();
@@ -67,13 +67,23 @@ public class Activity0411 extends BaseActivity {
         GetMainData();
     }
 
+    private void setView() {
+        if (Users.Language == 1) {
+            binding.textViewWorkDate1.setText("ITEM TAG");//제품TAG
+            binding.textViewWorkType42.setText("SPEC");//사양
+            binding.textViewWorkType5.setText("DWG");//도면
+            binding.textViewWorkDate.setText("ITEM");//품명
+            binding.textViewWorkType4.setText("SIZE");//규격
+        }
+    }
+
     private void GetMainData() {
         SearchCondition sc = new SearchCondition();
         sc.PackingNo = packingNo;
         commonViewModel.Get("GetPackingDetailData", sc);
     }
 
-    private void scanning(String barcode){
+    private void scanning(String barcode) {
         SearchCondition sc = new SearchCondition();
         sc.CustomerCode = Users.CustomerCode;
         sc.Barcode = barcode;
@@ -88,63 +98,51 @@ public class Activity0411 extends BaseActivity {
                     return;
                 scanning(barcode.Barcode);
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_LONG).show();
-            }
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
         });
 
         commonViewModel.data2.observe(this, data -> {
             if (data != null) {
                 if (data.ItemTagList.size() == 0) {
                     if (Users.Language == 0) {
-                        Toast.makeText(this, "품목Tag 정보를 찾을 수 없습니다.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "품목Tag 정보를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(this, "Tag information items can not be found.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "Tag information items can not be found.", Toast.LENGTH_SHORT).show();
                     }
-                }
-                else if (!data.ItemTagList.get(0).PackingNo.equals(""))
-                {
+                } else if (!data.ItemTagList.get(0).PackingNo.equals("")) {
                     if (Users.Language == 0) {
-                        Toast.makeText(this, "이미 포장된 제품TAG 입니다.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "이미 포장된 제품TAG 입니다.", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(this, "TAG product is already paved.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "TAG product is already paved.", Toast.LENGTH_SHORT).show();
                     }
                     return;
-                }
-                else if (!data.ItemTagList.get(0).SaleOrderNo.equals(saleOrderNo))
-                {
+                } else if (!data.ItemTagList.get(0).SaleOrderNo.equals(saleOrderNo)) {
                     if (Users.Language == 0) {
-                        Toast.makeText(this, "주문번호가 일치하지 않습니다.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "주문번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(this, "Order numbers do not match.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "Order numbers do not match.", Toast.LENGTH_SHORT).show();
                     }
                     return;
-                }
-                else if (!data.ItemTagList.get(0).Ho.equals(ho))
-                {
-                    if (data.ItemTagList.get(0).PartCombine==1)
-                    {
+                } else if (!data.ItemTagList.get(0).Ho.equals(ho)) {
+                    if (data.ItemTagList.get(0).PartCombine == 1) {
                         if (Users.Language == 0) {
-                            Toast.makeText(this, "기존 세대와 현재 입력된 세대가 일치하지 않습니다.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(this, "기존 세대와 현재 입력된 세대가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(this, "Zone previous generations, and currently entered do not match.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(this, "Zone previous generations, and currently entered do not match.", Toast.LENGTH_SHORT).show();
                         }
                         /*if (mclMsgBox.Show(mclVariable.Language == 0 ? "기존 세대와 현재 입력된 세대가 일치하지 않습니다. 제품포장을 진행하시겠습니까?(Yes:F3/No:F4)" : "zone previous generations, and currently entered do not match. Do you wish to proceed with the product packaging? (Yes: F3/No: F4)", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.OK)
                         {
                             fnAddList(nDataTable);
                             txtItemTag.Text = "";
                         }*/
-                    }
-                    else
-                    {
+                    } else {
                         if (Users.Language == 0) {
-                            Toast.makeText(this, "기존 세대와 현재 입력된 세대가 일치하지 않습니다.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(this, "기존 세대와 현재 입력된 세대가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(this, "Zone previous generations, and currently entered do not match.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(this, "Zone previous generations, and currently entered do not match.", Toast.LENGTH_SHORT).show();
                         }
                     }
-                }
-                else
-                {
+                } else {
                     fnAddList(data.ItemTagList);
                     /*SearchCondition sc = new SearchCondition();
                     sc.CustomerCode = Users.CustomerCode;
@@ -153,14 +151,13 @@ public class Activity0411 extends BaseActivity {
                     //txtItemTag.Text = "";
                 }
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_LONG).show();
-            }
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
         });
 
         //FNSetPackingPDAData 반환 데이터
         barcodeConvertPrintViewModel.data3.observe(this, data -> {
             if (data != null) {
-                 if(data.Result.equals("True")){
+                if (data.Result.equals("True")) {
 
                      /*Packing packing = new Packing();
                      packing.ItemTag = tempItemTagArrayList.get(0).TagNo;
@@ -184,15 +181,13 @@ public class Activity0411 extends BaseActivity {
                      lvi.SubItems.Add(nDataTable.Rows[0]["DrawingNo"].ToString());
                      lvi.SubItems.Add(nDataTable.Rows[0]["PartCode"].ToString());
                      listView1.Items.Insert(0, lvi);*/
-                     GetMainData();
-                 }
-                 else{
+                    GetMainData();
+                } else {
 
-                 }
+                }
 
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_LONG).show();
-            }
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
         });
 
         //에러메시지
@@ -219,9 +214,9 @@ public class Activity0411 extends BaseActivity {
                 binding.tvStockOutOrderQty.setText(numFormatter.format(num1));
                 binding.tvStockOutQty.setText(numFormatter.format(num2));*/
                 adapter.updateAdapter(data.PackingList);
+                adapter.getFilter().filter(binding.edtInput.getText().toString());
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_SHORT).show();
-                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
             }
         });
 
@@ -232,7 +227,7 @@ public class Activity0411 extends BaseActivity {
 
 
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_SHORT).show();
             }
         });*/
 
@@ -258,7 +253,7 @@ public class Activity0411 extends BaseActivity {
 
     private void fnAddList(ArrayList<ItemTag> itemTagList) {
         tempItemTagArrayList = itemTagList;
-        CommonMethod.FNSetPackingPDAData(barcodeConvertPrintViewModel,3, packingNo, itemTagList.get(0).TagNo, 0);
+        CommonMethod.FNSetPackingPDAData(barcodeConvertPrintViewModel, 3, packingNo, itemTagList.get(0).TagNo, 0);
     }
 
     private void setListener() {

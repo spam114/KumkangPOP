@@ -19,7 +19,7 @@ public class SalesOrder {
     public String Dong;
 
     //@SerializedName("LocationNo")
-    //public double LocationNo;
+    public double LocationNo;
 
     //@SerializedName("CustomerCode")
     public String CustomerCode;

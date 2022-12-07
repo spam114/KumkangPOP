@@ -55,7 +55,7 @@ public class Activity0120 extends BaseActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity0120);
         barcodeConvertPrintViewModel = new ViewModelProvider(this).get(BarcodeConvertPrintViewModel.class);
         commonViewModel = new ViewModelProvider(this).get(CommonViewModel.class);
-        binding.txtTitle.setText(getString(R.string.detail_menu_0120));
+        binding.txtTitle.setText(Users.Language == 0 ? getString(R.string.detail_menu_0120):getString(R.string.detail_menu_0120_eng));
         saleOrderNo = getIntent().getStringExtra("saleOrderNo");
         setView();
         setBar();
@@ -71,6 +71,37 @@ public class Activity0120 extends BaseActivity {
         binding.edtInput2.setEnabled(false);
         binding.edtInput3.setEnabled(false);
         binding.edtInput4.setEnabled(false);
+
+        if(Users.Language == 1){
+            binding.textView49.setText("  ");
+            binding.textView6.setText("OrderNo");//주문번호
+            binding.textInputLayout1.setHint("OrderNo");
+
+            binding.textView48.setText("");
+            binding.textView7.setText("Customer");//거래처명
+            binding.textInputLayout2.setHint("Customer");
+
+            binding.textView11.setText("    ");
+            binding.textView8.setText("Jobsite");//현장명
+            binding.textInputLayout3.setHint("Jobsite");
+
+            binding.textView12.setText("       ");
+            binding.textView13.setText("Block");//동
+            binding.textInputLayout4.setHint("Block");
+
+            binding.textView14.setText("        ");
+            binding.textView15.setText("Zone");//세대
+            binding.textInputLayout5.setHint("Zone");
+
+            binding.textView16.setText("   ");
+            binding.textView17.setText("PRT Qty");//개수
+            binding.textInputLayout6.setHint("PRT Qty");
+
+            binding.btnPrint.setText("PRINT TAG");
+            binding.btnRePrint.setText("REPRINT TAG");
+        }
+
+
     }
 
     private void GetMainData(String barCode) {
@@ -88,8 +119,7 @@ public class Activity0120 extends BaseActivity {
                 sc.SaleOrderNo = barcode.Barcode;
                 commonViewModel.Get("GetSalesOrderData", sc);
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_LONG).show();
-            }
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
         });
 
         commonViewModel.data.observe(this, data -> {
@@ -97,7 +127,7 @@ public class Activity0120 extends BaseActivity {
                 ArrayList<SalesOrder> tempArrayList = data.SalesOrderList;
 
                 if (tempArrayList.get(0).ErrorCheck != null) {
-                    Toast.makeText(this, tempArrayList.get(0).ErrorCheck, Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, tempArrayList.get(0).ErrorCheck, Toast.LENGTH_SHORT).show();
                 } else {
                     binding.textInputLayout1.setHint("S2-" + tempArrayList.get(0).SaleOrderNo);
                     binding.textInputLayout2.setHint(tempArrayList.get(0).CustomerName);
@@ -114,8 +144,7 @@ public class Activity0120 extends BaseActivity {
                 // 어뎁터가 리스트를 수정한다.
                 adapter.updateAdapter(TypeChanger.changeTypeSalesOrderList(dataList));*/
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_SHORT).show();
-                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
             }
         });
 
@@ -139,17 +168,15 @@ public class Activity0120 extends BaseActivity {
                 // 어뎁터가 리스트를 수정한다.
                 adapter.updateAdapter(TypeChanger.changeTypeSalesOrderList(dataList));*/
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_SHORT).show();
-                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
             }
         });
 
         commonViewModel.data3.observe(this, data -> {
             if (data != null) {
-                Toast.makeText(this, "완료되었습니다.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, Users.Language==0 ? "완료 되었습니다.": "The operation is complete.", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_SHORT).show();
-                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
             }
         });
 
@@ -188,17 +215,46 @@ public class Activity0120 extends BaseActivity {
         binding.btnPrint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                String titleKor="작업TAG(포장) 출력";
+                String titleEng="TAG (Packing) Print";
+                String messageKor="출력(TAG생성)작업을 진행하시겠습니까?";
+                String messageEng="Are you sure you want to proceed with the output (create TAG)?";
+                String poButtonKor="확인";
+                String poButtonEng="OK";
+                String negaButtonKor="취소";
+                String negaButtonEng="Cancel";
+
+                String strTitle;
+                String strMessage;
+                String strPoButton;
+                String strNegaButton;
+
+                if(Users.Language ==0){
+                    strTitle=titleKor;
+                    strMessage=messageKor;
+                    strPoButton=poButtonKor;
+                    strNegaButton=negaButtonKor;
+                }
+                else{
+                    strTitle=titleEng;
+                    strMessage=messageEng;
+                    strPoButton=poButtonEng;
+                    strNegaButton=negaButtonEng;
+                }
+
+
                 new MaterialAlertDialogBuilder(Activity0120.this)
-                        .setTitle("작업TAG(포장) 출력")
-                        .setMessage("출력(TAG생성)작업을 진행하시겠습니까?")
+                        .setTitle(strTitle)
+                        .setMessage(strMessage)
                         .setCancelable(true)
-                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(strPoButton, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 //Toast.makeText(getBaseContext(), "삭제되었습니다.", Toast.LENGTH_SHORT).show();
 
                                 if (Users.PCCode.equals("")) {
-                                    Toast.makeText(Activity0120.this, "출력 PC가 연결되어 있지 않습니다.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Activity0120.this, Users.Language==0 ? "출력 PC가 연결되어 있지 않습니다.": "There is no PC connected.", Toast.LENGTH_SHORT).show();
                                     return;
                                 }
                                 ListAdapter adapter = binding.comboHo.getAdapter();
@@ -221,7 +277,7 @@ public class Activity0120 extends BaseActivity {
                                 commonViewModel.Get3("PrintPacking", sc);
                             }
                         })
-                        .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(strNegaButton, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 

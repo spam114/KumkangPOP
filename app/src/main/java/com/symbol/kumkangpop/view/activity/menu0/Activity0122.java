@@ -51,8 +51,9 @@ public class Activity0122 extends BaseActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity0122);
         barcodeConvertPrintViewModel = new ViewModelProvider(this).get(BarcodeConvertPrintViewModel.class);
         commonViewModel = new ViewModelProvider(this).get(CommonViewModel.class);
-        binding.txtTitle.setText(getString(R.string.detail_menu_0122));
+        binding.txtTitle.setText(Users.Language == 0 ? getString(R.string.detail_menu_0122):getString(R.string.detail_menu_0122_eng));
         saleOrderNo = getIntent().getStringExtra("saleOrderNo");
+        setView();
         setBar();
         setListener();
         setFloatingNavigationView();
@@ -62,6 +63,16 @@ public class Activity0122 extends BaseActivity {
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerView.setAdapter(adapter);
         GetMainData();
+    }
+
+    private void setView() {
+        if(Users.Language == 1){
+            binding.textViewWorkDate4.setText("PackingNo");
+            binding.textViewWorkDate.setText("Block");
+            binding.textViewWorkType.setText("Zone");
+            binding.textViewWorkType4.setText("NO");
+            binding.textInputLayout.setHint("PackingNo");
+        }
     }
 
     private void GetMainData() {
@@ -84,16 +95,14 @@ public class Activity0122 extends BaseActivity {
                 //recyclerViewModel.cData = sc.Barcode;
                 commonViewModel.Get2("GetNumConvertData", sc);
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_LONG).show();
-            }
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
         });
 
         barcodeConvertPrintViewModel.data2.observe(this, result -> {
             if (result != null) {
-                Toast.makeText(this, result.Result, Toast.LENGTH_LONG).show();
+                Toast.makeText(this, result.Result, Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_LONG).show();
-            }
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
         });
 
         //에러메시지
@@ -120,23 +129,21 @@ public class Activity0122 extends BaseActivity {
                 // 어뎁터가 리스트를 수정한다.
                 adapter.updateAdapter(data.PackingList);
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_SHORT).show();
-                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
             }
         });
 
         commonViewModel.data2.observe(this, data -> {
             if (data != null) {
                 if (data.NumConvertDataList.size() == 0) {
-                    Toast.makeText(this, "해당 TAG의 포장정보를 찾을 수 없습니다.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, Users.Language==0 ? "해당 TAG의 포장정보를 찾을 수 없습니다.": "TAG's packaging information that could not be found.", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 else{
                     CommonMethod.FNSetPrintOrderData(this, barcodeConvertPrintViewModel, 1, data.NumConvertDataList.get(0).DestNum);
                 }
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_LONG).show();
-            }
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
         });
 
         commonViewModel.data3.observe(this, data -> {
@@ -145,8 +152,7 @@ public class Activity0122 extends BaseActivity {
 
 
             } else {
-                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_LONG).show();
-            }
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
         });
 
 
