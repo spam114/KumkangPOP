@@ -126,13 +126,13 @@ public class Activity1100 extends BaseActivity {
         String msg;
         String hint;
         if (type == 1) {//번들순번
-            titleName = "포장수량 입력";
-            msg = "포장수량을 입력해주세요.";
-            hint = "수량";
+            titleName = Users.Language==0 ? "포장수량 입력": "Input packing quantity";
+            msg = Users.Language==0 ? "포장수량을 입력해 주세요.": "Please input packing quantity";
+            hint = "Quantity";
         } else {//중량
-            titleName = "번들순번 입력";
-            msg = "번들순번을 입력해주세요.";
-            hint = "순번";
+            titleName = Users.Language==0 ? "번들 순번 입력": "Enter bundle order";
+            msg = Users.Language==0 ? "번들 순번을 입력해 주세요.": "Please enter bundle order";
+            hint = "Bundle order";
         }
 
         LayoutInflater inflater = LayoutInflater.from(this);
@@ -166,12 +166,12 @@ public class Activity1100 extends BaseActivity {
                     double num = Double.parseDouble(output);
 
                     if(num<=0){
-                        Toast.makeText(Activity1100.this, "수량은 0보다 커야합니다.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Activity1100.this, Users.Language==0 ? "수량은 0보다 커야합니다.": "Quantity must be greater than zero.", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
                     if(woPartHist.ReceivedQty-num >10 || woPartHist.ReceivedQty-num < -10){
-                        Toast.makeText(Activity1100.this, "포장수량은 ±10개까지 변경 가능합니다.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Activity1100.this, Users.Language==0 ? "포장수량은 ±10개까지 변경 가능합니다.": "Packing quantity can be changed up to ±10.", Toast.LENGTH_SHORT).show();
                         return;
                     }
 

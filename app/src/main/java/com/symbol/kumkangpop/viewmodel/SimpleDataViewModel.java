@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel;
 import com.symbol.kumkangpop.model.SearchCondition;
 import com.symbol.kumkangpop.model.SimpleDataService;
 import com.symbol.kumkangpop.model.object.CodeData;
-import com.symbol.kumkangpop.model.object.Dong;
 import com.symbol.kumkangpop.model.object.Users;
 
 import java.util.List;
@@ -59,7 +58,7 @@ public class SimpleDataViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        errorMsg.setValue(Users.Language==0 ? "서버 오류 발생": "Server error occurred");
+                        errorMsg.setValue(Users.Language == 0 ? "서버 오류 발생" : "Server error occurred");
                         loadError.setValue(true);
                         loading.setValue(false);
                         e.printStackTrace();
@@ -67,7 +66,6 @@ public class SimpleDataViewModel extends ViewModel {
                 })
         );
     }
-
 
 
     public void GetSimpleData(String apiName, SearchCondition sc) {
@@ -93,7 +91,7 @@ public class SimpleDataViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        errorMsg.setValue(Users.Language==0 ? "서버 오류 발생": "Server error occurred");
+                        errorMsg.setValue(Users.Language == 0 ? "서버 오류 발생" : "Server error occurred");
                         loadError.setValue(true);
                         loading.setValue(false);
                         e.printStackTrace();
@@ -124,7 +122,7 @@ public class SimpleDataViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        errorMsg.setValue(Users.Language==0 ? "서버 오류 발생": "Server error occurred");
+                        errorMsg.setValue(Users.Language == 0 ? "서버 오류 발생" : "Server error occurred");
                         loadError.setValue(true);
                         loading.setValue(false);
                         e.printStackTrace();
@@ -132,7 +130,6 @@ public class SimpleDataViewModel extends ViewModel {
                 })
         );
     }
-
 
 
     public void GetCodeData(String apiName, SearchCondition sc) {
@@ -158,7 +155,39 @@ public class SimpleDataViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        errorMsg.setValue(Users.Language==0 ? "서버 오류 발생": "Server error occurred");
+                        errorMsg.setValue(Users.Language == 0 ? "서버 오류 발생" : "Server error occurred");
+                        loadError.setValue(true);
+                        loading.setValue(false);
+                        e.printStackTrace();
+                    }
+                })
+        );
+    }
+
+    public void GetAuthorityList(String apiName, SearchCondition sc) {
+
+        loading.setValue(true);
+        disposable.add(service.GetCodeData(apiName, sc)
+                .subscribeOn(Schedulers.newThread()) // 새로운 스레드에서 통신한다.
+                .observeOn(AndroidSchedulers.mainThread()) // 응답 값을 가지고 ui update를 하기 위해 필요함, 메인스레드와 소통하기 위
+                .subscribeWith(new DisposableSingleObserver<List<CodeData>>() {
+                    @Override
+                    public void onSuccess(@NonNull List<CodeData> models) {
+                        // SimpleDataViewModel 은 에러처리를 각각의 View에서 처리한다.(각각 다르므로)
+                        /*if (models.ErrorCheck != null) {
+                            errorMsg.setValue(models.ErrorCheck);
+                            loadError.setValue(true);
+                            loading.setValue(false);
+                            return;
+                        }*/
+                        codeDataList.setValue(models);
+                        loadError.setValue(false);
+                        loading.setValue(false);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        errorMsg.setValue(Users.Language == 0 ? "서버 오류 발생" : "Server error occurred");
                         loadError.setValue(true);
                         loading.setValue(false);
                         e.printStackTrace();

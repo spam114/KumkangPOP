@@ -2,6 +2,8 @@ package com.symbol.kumkangpop.model.object;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+
 public class LoginInfo {
 
     @SerializedName("ErrorCheck")
@@ -33,4 +35,5 @@ public class LoginInfo {
 
     @SerializedName("PCName")
     public String PCName="";
+    public ArrayList<Authority> AuthorityList;
 }

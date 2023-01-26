@@ -17,8 +17,8 @@ import com.symbol.kumkangpop.databinding.ActivityLoginBinding;
 import com.symbol.kumkangpop.model.SearchCondition;
 import com.symbol.kumkangpop.model.object.Users;
 import com.symbol.kumkangpop.view.BackPressControl;
-import com.symbol.kumkangpop.view.CommonMethod;
 import com.symbol.kumkangpop.view.PreferenceManager;
+import com.symbol.kumkangpop.view.application.ApplicationClass;
 import com.symbol.kumkangpop.viewmodel.LoginViewModel;
 
 public class LoginActivity extends BaseActivity {
@@ -38,17 +38,16 @@ public class LoginActivity extends BaseActivity {
         setView();
         initEvent();
         observerViewModel();
-        if(getIntent().getBooleanExtra("FirstFlag",true)){
+        if (getIntent().getBooleanExtra("FirstFlag", true)) {
             StartLogin();
         }
     }
 
     private void setView() {
-        int langInt= PreferenceManager.getInt(this, "Language");
-        if(langInt==0){
+        int langInt = PreferenceManager.getInt(this, "Language");
+        if (langInt == 0) {
             binding.rbKor.setChecked(true);
-        }
-        else{
+        } else {
             binding.rbEng.setChecked(true);
         }
     }
@@ -58,7 +57,7 @@ public class LoginActivity extends BaseActivity {
         SearchCondition sc = new SearchCondition();
 
         sc.PCCode = PreferenceManager.getString(this, "PCCode");
-        if(sc.PCCode.equals(""))//저장되어 있는 PCCode가 없다면,
+        if (sc.PCCode.equals(""))//저장되어 있는 PCCode가 없다면,
             sc.PCCode = binding.edtPC.getText().toString();
         loginViewModel.GetPrintPCData(sc, this);
         sc.Language = PreferenceManager.getInt(this, "Language");
@@ -139,26 +138,25 @@ public class LoginActivity extends BaseActivity {
         StartLogin();
     }
 
-    private void StartLogin(){
+    private void StartLogin() {
         SearchCondition sc = new SearchCondition();
         boolean autoLoginFlag = PreferenceManager.getBoolean(this, "AutoLogin");
         if (autoLoginFlag) {
             sc.UserID = PreferenceManager.getString(this, "ID");
             sc.PassWord = PreferenceManager.getString(this, "PW");
             sc.Language = PreferenceManager.getInt(this, "Language");
-        }
-        else{
-            if(getIntent().getBooleanExtra("FirstFlag",true)){
+        } else {
+            if (getIntent().getBooleanExtra("FirstFlag", true)) {
                 GetLoginInfoByPhoneNumber();
                 return;
-            }
-            else{
+            } else {
                 sc.UserID = CheckInputLoginUserID(); // 아이디 공백 확인
                 sc.PassWord = CheckInputLoginPassword(); // 패스워드 공백 확인
+                sc.AppCode = ApplicationClass.getResourses().getString(R.string.app_code);
                 if (binding.rbKor.isChecked())
-                    sc.Language=0;
+                    sc.Language = 0;
                 else
-                    sc.Language=1;
+                    sc.Language = 1;
                 if (sc.UserID.equals("") || sc.PassWord.equals("")) return;
             }
         }
@@ -169,6 +167,7 @@ public class LoginActivity extends BaseActivity {
         SearchCondition sc = new SearchCondition();
         sc.UserID = Users.PhoneNumber;
         sc.Language = PreferenceManager.getInt(this, "Language");
+        sc.AppCode = ApplicationClass.getResourses().getString(R.string.app_code);
         loginViewModel.GetLoginInfoByPhoneNumber(sc);
     }
 
@@ -203,8 +202,7 @@ public class LoginActivity extends BaseActivity {
         loginViewModel.userImage.observe(this, models -> {
             if (models != null) {
                 Users.UserImage = models;
-            }
-            else
+            } else
                 Users.UserImage = "fail";
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
@@ -215,17 +213,17 @@ public class LoginActivity extends BaseActivity {
             if (phoneNumberFlag != null) {
                 if (phoneNumberFlag) {//성공
                     GetPrintPCData();
-                }
-                else{
+                } else {
                     SearchCondition sc = new SearchCondition();
                     sc.UserID = CheckInputLoginUserID(); // 아이디 공백 확인
                     sc.PassWord = CheckInputLoginPassword(); // 패스워드 공백 확인
+                    sc.AppCode = ApplicationClass.getResourses().getString(R.string.app_code);
                     if (sc.UserID.equals("") || sc.PassWord.equals("")) return;
 
                     if (binding.rbKor.isChecked())
-                        sc.Language=0;
+                        sc.Language = 0;
                     else
-                        sc.Language=1;
+                        sc.Language = 1;
                     loginViewModel.GetLoginInfoData(sc);
                 }
                 /*else{//PhoneNumber 가 없으니 자동로그인 or 직접로그인

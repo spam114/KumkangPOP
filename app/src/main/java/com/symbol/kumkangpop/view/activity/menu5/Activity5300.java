@@ -59,7 +59,7 @@ public class Activity5300 extends BaseActivity {
     int locationNo = 0;
     String packingNo = "";
 
-    public String tempPackingNo="";
+    public String tempPackingNo = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +71,7 @@ public class Activity5300 extends BaseActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity5300);
         barcodeConvertPrintViewModel = new ViewModelProvider(this).get(BarcodeConvertPrintViewModel.class);
         commonViewModel = new ViewModelProvider(this).get(CommonViewModel.class);
-        binding.txtTitle.setText(Users.Language == 0 ? getString(R.string.detail_menu_5300):getString(R.string.detail_menu_5300_eng));
+        binding.txtTitle.setText(Users.Language == 0 ? getString(R.string.detail_menu_5300) : getString(R.string.detail_menu_5300_eng));
         locationNo = getIntent().getIntExtra("locationNo", -1);
         setView();
         setBar();
@@ -307,7 +307,7 @@ public class Activity5300 extends BaseActivity {
 
                 //찍은것을 또찍으면 삭제할것인지 물어본다.
                 for (int i = 0; i < adapter.getItemList().size(); i++) {
-                    if (adapter.getItem(i).PackingNo.equals(barcode.Barcode)) {
+                    if (adapter.getItem(i).PackingNo.equalsIgnoreCase(barcode.Barcode)) {
                         String title = "작업목록 제외";
                         String message = "작업목록에서 제외하시겠습니까?\n" + barcode.Barcode;
                         String okString = "확인";
@@ -342,7 +342,8 @@ public class Activity5300 extends BaseActivity {
 
                 ScanStockOut(barcode.Barcode);
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
+                Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
+            }
         });
 
         //에러메시지
@@ -371,7 +372,8 @@ public class Activity5300 extends BaseActivity {
                 binding.tvACQty.setText(numFormatter.format(data.ScanResult2.ACQty));
                 binding.tvSTQty.setText(numFormatter.format(data.ScanResult2.STQty));
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
+                Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
 
@@ -403,44 +405,43 @@ public class Activity5300 extends BaseActivity {
 
 
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
+                Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
+            }
         });
 
         commonViewModel.data3.observe(this, data -> {
             if (data != null) {
                 int stockInFlag = data.IntResult;
                 if (stockInFlag == 1) {//출고완료
-                    if(Users.Language==1){
+                    if (Users.Language == 1) {
                         binding.tvState.setText("completed");
-                    }
-                    else{
+                    } else {
                         binding.tvState.setText("완료");
                     }
                     binding.tvState.setTextColor(Color.BLUE);
                 } else {//미완료
-                    if(Users.Language==1){
+                    if (Users.Language == 1) {
                         binding.tvState.setText("uncompleted");
-                    }
-                    else{
+                    } else {
                         binding.tvState.setText("미완료");
                     }
                     binding.tvState.setTextColor(Color.BLACK);
                 }
 
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
+                Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
+            }
         });
 
         commonViewModel.data4.observe(this, data -> {
             if (data != null) {
-                if(data.BoolResult){
+                if (data.BoolResult) {
                     if (Users.Language == 0) {
                         Toast.makeText(this, "사진이 저장되었습니다.", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(this, "Photos have been saved.", Toast.LENGTH_SHORT).show();
                     }
-                }
-                else{
+                } else {
                     if (Users.Language == 0) {
                         Toast.makeText(this, "진행중에 오류가 발생하였습니다.", Toast.LENGTH_SHORT).show();
                     } else {
@@ -449,7 +450,8 @@ public class Activity5300 extends BaseActivity {
                 }
 
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
+                Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
+            }
         });
 
 

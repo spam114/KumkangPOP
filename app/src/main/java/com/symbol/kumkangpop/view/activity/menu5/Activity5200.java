@@ -252,6 +252,7 @@ public class Activity5200 extends BaseActivity {
                         sc.BReturn = bReturn;
                         sc.StockOutType = StockOutType;
                         sc.GLocationNo = gLocationNo;
+                        sc.StockOutLocationNo = gLocationNo;
                         sc.StockOrderLocationNo = stockOrderLocationNo;
                         sc.ContainerNo = binding.edt1.getText().toString();
                         sc.DeptCode = Integer.toString(Users.DeptCode);

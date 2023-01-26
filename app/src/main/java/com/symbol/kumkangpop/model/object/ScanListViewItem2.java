@@ -10,4 +10,5 @@ public class ScanListViewItem2 {
     public String LocationName;
     public String SaleOrderNo;
     public double SaleOrderLocationNo;
+    public String StockOutStatus;
 }

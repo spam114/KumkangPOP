@@ -186,7 +186,7 @@ public class Activity1000 extends BaseActivity {
                     //다시조회
                     String inDate = tyear + "-" + (tmonth + 1) + "-" + tdate;
                     GetRecyclerViewData(inDate, binding.rbNo.isChecked());
-                    Toast.makeText(this, "확인 되었습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, Users.Language==0 ? "확인 되었습니다.": "It's been confirmed.", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(this, data.toString(), Toast.LENGTH_SHORT).show();
                 }

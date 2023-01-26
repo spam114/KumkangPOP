@@ -118,7 +118,8 @@ public class MainActivity extends BaseActivity {
                         viewNotice(remark.toString());
                 }
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
 
@@ -160,7 +161,8 @@ public class MainActivity extends BaseActivity {
                     //Log.i("스피너순서", "구성");
                 }
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
 

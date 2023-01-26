@@ -17,10 +17,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.symbol.kumkangpop.R;
 import com.symbol.kumkangpop.databinding.RowMenuBinding;
 import com.symbol.kumkangpop.model.object.MainMenuItem;
-import com.symbol.kumkangpop.view.activity.MainActivity;
 import com.symbol.kumkangpop.view.activity.menu0.Activity0000;
 import com.symbol.kumkangpop.view.activity.menu1.Activity1000;
 import com.symbol.kumkangpop.view.activity.menu2.Activity2000;
+import com.symbol.kumkangpop.view.activity.menu3.Activity3000;
+import com.symbol.kumkangpop.view.activity.menu4.Activity4000;
 import com.symbol.kumkangpop.view.activity.menu5.Activity5000;
 import com.symbol.kumkangpop.view.activity.menu9.Activity9000;
 import com.symbol.kumkangpop.view.activity.report.ActivityReport1;
@@ -99,11 +100,11 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT);
+
             if (item.menuType == 1) {//각 그룹의 첫항목 이미지 없애기, 글자 크게
                 binding.imvIcon.setVisibility(View.GONE);
                 binding.txtMenuName.setTextSize(19);
                 binding.txtMenuName.setTypeface(null, Typeface.BOLD); //only text style(only bold)
-
 
 
                 DisplayMetrics dm = context.getResources().getDisplayMetrics();
@@ -128,8 +129,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             if (item.lastItem) {//그릅의 마지막 항목 줄 띄우기
 
                 param2.bottomMargin = 40;
-            }
-            else{
+            } else {
                 param2.bottomMargin = 0;
             }
             binding.cardView.setLayoutParams(param);
@@ -145,81 +145,76 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             binding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (item.menuName.equals(context.getString(R.string.menu2))||
+                    if (item.menuName.equals(context.getString(R.string.menu2)) ||
                             item.menuName.equals(context.getString(R.string.menu2_eng))) {
                         Intent intent = new Intent(context, Activity9000.class);
                         context.startActivity(intent);
-                    }else if (item.menuName.equals(context.getString(R.string.menu3))||
+                    } else if (item.menuName.equals(context.getString(R.string.menu3)) ||
                             item.menuName.equals(context.getString(R.string.menu3_eng))) {
                         Intent intent = new Intent(context, Activity1000.class);
                         context.startActivity(intent);
-                    } else if (item.menuName.equals(context.getString(R.string.menu4))||
+                    } else if (item.menuName.equals(context.getString(R.string.menu4)) ||
                             item.menuName.equals(context.getString(R.string.menu4_eng))) {
 
-                    } else if (item.menuName.equals(context.getString(R.string.menu5))||
+                    } else if (item.menuName.equals(context.getString(R.string.menu5)) ||
                             item.menuName.equals(context.getString(R.string.menu5_eng))) {
                         Intent intent = new Intent(context, ActivityReport1.class);
                         context.startActivity(intent);
-                    } else if (item.menuName.equals(context.getString(R.string.menu6))||
+                    } else if (item.menuName.equals(context.getString(R.string.menu6)) ||
                             item.menuName.equals(context.getString(R.string.menu6_eng))) {
                         Intent intent = new Intent(context, ActivityReport2.class);
                         context.startActivity(intent);
 
-                    } else if (item.menuName.equals(context.getString(R.string.menu7))||
+                    } else if (item.menuName.equals(context.getString(R.string.menu7)) ||
                             item.menuName.equals(context.getString(R.string.menu7_eng))) {
                         Intent intent = new Intent(context, ActivityReport3.class);
                         context.startActivity(intent);
 
-                    } else if (item.menuName.equals(context.getString(R.string.menu8))||
+                    } else if (item.menuName.equals(context.getString(R.string.menu8)) ||
                             item.menuName.equals(context.getString(R.string.menu8_eng))) {
                         Intent intent = new Intent(context, ActivityReport4.class);
                         context.startActivity(intent);
-                    } else if (item.menuName.equals(context.getString(R.string.menu9))||
+                    } else if (item.menuName.equals(context.getString(R.string.menu9)) ||
                             item.menuName.equals(context.getString(R.string.menu9_eng))) {
                         Intent intent = new Intent(context, ActivityReport5.class);
                         context.startActivity(intent);
-                    }else if (item.menuName.equals(context.getString(R.string.menu16))||
+                    } else if (item.menuName.equals(context.getString(R.string.menu16)) ||
                             item.menuName.equals(context.getString(R.string.menu16_eng))) {
                         Intent intent = new Intent(context, ActivityReport6.class);
                         context.startActivity(intent);
-                    }
-                    else if (item.menuName.equals(context.getString(R.string.menu17))||
+                    } else if (item.menuName.equals(context.getString(R.string.menu17)) ||
                             item.menuName.equals(context.getString(R.string.menu17_eng))) {
                         Intent intent = new Intent(context, ActivityReport7.class);
                         context.startActivity(intent);
-                    }
-                    else if (item.menuName.equals(context.getString(R.string.menu11))||
+                    } else if (item.menuName.equals(context.getString(R.string.menu11)) ||
                             item.menuName.equals(context.getString(R.string.menu11_eng))) {//제품포장
                         Intent intent = new Intent(context, Activity0000.class);
                         context.startActivity(intent);
-                    } else if (item.menuName.equals(context.getString(R.string.menu12))||
+                    } else if (item.menuName.equals(context.getString(R.string.menu12)) ||
                             item.menuName.equals(context.getString(R.string.menu12_eng))) {//번들생성
                         Intent intent = new Intent(context, Activity2000.class);
                         context.startActivity(intent);
-                    } else if (item.menuName.equals(context.getString(R.string.menu13))||
+                    } else if (item.menuName.equals(context.getString(R.string.menu13)) ||
                             item.menuName.equals(context.getString(R.string.menu13_eng))) {//재고이송
-                        /*Intent intent = new Intent(context, Activity0000.class);
-                        context.startActivity(intent);*/
-                    } else if (item.menuName.equals(context.getString(R.string.menu14))||
+                        Intent intent = new Intent(context, Activity3000.class);
+                        context.startActivity(intent);
+                    } else if (item.menuName.equals(context.getString(R.string.menu14)) ||
                             item.menuName.equals(context.getString(R.string.menu14_eng))) {//제품출고
                         Intent intent = new Intent(context, Activity5000.class);
                         context.startActivity(intent);
-                    } else if (item.menuName.equals(context.getString(R.string.menu15))||
+                    } else if (item.menuName.equals(context.getString(R.string.menu15)) ||
                             item.menuName.equals(context.getString(R.string.menu15_eng))) {//자료수신
                         /*Intent intent = new Intent(context, Activity0000.class);
                         context.startActivity(intent);*/
-                    }
-                    else if (item.menuName.equals(context.getString(R.string.menu18))||
+                    } else if (item.menuName.equals(context.getString(R.string.menu18)) ||
                             item.menuName.equals(context.getString(R.string.menu18_eng))) {//재고이입
-                        /*Intent intent = new Intent(context, Activity0000.class);
-                        context.startActivity(intent);*/
-                    }
-                    else if (item.menuName.equals(context.getString(R.string.menu19))||
+                        Intent intent = new Intent(context, Activity4000.class);
+                        context.startActivity(intent);
+                    } else if (item.menuName.equals(context.getString(R.string.menu19)) ||
                             item.menuName.equals(context.getString(R.string.menu19_eng))) {//출고검수
                         /*Intent intent = new Intent(context, Activity0000.class);
                         context.startActivity(intent);*/
-                    }
-                    else if (item.menuName.equals(context.getString(R.string.menu20))||
+                    } else if (item.menuName.equals(context.getString(R.string.menu20)) ||
                             item.menuName.equals(context.getString(R.string.menu20_eng))) {//자료송신
                         /*Intent intent = new Intent(context, Activity0000.class);
                         context.startActivity(intent);*/
@@ -230,7 +225,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         }
     }
 
-    public void removeItem(int position){
+    public void removeItem(int position) {
         items.remove(position);
     }
 

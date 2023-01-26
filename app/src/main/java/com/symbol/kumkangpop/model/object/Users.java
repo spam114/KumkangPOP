@@ -20,8 +20,7 @@ public class Users {
     //스캐너관련
 
     //권한 리스트
-    public static List<Integer> authorityList = new ArrayList<>();
-    public static List<String> authorityNameList = new ArrayList<>();
+    public static List<Authority> AuthorityList;
 
     //PC정보
     public static String PCCode = "";

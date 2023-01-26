@@ -189,6 +189,9 @@ public class SearchCondition {
     @SerializedName("ScanList2")
     public List<ScanListViewItem2> ScanList2;
 
+    @SerializedName("ScanListTemp")
+    public List<ScanListViewItem2> ScanListTemp;
+
     @SerializedName("SaleOrderQty")
     public double SaleOrderQty;
 
@@ -317,6 +320,15 @@ public class SearchCondition {
 
     @SerializedName("SaleOrderLocationNo")
     public int SaleOrderLocationNo;
+
+    @SerializedName("StockOutLocationNo")
+    public int StockOutLocationNo;
+
+    @SerializedName("Action")
+    public int Action;
+
+    @SerializedName("WorkDivision")
+    public int WorkDivision;
 
     public SearchCondition(){}
 

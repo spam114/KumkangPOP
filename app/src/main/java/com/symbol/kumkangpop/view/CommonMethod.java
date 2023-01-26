@@ -37,6 +37,7 @@ import com.andremion.floatingnavigationview.FloatingNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.symbol.kumkangpop.R;
@@ -110,14 +111,22 @@ public class CommonMethod {
                 //Dialog 보이기
                 dialog.show();
                 TextView tvTitle = dialogView.findViewById(R.id.tvTitle);
+                TextInputLayout textInputLayout = dialogView.findViewById(R.id.textInputLayout);
+                Button btnOK = dialogView.findViewById(R.id.btnOK);
+                Button btnCancel = dialogView.findViewById(R.id.btnCancel);
                 if(Users.Language ==0){
                     tvTitle.setText("TAG번호 입력");
+                    textInputLayout.setHint("TAG 번호");
+                    btnOK.setText("확인");
+                    btnCancel.setText("닫기");
                 }
                 else{
                     tvTitle.setText("Enter TAG number");
+                    textInputLayout.setHint("TAG No");
+                    btnOK.setText("OK");
+                    btnCancel.setText("Cancel");
                 }
-                Button btnOK = dialogView.findViewById(R.id.btnOK);
-                Button btnCancel = dialogView.findViewById(R.id.btnCancel);
+
                 TextInputEditText edtTagNo = dialogView.findViewById(R.id.edtTagNo);
                 btnOK.setOnClickListener(new View.OnClickListener() {
                     @Override

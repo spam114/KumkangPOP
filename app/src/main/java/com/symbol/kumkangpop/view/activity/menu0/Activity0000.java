@@ -71,6 +71,7 @@ public class Activity0000 extends BaseActivity {
             binding.textView1.setText("SaleOrderNo");
             binding.textView2.setText("Customer/Jobsite");
             binding.textView3.setText("Block");
+            binding.txtInfo.setText("\"Please Scan Packing Order(or Item) TAG\"");
         }
     }
 

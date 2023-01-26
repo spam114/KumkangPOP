@@ -108,7 +108,7 @@ public class Activity2100 extends BaseActivity {
     public void ScanBundle(String barcode) {
 
         for (int i = 0; i < adapter.getItemList().size(); i++) {
-            if (adapter.getItem(i).PackingNo.equals(barcode)) {
+            if (adapter.getItem(i).PackingNo.equalsIgnoreCase(barcode)) {
                 String title = "작업목록 제외";
                 String message = "작업목록에서 제외하시겠습니까?\n" + barcode;
                 String okString = "확인";

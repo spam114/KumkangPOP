@@ -7,7 +7,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -52,7 +51,7 @@ public class Activity5400 extends BaseActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity5400);
         barcodeConvertPrintViewModel = new ViewModelProvider(this).get(BarcodeConvertPrintViewModel.class);
         commonViewModel = new ViewModelProvider(this).get(CommonViewModel.class);
-        binding.txtTitle.setText(Users.Language == 0 ? getString(R.string.detail_menu_5400):getString(R.string.detail_menu_5400_eng));
+        binding.txtTitle.setText(Users.Language == 0 ? getString(R.string.detail_menu_5400) : getString(R.string.detail_menu_5400_eng));
         locationNo = getIntent().getIntExtra("locationNo", -1);
         setView();
         setBar();
@@ -98,7 +97,8 @@ public class Activity5400 extends BaseActivity {
                 sc.Barcode = barcode.Barcode;
                 commonViewModel.Get2("GetNumConvertData", sc);
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
+                Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
+            }
         });
 
 
@@ -128,13 +128,14 @@ public class Activity5400 extends BaseActivity {
                 adapter.updateAdapter(data.StockOutDetailList);
                 adapter.getFilter().filter(binding.edtInput.getText().toString());
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
+                Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
 
         commonViewModel.data2.observe(this, data -> {
             if (data != null) {
-                if (data.NumConvertDataList.size() == 0){
+                if (data.NumConvertDataList.size() == 0) {
                     if (Users.Language == 0) {
                         Toast.makeText(this, "해당 바코드의 출고정보를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show();
                     } else {
@@ -145,10 +146,8 @@ public class Activity5400 extends BaseActivity {
                 String stockOutNo = data.NumConvertDataList.get(0).DestNum;
 
 
-                for (int i = 0; i < adapter.getItemList().size(); i++)
-                {
-                    if (stockOutNo.equals(adapter.getItemList().get(i).StockOutNo))
-                    {
+                for (int i = 0; i < adapter.getItemList().size(); i++) {
+                    if (stockOutNo.equals(adapter.getItemList().get(i).StockOutNo)) {
                         Intent intent = new Intent(getBaseContext(), Activity5410.class);
                         intent.putExtra("stockOutNo", stockOutNo);
                         intent.putExtra("locationNo", locationNo);
@@ -168,7 +167,8 @@ public class Activity5400 extends BaseActivity {
                     }
                 }
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
+                Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
+            }
         });
 
         /*commonViewModel.data3.observe(this, data -> {

@@ -241,5 +241,17 @@ public interface DataApi {
 
     @POST("EditBundle")
     Single<Common> EditBundle(@Body SearchCondition searchCondition);
+
+    @POST("ScanTransfer")//이송
+    Single<Common> ScanTransfer(@Body SearchCondition searchCondition);
+
+    @POST("EditTransfer")//이송수정
+    Single<Common> EditTransfer(@Body SearchCondition searchCondition);
+
+    @POST("ScanBring")//이입
+    Single<Common> ScanBring(@Body SearchCondition searchCondition);
+
+    @POST("UpdateStockOutDetailData")//일괄이입 or 일괄제외
+    Single<Common> UpdateStockOutDetailData(@Body SearchCondition searchCondition);
 }
 

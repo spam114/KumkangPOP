@@ -62,6 +62,7 @@ public class LoginViewModel extends ViewModel {
                                 Users.BusinessClassCode = models.BusinessClassCode;
                                 Users.GboutSourcing = models.GboutSourcing;
                                 Users.Language = sc.Language;
+                                Users.AuthorityList = models.AuthorityList;
                                 loadError.setValue(false);
                                 loading.setValue(false);
                             }
@@ -112,6 +113,8 @@ public class LoginViewModel extends ViewModel {
                             @Override
                             public void onSuccess(@NonNull LoginInfo models) {//todo
                                 if (models.ErrorCheck != null) {
+                                    errorMsg.setValue(models.ErrorCheck);
+                                    loadError.setValue(true);
                                     phoneNumberFlag.setValue(false);
                                     loading.setValue(false);
                                     return;
@@ -123,6 +126,8 @@ public class LoginViewModel extends ViewModel {
                                 Users.BusinessClassCode = models.BusinessClassCode;
                                 Users.GboutSourcing = models.GboutSourcing;
                                 Users.Language = sc.Language;
+                                Users.AuthorityList = models.AuthorityList;
+
                                 phoneNumberFlag.setValue(true);
                                 loading.setValue(false);
                             }

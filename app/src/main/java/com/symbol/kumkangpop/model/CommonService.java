@@ -162,7 +162,18 @@ public class CommonService {
         else if(apiName.equals("EditBundle")){
             return api.EditBundle(sc);
         }
-
+        else if(apiName.equals("ScanTransfer")){
+            return api.ScanTransfer(sc);
+        }
+        else if(apiName.equals("EditTransfer")){
+            return api.EditTransfer(sc);
+        }
+        else if(apiName.equals("ScanBring")){
+            return api.ScanBring(sc);
+        }
+        else if(apiName.equals("UpdateStockOutDetailData")){
+            return api.UpdateStockOutDetailData(sc);
+        }
         else {
             return null;
         }
