@@ -58,6 +58,8 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         init();
+
+        // 주석 TEST
     }
 
     private void init() {
