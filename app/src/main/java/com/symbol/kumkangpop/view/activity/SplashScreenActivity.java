@@ -254,7 +254,15 @@ public class SplashScreenActivity extends BaseActivity {
             if (Users.DeviceOS == null)
                 Users.DeviceOS = "";
             Users.Remark = "";
-            Users.DeviceName = BluetoothAdapter.getDefaultAdapter().getName();//블루투스 권한(BLUETOOTH_CONNECT) 필요
+            android.bluetooth.BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+            String deviceName;
+            if(bluetoothAdapter==null){
+                deviceName="";
+            }
+            else{
+                deviceName = bluetoothAdapter.getName();
+            }
+            Users.DeviceName = deviceName;//블루투스 권한(BLUETOOTH_CONNECT) 필요
         } catch (Exception e) {
             String str = e.getMessage();
             String str2 = str;

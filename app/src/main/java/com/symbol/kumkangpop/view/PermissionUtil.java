@@ -13,7 +13,7 @@ public class PermissionUtil {
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_PHONE_STATE,
             Manifest.permission.READ_PHONE_NUMBERS,
-            Manifest.permission.BLUETOOTH_CONNECT,
+            //Manifest.permission.BLUETOOTH_CONNECT,
             Manifest.permission.CAMERA
     };
 

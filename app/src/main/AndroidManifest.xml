@@ -6,10 +6,11 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+
     <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
     <uses-permission android:name="android.permission.CAMERA" />
     <!--<uses-permission android:name="android.permission.READ_SMS" />-->
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" /><!--과거버전에서는 물어보지 않아서, 무조건 명시하지 않도록 처리한다.-->
 
     <!--여기만으로 OK-->
     <uses-permission android:name="android.permission.INTERNET"/>

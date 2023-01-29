@@ -2,6 +2,7 @@ package com.symbol.kumkangpop.view.activity;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -60,6 +61,7 @@ public class MainActivity extends BaseActivity {
         init();
 
         // 주석 TEST
+        // 주석 TEST2
     }
 
     private void init() {
@@ -71,6 +73,7 @@ public class MainActivity extends BaseActivity {
         setBar();
         setFloatingNavigationView();
         setResultLauncher();
+        setMediaSound();
         observerViewModel();
         ArrayList<MainMenuItem> menuItemArrayList = getMainMenuItem();
         mainAdapter = new MainAdapter(menuItemArrayList,this);
@@ -81,6 +84,12 @@ public class MainActivity extends BaseActivity {
             mainAdapter.removeItem(17);
             //mainAdapter.notifyDataSetChanged();
         }*/
+    }
+
+    private void setMediaSound(){
+        setVolumeControlStream(AudioManager.STREAM_MUSIC); // 볼륨컨트롤의 기본 설정을 (STREAM_MUSIC) 음악 및 미디어로 바꾸겠다는 뜻
+        AudioManager mAudioManager = (AudioManager)getSystemService(AUDIO_SERVICE);
+        mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, (int)(mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) * 0.90), AudioManager.FLAG_PLAY_SOUND); // 0.9 = 90% 크기로 설정
     }
 
 
