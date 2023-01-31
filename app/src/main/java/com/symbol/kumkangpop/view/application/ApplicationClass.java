@@ -194,29 +194,55 @@ public class ApplicationClass extends Application {
 
         ArrayList<MainMenuItem> menuItemArrayList= new ArrayList<>();
 
-        menuItemArrayList.add(new MainMenuItem(1,1, Users.Language == 0 ? getString(R.string.menu1):getString(R.string.menu1_eng),false,-1));
-        menuItemArrayList.add(new MainMenuItem(2,1,Users.Language == 0 ? getString(R.string.menu2):getString(R.string.menu2_eng),false, R.drawable.sprinkler_48px));
-        menuItemArrayList.add(new MainMenuItem(2,1,Users.Language == 0 ? getString(R.string.menu3):getString(R.string.menu3_eng),true, R.drawable.next_plan_48px));
+        boolean booleanAdmin=false;
+        boolean booleanPOP=false;
 
-        menuItemArrayList.add(new MainMenuItem(1,2,Users.Language == 0 ? getString(R.string.menu4):getString(R.string.menu4_eng),false, -1));
-        menuItemArrayList.add(new MainMenuItem(2,2,Users.Language == 0 ? getString(R.string.menu5):getString(R.string.menu5_eng),false, R.drawable.monitor_weight_48px));
-        menuItemArrayList.add(new MainMenuItem(2,2,Users.Language == 0 ? getString(R.string.menu6):getString(R.string.menu6_eng),false, R.drawable.safety_divider_48px));
-        menuItemArrayList.add(new MainMenuItem(2,2,Users.Language == 0 ? getString(R.string.menu7):getString(R.string.menu7_eng),false, R.drawable.sprinkler_48px));
-        menuItemArrayList.add(new MainMenuItem(2,2,Users.Language == 0 ? getString(R.string.menu8):getString(R.string.menu8_eng),false, R.drawable.list_alt_48px));
-        menuItemArrayList.add(new MainMenuItem(2,2,Users.Language == 0 ? getString(R.string.menu9):getString(R.string.menu9_eng),false, R.drawable.local_shipping_48px));
-        menuItemArrayList.add(new MainMenuItem(2,2,Users.Language == 0 ? getString(R.string.menu16):getString(R.string.menu16_eng),false, R.drawable.package_48px));
-        menuItemArrayList.add(new MainMenuItem(2,2,Users.Language == 0 ? getString(R.string.menu17):getString(R.string.menu17_eng),true, R.drawable.inventory_2_48px));
+        for(int i=0;i<Users.AuthorityList.size();i++){
+            if(Users.AuthorityList.get(i).Authority==0){//관리자
+                booleanAdmin=true;
+            }
+            else if(Users.AuthorityList.get(i).Authority==1){//POP
+                booleanPOP=true;
+            }
+        }
 
-        menuItemArrayList.add(new MainMenuItem(1,3,Users.Language == 0 ? getString(R.string.menu10):getString(R.string.menu10_eng),false,-1));
-        menuItemArrayList.add(new MainMenuItem(2,3,Users.Language == 0 ? getString(R.string.menu11):getString(R.string.menu11_eng),false, R.drawable.inventory_2_48px));
-        menuItemArrayList.add(new MainMenuItem(2,3,Users.Language == 0 ? getString(R.string.menu12):getString(R.string.menu12_eng),false, R.drawable.inventory_48px));
-        menuItemArrayList.add(new MainMenuItem(2,3,Users.Language == 0 ? getString(R.string.menu13):getString(R.string.menu13_eng),false, R.drawable.keyboard_double_arrow_left_48px));
-        menuItemArrayList.add(new MainMenuItem(2,3,Users.Language == 0 ? getString(R.string.menu18):getString(R.string.menu18_eng),false, R.drawable.keyboard_double_arrow_right_48px));
-        //menuItemArrayList.add(new MainMenuItem(2,3,getString(R.string.menu18),false, R.drawable.keyboard_double_arrow_left_48px));
-        menuItemArrayList.add(new MainMenuItem(2,3,Users.Language == 0 ? getString(R.string.menu14):getString(R.string.menu14_eng),false, R.drawable.local_shipping_48px));
-        //menuItemArrayList.add(new MainMenuItem(2,3,getString(R.string.menu19),false, R.drawable.checklist_rtl_48px));
-        //menuItemArrayList.add(new MainMenuItem(2,3,getString(R.string.menu15),false, R.drawable.download_48px));
-        //menuItemArrayList.add(new MainMenuItem(2,3,getString(R.string.menu20),true, R.drawable.file_upload_48px));
+        if(booleanAdmin){//관리자: 모든권한
+            menuItemArrayList.add(new MainMenuItem(1,1, Users.Language == 0 ? getString(R.string.menu1):getString(R.string.menu1_eng),false,-1));
+            menuItemArrayList.add(new MainMenuItem(2,1,Users.Language == 0 ? getString(R.string.menu2):getString(R.string.menu2_eng),false, R.drawable.sprinkler_48px));
+            menuItemArrayList.add(new MainMenuItem(2,1,Users.Language == 0 ? getString(R.string.menu3):getString(R.string.menu3_eng),true, R.drawable.next_plan_48px));
+
+            menuItemArrayList.add(new MainMenuItem(1,2,Users.Language == 0 ? getString(R.string.menu4):getString(R.string.menu4_eng),false, -1));
+            menuItemArrayList.add(new MainMenuItem(2,2,Users.Language == 0 ? getString(R.string.menu5):getString(R.string.menu5_eng),false, R.drawable.monitor_weight_48px));
+            menuItemArrayList.add(new MainMenuItem(2,2,Users.Language == 0 ? getString(R.string.menu6):getString(R.string.menu6_eng),false, R.drawable.safety_divider_48px));
+            menuItemArrayList.add(new MainMenuItem(2,2,Users.Language == 0 ? getString(R.string.menu7):getString(R.string.menu7_eng),false, R.drawable.sprinkler_48px));
+            menuItemArrayList.add(new MainMenuItem(2,2,Users.Language == 0 ? getString(R.string.menu8):getString(R.string.menu8_eng),false, R.drawable.list_alt_48px));
+            menuItemArrayList.add(new MainMenuItem(2,2,Users.Language == 0 ? getString(R.string.menu9):getString(R.string.menu9_eng),false, R.drawable.local_shipping_48px));
+            menuItemArrayList.add(new MainMenuItem(2,2,Users.Language == 0 ? getString(R.string.menu16):getString(R.string.menu16_eng),false, R.drawable.package_48px));
+            menuItemArrayList.add(new MainMenuItem(2,2,Users.Language == 0 ? getString(R.string.menu17):getString(R.string.menu17_eng),true, R.drawable.inventory_2_48px));
+
+            menuItemArrayList.add(new MainMenuItem(1,3,Users.Language == 0 ? getString(R.string.menu10):getString(R.string.menu10_eng),false,-1));
+            menuItemArrayList.add(new MainMenuItem(2,3,Users.Language == 0 ? getString(R.string.menu11):getString(R.string.menu11_eng),false, R.drawable.inventory_2_48px));
+            menuItemArrayList.add(new MainMenuItem(2,3,Users.Language == 0 ? getString(R.string.menu12):getString(R.string.menu12_eng),false, R.drawable.inventory_48px));
+            menuItemArrayList.add(new MainMenuItem(2,3,Users.Language == 0 ? getString(R.string.menu13):getString(R.string.menu13_eng),false, R.drawable.keyboard_double_arrow_left_48px));
+            menuItemArrayList.add(new MainMenuItem(2,3,Users.Language == 0 ? getString(R.string.menu18):getString(R.string.menu18_eng),false, R.drawable.keyboard_double_arrow_right_48px));
+            //menuItemArrayList.add(new MainMenuItem(2,3,getString(R.string.menu18),false, R.drawable.keyboard_double_arrow_left_48px));
+            menuItemArrayList.add(new MainMenuItem(2,3,Users.Language == 0 ? getString(R.string.menu14):getString(R.string.menu14_eng),false, R.drawable.local_shipping_48px));
+            //menuItemArrayList.add(new MainMenuItem(2,3,getString(R.string.menu19),false, R.drawable.checklist_rtl_48px));
+            //menuItemArrayList.add(new MainMenuItem(2,3,getString(R.string.menu15),false, R.drawable.download_48px));
+            //menuItemArrayList.add(new MainMenuItem(2,3,getString(R.string.menu20),true, R.drawable.file_upload_48px));
+        }
+        else if(booleanPOP){//POP권한
+            menuItemArrayList.add(new MainMenuItem(1,3,Users.Language == 0 ? getString(R.string.menu10):getString(R.string.menu10_eng),false,-1));
+            menuItemArrayList.add(new MainMenuItem(2,3,Users.Language == 0 ? getString(R.string.menu11):getString(R.string.menu11_eng),false, R.drawable.inventory_2_48px));
+            menuItemArrayList.add(new MainMenuItem(2,3,Users.Language == 0 ? getString(R.string.menu12):getString(R.string.menu12_eng),false, R.drawable.inventory_48px));
+            menuItemArrayList.add(new MainMenuItem(2,3,Users.Language == 0 ? getString(R.string.menu13):getString(R.string.menu13_eng),false, R.drawable.keyboard_double_arrow_left_48px));
+            menuItemArrayList.add(new MainMenuItem(2,3,Users.Language == 0 ? getString(R.string.menu18):getString(R.string.menu18_eng),false, R.drawable.keyboard_double_arrow_right_48px));
+            //menuItemArrayList.add(new MainMenuItem(2,3,getString(R.string.menu18),false, R.drawable.keyboard_double_arrow_left_48px));
+            menuItemArrayList.add(new MainMenuItem(2,3,Users.Language == 0 ? getString(R.string.menu14):getString(R.string.menu14_eng),false, R.drawable.local_shipping_48px));
+        }
+
+
+
         return menuItemArrayList;
     }
 
@@ -224,7 +250,7 @@ public class ApplicationClass extends Application {
      * POP 포장/출고 권한
      * @return
      */
-    public ArrayList<MainMenuItem> getMainMenuItem2(){
+    /*public ArrayList<MainMenuItem> getMainMenuItem2(){
 
         ArrayList<MainMenuItem> menuItemArrayList= new ArrayList<>();
         menuItemArrayList.add(new MainMenuItem(1,3,Users.Language == 0 ? getString(R.string.menu10):getString(R.string.menu10_eng),false,-1));
@@ -232,11 +258,7 @@ public class ApplicationClass extends Application {
         menuItemArrayList.add(new MainMenuItem(2,3,Users.Language == 0 ? getString(R.string.menu12):getString(R.string.menu12_eng),false, R.drawable.inventory_48px));
         menuItemArrayList.add(new MainMenuItem(2,3,Users.Language == 0 ? getString(R.string.menu13):getString(R.string.menu13_eng),false, R.drawable.keyboard_double_arrow_left_48px));
         menuItemArrayList.add(new MainMenuItem(2,3,Users.Language == 0 ? getString(R.string.menu18):getString(R.string.menu18_eng),false, R.drawable.keyboard_double_arrow_right_48px));
-        //menuItemArrayList.add(new MainMenuItem(2,3,getString(R.string.menu18),false, R.drawable.keyboard_double_arrow_left_48px));
         menuItemArrayList.add(new MainMenuItem(2,3,Users.Language == 0 ? getString(R.string.menu14):getString(R.string.menu14_eng),false, R.drawable.local_shipping_48px));
-        //menuItemArrayList.add(new MainMenuItem(2,3,getString(R.string.menu19),false, R.drawable.checklist_rtl_48px));
-        //menuItemArrayList.add(new MainMenuItem(2,3,getString(R.string.menu15),false, R.drawable.download_48px));
-        //menuItemArrayList.add(new MainMenuItem(2,3,getString(R.string.menu20),true, R.drawable.file_upload_48px));
         return menuItemArrayList;
-    }
+    }*/
 }
