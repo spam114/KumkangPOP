@@ -63,6 +63,7 @@ public class ScanViewModel extends ViewModel {
                             return;
                         }
                         data.setValue(models);
+                        loadError.setValue(false);
                         loading.setValue(false);
                     }
 

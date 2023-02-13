@@ -1,14 +1,21 @@
 package com.symbol.kumkangpop.view.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PowerManager;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -22,6 +29,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.andremion.floatingnavigationview.FloatingNavigationView;
+import com.google.zxing.integration.android.IntentIntegrator;
 import com.symbol.kumkangpop.R;
 import com.symbol.kumkangpop.databinding.ActivityMainBinding;
 import com.symbol.kumkangpop.databinding.DialogNoticeBinding;
@@ -34,6 +42,7 @@ import com.symbol.kumkangpop.model.object.Users;
 import com.symbol.kumkangpop.view.BackPressControl;
 import com.symbol.kumkangpop.view.CommonMethod;
 import com.symbol.kumkangpop.view.PreferenceManager;
+import com.symbol.kumkangpop.view.SoundManager;
 import com.symbol.kumkangpop.view.TypeChanger;
 import com.symbol.kumkangpop.view.activity.menu0.Activity0010;
 import com.symbol.kumkangpop.view.activity.menu2.Activity2300;
@@ -55,9 +64,19 @@ public class MainActivity extends BaseActivity {
     private ActivityResultLauncher<Intent> resultLauncher;
     private FloatingNavigationView mFloatingNavigationView;
     ArrayList<BusinessClass> businessClassList;
+
+    SoundManager soundManager; // 효과음 관리 객체
+    
+    // 전원버튼 컨트롤러
+    private BroadcastReceiver receiver; // 전원버튼 눌러 기기의 화면이 OFF, ON 되는 것을 확인한다.
+    private IntentFilter intentFilter; // ON,OFF를 등록하는 변수
+    PowerManager powerManager;
+    PowerManager.WakeLock wakeLock;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON); // 화면 꺼짐 방지
         init();
     }
 
@@ -81,14 +100,43 @@ public class MainActivity extends BaseActivity {
             mainAdapter.removeItem(17);
             //mainAdapter.notifyDataSetChanged();
         }*/
+
+        soundManager = new SoundManager(this);
+
     }
 
     private void setMediaSound(){
         setVolumeControlStream(AudioManager.STREAM_MUSIC); // 볼륨컨트롤의 기본 설정을 (STREAM_MUSIC) 음악 및 미디어로 바꾸겠다는 뜻
         AudioManager mAudioManager = (AudioManager)getSystemService(AUDIO_SERVICE);
-        mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, (int)(mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) * 0.90), AudioManager.FLAG_PLAY_SOUND); // 0.9 = 90% 크기로 설정
+        mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, (int)(mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) * 0.40), AudioManager.FLAG_PLAY_SOUND); // 0.9 = 90% 크기로 설정
     }
 
+
+    // 볼륨 설정 키를 조작하여 QR 카메라를 실행한다.
+    /*
+        KEYCODE의 기존 기능
+        true를 반환하면 기존의 KEYCODE의 기능을 사용할 수 없게된다.
+        false를 반환하면 기존의 KEYCODE의 기능을 사용한다.
+    * */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        switch (keyCode){
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                IntentIntegrator intentIntegrator = new IntentIntegrator(this);
+                intentIntegrator.setBeepEnabled(false);//바코드 인식시 소리 off
+                //intentIntegrator.setBeepEnabled(true);//바코드 인식시 소리 on
+                intentIntegrator.setPrompt(this.getString(R.string.qr_state_common));
+                intentIntegrator.setOrientationLocked(true);
+                // intentIntegrator.setCaptureActivity(QRReaderActivityStockOutMaster.class);
+                //intentIntegrator.initiateScan();
+                intentIntegrator.setRequestCode(7);
+                resultLauncher.launch(intentIntegrator.createScanIntent());
+                return true; // true를 반환함으로써 기존 기능을 막는다(true = 단순한 키입력을 막는다)
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
     private void setListener() {
 
@@ -230,6 +278,14 @@ public class MainActivity extends BaseActivity {
             }
         });
 
+        scanViewModel.loadError.observe(this, data -> { // data: true = 에러, false = 에러x    ...  loadError에 담긴 값을 가져온다.
+            if(data) { // 에러 발생
+                soundManager.playSound(0, 2, 3);
+            }
+            else { // 정상
+                soundManager.playSound(0, 0, 3);
+            }
+        });
     }
 
     private void viewNotice(String remark) {
