@@ -5,6 +5,7 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
+import android.os.Vibrator;
 
 import com.symbol.kumkangpop.R;
 
@@ -32,7 +33,7 @@ public class SoundManager {
       ((Activity)mContext).setVolumeControlStream(AudioManager.STREAM_MUSIC); // 볼륨컨트롤의 기본 설정을 (STREAM_MUSIC) 음악 및 미디어로 바꾸겠다는 뜻
       mSoundPoolMap = new HashMap<Integer, Integer>();
       mAudioManager = (AudioManager)mContext.getSystemService(Context.AUDIO_SERVICE);
-      mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, (int)(mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) * 0.1), AudioManager.FLAG_PLAY_SOUND); // 0.9 = 90% 크기로 설정
+      mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, (int)(mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) * 0.5), AudioManager.FLAG_PLAY_SOUND); // 0.9 = 90% 크기로 설정
       initSoundPool();
    }
 
@@ -55,6 +56,12 @@ public class SoundManager {
 
    public int playSound(int index, int loop, int rate){ //효과음 재생
       int streamVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+
+      if(loop >= 2) { // Error -> 진동을 울린다.
+         Vibrator vibrator = (Vibrator) this.mContext.getSystemService(mContext.VIBRATOR_SERVICE);
+         vibrator.vibrate(1000); // 1초간 진동
+      }
+
       return mSoundPool.play(mSoundPoolMap.get(index),streamVolume,streamVolume,1, loop, rate); // 출력음악의 ID(리스트에 저장된 해당 인덱스 위치의 효과음 파일 호출), 왼쪽볼륨, 오른쪽볼륨, ?, 반복횟수(0=1번반복), 재생속도(1=1배)
    }
 

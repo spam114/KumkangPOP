@@ -394,8 +394,8 @@ public class MainActivity extends BaseActivity {
             case KeyEvent.KEYCODE_VOLUME_DOWN:
             case KeyEvent.KEYCODE_VOLUME_UP:
                 IntentIntegrator intentIntegrator = new IntentIntegrator(this);
-                intentIntegrator.setBeepEnabled(false);//바코드 인식시 소리 off
-                //intentIntegrator.setBeepEnabled(true);//바코드 인식시 소리 on
+                //intentIntegrator.setBeepEnabled(false);//바코드 인식시 소리 off
+                intentIntegrator.setBeepEnabled(true);//바코드 인식시 소리 on
                 intentIntegrator.setPrompt(this.getString(R.string.qr_state_common));
                 intentIntegrator.setOrientationLocked(true);
                 // intentIntegrator.setCaptureActivity(QRReaderActivityStockOutMaster.class);
