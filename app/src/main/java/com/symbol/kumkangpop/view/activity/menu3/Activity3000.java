@@ -85,7 +85,14 @@ public class Activity3000 extends BaseActivity {
 
     private void GetMainData() {
         SearchCondition sc = new SearchCondition();
-        int businessClassCode = Integer.parseInt(binding.comboBusiness.getText().toString().split("-")[0]);
+        int businessClassCode=0;
+        try{
+            businessClassCode = Integer.parseInt(binding.comboBusiness.getText().toString().split("-")[0]);
+        }
+        catch (Exception e){
+            Users.SoundManager.playSound(0, 2, 3);//에러
+            return;
+        }
         sc.BusinessClassCode = businessClassCode;
         sc.LocationNo = 0;
         sc.LocationName = "";
@@ -104,10 +111,14 @@ public class Activity3000 extends BaseActivity {
                     return;
                 }
 
+                try{
                     int locationNo = Integer.parseInt(barcode.Barcode);
                     findLocation(locationNo);
-
-
+                }
+                catch (Exception e){
+                    Users.SoundManager.playSound(0, 2, 3);//에러
+                    return;
+                }
 
                 /*SearchCondition sc = new SearchCondition();
                 sc.IConvetDivision = 7;

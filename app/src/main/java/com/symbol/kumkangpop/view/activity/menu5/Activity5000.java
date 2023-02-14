@@ -84,7 +84,14 @@ public class Activity5000 extends BaseActivity {
 
     private void GetMainData() {
         SearchCondition sc = new SearchCondition();
-        int businessClassCode = Integer.parseInt(binding.comboBusiness.getText().toString().split("-")[0]);
+        int businessClassCode=0;
+        try{
+            businessClassCode = Integer.parseInt(binding.comboBusiness.getText().toString().split("-")[0]);
+        }
+        catch (Exception et){
+            Users.SoundManager.playSound(0, 2, 3);//에러
+            return;
+        }
         sc.BusinessClassCode = businessClassCode;
         sc.LocationNo = 0;
         sc.LocationName = "";
@@ -174,11 +181,24 @@ public class Activity5000 extends BaseActivity {
             if (data != null) {
                 int scanLocationNo;
                 if (data.NumConvertDataList.size() != 0) {
-                    scanLocationNo = Integer.parseInt(data.NumConvertDataList.get(0).DestNum);//출고번호 스캔해서 찾은 LocationNo
+                    try {
+                        scanLocationNo = Integer.parseInt(data.NumConvertDataList.get(0).DestNum);//출고번호 스캔해서 찾은 LocationNo
+                    }
+                    catch (Exception et){
+                        Users.SoundManager.playSound(0, 2, 3);//에러
+                        return;
+                    }
+
                     findLocation(scanLocationNo);
                 } else {
-                    int locationNo = Integer.parseInt(data.StrResult);
-                    findLocation(locationNo);
+                    try {
+                        int locationNo = Integer.parseInt(data.StrResult);
+                        findLocation(locationNo);
+                    } catch (Exception et) {
+                        Users.SoundManager.playSound(0, 2, 3);//에러
+                        return;
+                    }
+
                 }
             } else {
                 Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();

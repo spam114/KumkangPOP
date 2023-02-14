@@ -183,7 +183,6 @@ public class Activity0120 extends BaseActivity {
         commonViewModel.data3.observe(this, data -> {
             if (data != null) {
                 Toast.makeText(this, Users.Language==0 ? "완료 되었습니다.": "The operation is complete.", Toast.LENGTH_SHORT).show();
-                Users.SoundManager.playSound(0, 2, 3);//에러
             } else {
                 Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
                 Users.SoundManager.playSound(0, 2, 3);//에러
@@ -277,7 +276,14 @@ public class Activity0120 extends BaseActivity {
                                     tempList.add(adapter.getItem(i).toString());
                                 }
 
-                                int printNum = Integer.parseInt(binding.edtInput6.getText().toString());
+                                int printNum=0;
+                                try{
+                                    printNum = Integer.parseInt(binding.edtInput6.getText().toString());
+                                }
+                                catch (Exception et){
+                                    Users.SoundManager.playSound(0, 2, 3);
+                                    return;
+                                }
                                 //String sPackingNo = CommonMethod.GetPackingNo();
                                 SearchCondition sc = new SearchCondition();
                                 sc.SaleOrderNo = saleOrderNo;

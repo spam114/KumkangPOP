@@ -224,7 +224,13 @@ public class Activity3100 extends BaseActivity {
         boolean bReturn = true;
         int numPrint = 1;
         if(!binding.edt2.getText().toString().equals("")){
-            numPrint = Integer.parseInt(binding.edt2.getText().toString());
+            try{
+                numPrint = Integer.parseInt(binding.edt2.getText().toString());
+            }
+            catch (Exception et){
+                Users.SoundManager.playSound(0, 2, 3);//에러
+                return;
+            }
         }
 
         String titleKor="이송상차TAG 출력";

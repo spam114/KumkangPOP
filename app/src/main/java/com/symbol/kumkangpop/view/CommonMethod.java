@@ -217,6 +217,8 @@ public class CommonMethod {
         return "";
     }*/
 
+
+
     public static FloatingNavigationView setFloatingNavigationView(BaseActivity activity) {
         View fnvHeader;
         FloatingNavigationView mFloatingNavigationView = (FloatingNavigationView) activity.findViewById(R.id.floating_navigation_view);
@@ -524,6 +526,7 @@ public class CommonMethod {
                 new ActivityResultCallback<ActivityResult>() {
                     @Override
                     public void onActivityResult(ActivityResult result) {
+                        Users.SoundManager.playSound(0, 0, 3);
                         /**
                          * QR코드 시작
                          */
@@ -552,6 +555,7 @@ public class CommonMethod {
      * @param barcodeConvertPrintViewModel
      */
     public static void FNBarcodeConvertPrint(String barcode, BarcodeConvertPrintViewModel barcodeConvertPrintViewModel) {
+        Users.SoundManager.playSound(0, 0, 3);
         SearchCondition sc = new SearchCondition();
         sc.Barcode = barcode;
         sc.LocationNo = Users.LocationNo;

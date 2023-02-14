@@ -153,7 +153,6 @@ public class Activity0100 extends BaseActivity {
                     binding.textInputLayout8.setHint(numFormatter.format(tempArrayList.get(0).StockOutOrderQty));
                     binding.textInputLayout9.setHint(numFormatter.format(tempArrayList.get(0).StockOutCheckQty));
                     Toast.makeText(this, Users.Language==0 ? "검수 완료되었습니다.": "The inspection is complete.", Toast.LENGTH_SHORT).show();
-                    Users.SoundManager.playSound(0, 2, 3);//에러
                 }
                 /*binding.recyclerView.setVisibility(View.VISIBLE);
                 // 어뎁터가 리스트를 수정한다.
