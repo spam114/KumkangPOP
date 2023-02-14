@@ -32,6 +32,7 @@ import com.symbol.kumkangpop.R;
 import com.symbol.kumkangpop.databinding.ActivitySplashScreenBinding;
 import com.symbol.kumkangpop.model.object.Users;
 import com.symbol.kumkangpop.view.PermissionUtil;
+import com.symbol.kumkangpop.view.SoundManager;
 import com.symbol.kumkangpop.viewmodel.AppVersionViewModel;
 
 import java.io.File;
@@ -68,6 +69,7 @@ public class SplashScreenActivity extends BaseActivity {
         viewModel = new ViewModelProvider(this).get(AppVersionViewModel.class);
         viewModel.CheckAppVersion();
         observerViewModel();
+        Users.SoundManager =new SoundManager(this);
     }
 
     private void observerViewModel() {

@@ -1,12 +1,16 @@
 package com.symbol.kumkangpop.view.activity;
 
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Handler;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.symbol.kumkangpop.model.object.MainMenuItem;
@@ -24,6 +28,7 @@ public class BaseActivity extends AppCompatActivity {
     public void HideKeyBoard() {
         ApplicationClass.getInstance().HideKeyBoard(this);
     }
+
 
     public void progressON(String message) {
         ApplicationClass.getInstance().progressON(this, message);

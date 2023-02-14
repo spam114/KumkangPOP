@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -142,7 +143,9 @@ public class Activity2300 extends BaseActivity {
                     return;
                 EditPacking(barcode.Barcode);
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
+            }
         });
 
         //프린트 후 메시지 처리
@@ -150,13 +153,16 @@ public class Activity2300 extends BaseActivity {
             if (barcode != null) {
                 Toast.makeText(this, barcode.Result, Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
+            }
         });
 
         //에러메시지
         barcodeConvertPrintViewModel.errorMsg.observe(this, models -> {
             if (models != null) {
                 Toast.makeText(this, models, Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
                 progressOFF2();
             }
         });
@@ -177,7 +183,9 @@ public class Activity2300 extends BaseActivity {
                 adapter.updateAdapter(data.ScanListViewItem2List);
                 scanListViewItemList2 = data.ScanListViewItem2List;
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
+                finish();
             }
         });
 
@@ -197,7 +205,9 @@ public class Activity2300 extends BaseActivity {
                     }
                 }
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
+            }
         });
 
         /*commonViewModel.data3.observe(this, data -> {
@@ -401,6 +411,7 @@ public class Activity2300 extends BaseActivity {
 
                                 if (Users.PCCode.equals("")) {
                                     Toast.makeText(Activity2300.this, Users.Language==0 ? "출력 PC가 연결되어 있지 않습니다.": "There is no PC connected.", Toast.LENGTH_SHORT).show();
+                                    Users.SoundManager.playSound(0, 2, 3);//에러
                                     return;
                                 }
                                 EditPacking("KP-0000000000-03");
@@ -500,6 +511,25 @@ public class Activity2300 extends BaseActivity {
                 }*/
             }
     );
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode){
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                IntentIntegrator intentIntegrator = new IntentIntegrator(this);
+                intentIntegrator.setBeepEnabled(false);//바코드 인식시 소리 off
+                //intentIntegrator.setBeepEnabled(true);//바코드 인식시 소리 on
+                intentIntegrator.setPrompt(this.getString(R.string.qr_state_common));
+                intentIntegrator.setOrientationLocked(true);
+                // intentIntegrator.setCaptureActivity(QRReaderActivityStockOutMaster.class);
+                //intentIntegrator.initiateScan();
+                intentIntegrator.setRequestCode(7);
+                resultLauncher.launch(intentIntegrator.createScanIntent());
+                return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
     /**
      * 공통 끝

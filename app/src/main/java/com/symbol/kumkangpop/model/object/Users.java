@@ -1,5 +1,7 @@
 package com.symbol.kumkangpop.model.object;
 
+import com.symbol.kumkangpop.view.SoundManager;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +17,8 @@ public class Users {
     public static String Remark = "";
     public static String fromDate="";
     public static String DeptName="";
+
+    public static SoundManager SoundManager;
 
     public static int REQUEST_SCRAP=4;
     //스캐너관련

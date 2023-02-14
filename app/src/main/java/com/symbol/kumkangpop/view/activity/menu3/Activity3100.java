@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.andremion.floatingnavigationview.FloatingNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.zxing.integration.android.IntentIntegrator;
 import com.symbol.kumkangpop.R;
 import com.symbol.kumkangpop.databinding.Activity3100Binding;
 import com.symbol.kumkangpop.model.SearchCondition;
@@ -108,7 +110,9 @@ public class Activity3100 extends BaseActivity {
                 sc.Barcode = barcode.Barcode;
                 commonViewModel.Get2("GetNumConvertData", sc);
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
+            }
         });
 
 
@@ -116,6 +120,7 @@ public class Activity3100 extends BaseActivity {
         barcodeConvertPrintViewModel.errorMsg.observe(this, models -> {
             if (models != null) {
                 Toast.makeText(this, models, Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
                 progressOFF2();
             }
         });
@@ -139,6 +144,7 @@ public class Activity3100 extends BaseActivity {
                 adapter.getFilter().filter(binding.edtInput.getText().toString());
             } else {
                 Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
                 finish();
             }
         });
@@ -148,8 +154,10 @@ public class Activity3100 extends BaseActivity {
                 if (data.NumConvertDataList.size() == 0) {
                     if (Users.Language == 0) {
                         Toast.makeText(this, "해당 입력TAG의 현장정보를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show();
+                        Users.SoundManager.playSound(0, 2, 3);//에러
                     } else {
                         Toast.makeText(this, "Enter the TAG field information that can not be found.", Toast.LENGTH_SHORT).show();
+                        Users.SoundManager.playSound(0, 2, 3);//에러
                     }
                     return;
                 }
@@ -158,6 +166,7 @@ public class Activity3100 extends BaseActivity {
                 {
                     ////nScaner.fnBeepError();
                     Toast.makeText(this, Users.Language==0 ? "차량번호를 입력해주세요.": "Please enter the number of vehicles.", Toast.LENGTH_SHORT).show();
+                    Users.SoundManager.playSound(0, 2, 3);//에러
                     //mclMsgBox.Show(mclVariable.Language == 0 ? "차량번호를 입력해주세요." : "Please enter the number of vehicles.");
                     return;
                 }
@@ -167,7 +176,9 @@ public class Activity3100 extends BaseActivity {
                 ScanStockOutTag(StockOrderLocationNo);
 
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
+            }
         });
 
         commonViewModel.data3.observe(this, data -> {
@@ -184,13 +195,16 @@ public class Activity3100 extends BaseActivity {
                 }
 
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
+            }
         });
 
         //에러메시지
         commonViewModel.errorMsg.observe(this, models -> {
             if (models != null) {
                 Toast.makeText(this, models, Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
                 progressOFF2();
             }
         });
@@ -254,6 +268,7 @@ public class Activity3100 extends BaseActivity {
 
                         if (Users.PCCode.equals("")) {
                             Toast.makeText(Activity3100.this, Users.Language==0 ? "출력 PC가 연결되어 있지 않습니다.": "There is no PC connected.", Toast.LENGTH_SHORT).show();
+                            Users.SoundManager.playSound(0, 2, 3);//에러
                             return;
                         }
                         SearchCondition sc = new SearchCondition();
@@ -410,6 +425,25 @@ public class Activity3100 extends BaseActivity {
         if (result.equals(""))
             return;
         CommonMethod.FNBarcodeConvertPrint(result, barcodeConvertPrintViewModel);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode){
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                IntentIntegrator intentIntegrator = new IntentIntegrator(this);
+                intentIntegrator.setBeepEnabled(false);//바코드 인식시 소리 off
+                //intentIntegrator.setBeepEnabled(true);//바코드 인식시 소리 on
+                intentIntegrator.setPrompt(this.getString(R.string.qr_state_common));
+                intentIntegrator.setOrientationLocked(true);
+                // intentIntegrator.setCaptureActivity(QRReaderActivityStockOutMaster.class);
+                //intentIntegrator.initiateScan();
+                intentIntegrator.setRequestCode(7);
+                resultLauncher.launch(intentIntegrator.createScanIntent());
+                return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     /**

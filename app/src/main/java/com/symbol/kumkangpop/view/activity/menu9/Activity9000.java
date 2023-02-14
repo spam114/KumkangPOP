@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -158,7 +159,9 @@ public class Activity9000 extends BaseActivity {
                 // 어뎁터가 리스트를 수정한다.
                 adapter.updateAdapter(data.StockInList);
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
+                finish();
             }
         });
 
@@ -166,6 +169,7 @@ public class Activity9000 extends BaseActivity {
         commonViewModel.errorMsg.observe(this, models -> {
             if (models != null) {
                 Toast.makeText(this, models, Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
                 progressOFF2();
             }
         });
@@ -194,7 +198,9 @@ public class Activity9000 extends BaseActivity {
                     Toast.makeText(this, data.toString(), Toast.LENGTH_SHORT).show();
                 }
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
+                finish();
             }
         });
 
@@ -202,6 +208,7 @@ public class Activity9000 extends BaseActivity {
         simpleDataViewModel.errorMsg.observe(this, models -> {
             if (models != null) {
                 Toast.makeText(this, models, Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
                 progressOFF2();
             }
         });
@@ -311,6 +318,25 @@ public class Activity9000 extends BaseActivity {
             }
         }, 5000);
         progressON("Loading...", handler);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode){
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                IntentIntegrator intentIntegrator = new IntentIntegrator(this);
+                intentIntegrator.setBeepEnabled(false);//바코드 인식시 소리 off
+                //intentIntegrator.setBeepEnabled(true);//바코드 인식시 소리 on
+                intentIntegrator.setPrompt(this.getString(R.string.qr_state_common));
+                intentIntegrator.setOrientationLocked(true);
+                // intentIntegrator.setCaptureActivity(QRReaderActivityStockOutMaster.class);
+                //intentIntegrator.initiateScan();
+                intentIntegrator.setRequestCode(7);
+                resultLauncher.launch(intentIntegrator.createScanIntent());
+                return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     /**

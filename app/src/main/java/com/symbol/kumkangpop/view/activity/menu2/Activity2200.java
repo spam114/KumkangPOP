@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -16,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.andremion.floatingnavigationview.FloatingNavigationView;
+import com.google.zxing.integration.android.IntentIntegrator;
 import com.symbol.kumkangpop.R;
 import com.symbol.kumkangpop.databinding.Activity2200Binding;
 import com.symbol.kumkangpop.model.SearchCondition;
@@ -103,13 +105,16 @@ public class Activity2200 extends BaseActivity {
                 sc.Barcode = barcode.Barcode;
                 commonViewModel.Get2("GetNumConvertData", sc);
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
+            }
         });
 
         //에러메시지
         barcodeConvertPrintViewModel.errorMsg.observe(this, models -> {
             if (models != null) {
                 Toast.makeText(this, models, Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
                 progressOFF2();
             }
         });
@@ -128,7 +133,9 @@ public class Activity2200 extends BaseActivity {
             if (data != null) {
                 adapter.updateAdapter(data.BundleList);
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
+                finish();
             }
         });
 
@@ -141,6 +148,7 @@ public class Activity2200 extends BaseActivity {
                     } else {
                         Toast.makeText(this, "Bundles of bar code information that can not be found.", Toast.LENGTH_SHORT).show();
                     }
+                    Users.SoundManager.playSound(0, 2, 3);//에러
                     return;
                 }
 
@@ -158,7 +166,9 @@ public class Activity2200 extends BaseActivity {
 
 
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
+            }
         });
 
         /*commonViewModel.data3.observe(this, data -> {
@@ -204,6 +214,7 @@ public class Activity2200 extends BaseActivity {
         commonViewModel.errorMsg.observe(this, models -> {
             if (models != null) {
                 Toast.makeText(this, models, Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
                 progressOFF2();
             }
         });
@@ -374,6 +385,25 @@ public class Activity2200 extends BaseActivity {
                 }*/
             }
     );
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode){
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                IntentIntegrator intentIntegrator = new IntentIntegrator(this);
+                intentIntegrator.setBeepEnabled(false);//바코드 인식시 소리 off
+                //intentIntegrator.setBeepEnabled(true);//바코드 인식시 소리 on
+                intentIntegrator.setPrompt(this.getString(R.string.qr_state_common));
+                intentIntegrator.setOrientationLocked(true);
+                // intentIntegrator.setCaptureActivity(QRReaderActivityStockOutMaster.class);
+                //intentIntegrator.initiateScan();
+                intentIntegrator.setRequestCode(7);
+                resultLauncher.launch(intentIntegrator.createScanIntent());
+                return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
     /**
      * 공통 끝

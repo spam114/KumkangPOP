@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.InputType;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -21,6 +22,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.integration.android.IntentIntegrator;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.symbol.kumkangpop.R;
 import com.symbol.kumkangpop.databinding.Activity1100Binding;
@@ -160,6 +162,7 @@ public class Activity1100 extends BaseActivity {
 
                 if (output.equals("")) {
                     Toast.makeText(Activity1100.this, msg, Toast.LENGTH_SHORT).show();
+                    Users.SoundManager.playSound(0, 2, 3);//에러
                     return;
                 }
                 if (type == 1) {//포장수량 확인 버튼
@@ -167,11 +170,13 @@ public class Activity1100 extends BaseActivity {
 
                     if(num<=0){
                         Toast.makeText(Activity1100.this, Users.Language==0 ? "수량은 0보다 커야합니다.": "Quantity must be greater than zero.", Toast.LENGTH_SHORT).show();
+                        Users.SoundManager.playSound(0, 2, 3);//에러
                         return;
                     }
 
                     if(woPartHist.ReceivedQty-num >10 || woPartHist.ReceivedQty-num < -10){
                         Toast.makeText(Activity1100.this, Users.Language==0 ? "포장수량은 ±10개까지 변경 가능합니다.": "Packing quantity can be changed up to ±10.", Toast.LENGTH_SHORT).show();
+                        Users.SoundManager.playSound(0, 2, 3);//에러
                         return;
                     }
 
@@ -207,6 +212,7 @@ public class Activity1100 extends BaseActivity {
         aEditModel.errorMsg.observe(this, models -> {
             if (models != null) {
                 Toast.makeText(this, models, Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
                 progressOFF2();
             }
         });
@@ -233,12 +239,15 @@ public class Activity1100 extends BaseActivity {
                 woPartHist = TypeChanger.changeTypeWoPartHist(data);
                 if (woPartHist.ErrorCheck != null) {
                     Toast.makeText(this, woPartHist.ErrorCheck, Toast.LENGTH_SHORT).show();
+                    Users.SoundManager.playSound(0, 2, 3);//에러
                     finish();
                 } else {
                     DrawTag(woPartHist);
                 }
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
+                finish();
             }
         });
 
@@ -246,6 +255,7 @@ public class Activity1100 extends BaseActivity {
         simpleDataViewModel.errorMsg.observe(this, models -> {
             if (models != null) {
                 Toast.makeText(this, models, Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
                 progressOFF2();
             }
         });
@@ -288,6 +298,25 @@ public class Activity1100 extends BaseActivity {
             }
         }, 5000);
         progressON("Loading...", handler);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode){
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                IntentIntegrator intentIntegrator = new IntentIntegrator(this);
+                intentIntegrator.setBeepEnabled(false);//바코드 인식시 소리 off
+                //intentIntegrator.setBeepEnabled(true);//바코드 인식시 소리 on
+                intentIntegrator.setPrompt(this.getString(R.string.qr_state_common));
+                intentIntegrator.setOrientationLocked(true);
+                // intentIntegrator.setCaptureActivity(QRReaderActivityStockOutMaster.class);
+                //intentIntegrator.initiateScan();
+                intentIntegrator.setRequestCode(7);
+                //resultLauncher.launch(intentIntegrator.createScanIntent());
+                return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     /**

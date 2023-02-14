@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.andremion.floatingnavigationview.FloatingNavigationView;
+import com.google.zxing.integration.android.IntentIntegrator;
 import com.symbol.kumkangpop.R;
 import com.symbol.kumkangpop.databinding.Activity5100Binding;
 import com.symbol.kumkangpop.model.SearchCondition;
@@ -105,7 +107,9 @@ public class Activity5100 extends BaseActivity {
 
 
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
+            }
         });
 
 
@@ -113,6 +117,7 @@ public class Activity5100 extends BaseActivity {
         barcodeConvertPrintViewModel.errorMsg.observe(this, models -> {
             if (models != null) {
                 Toast.makeText(this, models, Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
                 progressOFF2();
             }
         });
@@ -135,7 +140,9 @@ public class Activity5100 extends BaseActivity {
                 adapter.updateAdapter(data.ContainerList);
                 adapter.getFilter().filter(binding.edtInput.getText().toString());
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
+                finish();
             }
         });
 
@@ -152,7 +159,9 @@ public class Activity5100 extends BaseActivity {
                 sc.ContainerNo = scanContainerNo;
                 commonViewModel.Get3("GetContainerData", sc);
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
+            }
         });
 
         commonViewModel.data3.observe(this, data -> {
@@ -165,6 +174,7 @@ public class Activity5100 extends BaseActivity {
                     } else {
                         Toast.makeText(this, "Container of the corresponding bar code information can not be found.", Toast.LENGTH_SHORT).show();
                     }
+                    Users.SoundManager.playSound(0, 2, 3);//에러
                 } else {
                     Intent intent = new Intent(getBaseContext(), Activity5110.class);
                     intent.putExtra("containerNo", data.ContainerList.get(0).ContainerNo);
@@ -172,7 +182,9 @@ public class Activity5100 extends BaseActivity {
                     activityResultLauncher.launch(intent);
                 }
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
+            }
         });
 
 
@@ -180,6 +192,7 @@ public class Activity5100 extends BaseActivity {
         commonViewModel.errorMsg.observe(this, models -> {
             if (models != null) {
                 Toast.makeText(this, models, Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
                 progressOFF2();
             }
         });
@@ -308,11 +321,29 @@ public class Activity5100 extends BaseActivity {
                 });*/
     }
 
-
     public void getKeyInResult(String result) {
         if (result.equals(""))
             return;
         CommonMethod.FNBarcodeConvertPrint(result, barcodeConvertPrintViewModel);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode){
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                IntentIntegrator intentIntegrator = new IntentIntegrator(this);
+                intentIntegrator.setBeepEnabled(false);//바코드 인식시 소리 off
+                //intentIntegrator.setBeepEnabled(true);//바코드 인식시 소리 on
+                intentIntegrator.setPrompt(this.getString(R.string.qr_state_common));
+                intentIntegrator.setOrientationLocked(true);
+                // intentIntegrator.setCaptureActivity(QRReaderActivityStockOutMaster.class);
+                //intentIntegrator.initiateScan();
+                intentIntegrator.setRequestCode(7);
+                resultLauncher.launch(intentIntegrator.createScanIntent());
+                return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     /**

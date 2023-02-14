@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.andremion.floatingnavigationview.FloatingNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.zxing.integration.android.IntentIntegrator;
 import com.symbol.kumkangpop.R;
 import com.symbol.kumkangpop.databinding.Activity0120Binding;
 import com.symbol.kumkangpop.model.SearchCondition;
@@ -119,7 +120,9 @@ public class Activity0120 extends BaseActivity {
                 sc.SaleOrderNo = barcode.Barcode;
                 commonViewModel.Get("GetSalesOrderData", sc);
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
+            }
         });
 
         commonViewModel.data.observe(this, data -> {
@@ -128,6 +131,7 @@ public class Activity0120 extends BaseActivity {
 
                 if (tempArrayList.get(0).ErrorCheck != null) {
                     Toast.makeText(this, tempArrayList.get(0).ErrorCheck, Toast.LENGTH_SHORT).show();
+                    Users.SoundManager.playSound(0, 2, 3);//에러
                 } else {
                     binding.textInputLayout1.setHint("S2-" + tempArrayList.get(0).SaleOrderNo);
                     binding.textInputLayout2.setHint(tempArrayList.get(0).CustomerName);
@@ -144,7 +148,9 @@ public class Activity0120 extends BaseActivity {
                 // 어뎁터가 리스트를 수정한다.
                 adapter.updateAdapter(TypeChanger.changeTypeSalesOrderList(dataList));*/
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
+                finish();
             }
         });
 
@@ -168,15 +174,20 @@ public class Activity0120 extends BaseActivity {
                 // 어뎁터가 리스트를 수정한다.
                 adapter.updateAdapter(TypeChanger.changeTypeSalesOrderList(dataList));*/
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
+                finish();
             }
         });
 
         commonViewModel.data3.observe(this, data -> {
             if (data != null) {
                 Toast.makeText(this, Users.Language==0 ? "완료 되었습니다.": "The operation is complete.", Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
+                finish();
             }
         });
 
@@ -184,6 +195,7 @@ public class Activity0120 extends BaseActivity {
         commonViewModel.errorMsg.observe(this, models -> {
             if (models != null) {
                 Toast.makeText(this, models, Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
                 progressOFF2();
             }
         });
@@ -255,6 +267,7 @@ public class Activity0120 extends BaseActivity {
 
                                 if (Users.PCCode.equals("")) {
                                     Toast.makeText(Activity0120.this, Users.Language==0 ? "출력 PC가 연결되어 있지 않습니다.": "There is no PC connected.", Toast.LENGTH_SHORT).show();
+                                    Users.SoundManager.playSound(0, 2, 3);//에러
                                     return;
                                 }
                                 ListAdapter adapter = binding.comboHo.getAdapter();
@@ -359,6 +372,25 @@ public class Activity0120 extends BaseActivity {
         if (result.equals(""))
             return;
         GetMainData(result);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode){
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                IntentIntegrator intentIntegrator = new IntentIntegrator(this);
+                intentIntegrator.setBeepEnabled(false);//바코드 인식시 소리 off
+                //intentIntegrator.setBeepEnabled(true);//바코드 인식시 소리 on
+                intentIntegrator.setPrompt(this.getString(R.string.qr_state_common));
+                intentIntegrator.setOrientationLocked(true);
+                // intentIntegrator.setCaptureActivity(QRReaderActivityStockOutMaster.class);
+                //intentIntegrator.initiateScan();
+                intentIntegrator.setRequestCode(7);
+                resultLauncher.launch(intentIntegrator.createScanIntent());
+                return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     /**

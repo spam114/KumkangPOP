@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel;
 import com.symbol.kumkangpop.model.ScanService;
 import com.symbol.kumkangpop.model.SearchCondition;
 import com.symbol.kumkangpop.model.object.Scan;
+import com.symbol.kumkangpop.model.object.Users;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
@@ -60,6 +61,7 @@ public class ScanViewModel extends ViewModel {
                             //errorMsg.setValue(models.ErrorCheck);
                             loadError.setValue(true);
                             loading.setValue(false);
+                            Users.SoundManager.playSound(0, 2, 3);//에러
                             return;
                         }
                         data.setValue(models);
@@ -71,6 +73,7 @@ public class ScanViewModel extends ViewModel {
                     public void onError(@NonNull Throwable e) {
                         loadError.setValue(true);
                         loading.setValue(false);
+                        Users.SoundManager.playSound(0, 2, 3);//에러
                         e.printStackTrace();
                     }
                 })

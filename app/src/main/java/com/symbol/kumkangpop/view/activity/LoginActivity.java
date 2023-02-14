@@ -144,6 +144,7 @@ public class LoginActivity extends BaseActivity {
         if (autoLoginFlag) {
             sc.UserID = PreferenceManager.getString(this, "ID");
             sc.PassWord = PreferenceManager.getString(this, "PW");
+            sc.AppCode = ApplicationClass.getResourses().getString(R.string.app_code);
             sc.Language = PreferenceManager.getInt(this, "Language");
         } else {
             if (getIntent().getBooleanExtra("FirstFlag", true)) {

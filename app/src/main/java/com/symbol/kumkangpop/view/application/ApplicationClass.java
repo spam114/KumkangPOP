@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -12,13 +13,16 @@ import android.net.NetworkInfo;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatDialog;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.zxing.integration.android.IntentIntegrator;
 import com.symbol.kumkangpop.R;
 import com.symbol.kumkangpop.model.object.MainMenuItem;
 import com.symbol.kumkangpop.model.object.Users;
@@ -88,6 +92,8 @@ public class ApplicationClass extends Application {
         InputMethodManager manager = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
         manager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
+
+
 
 
     public void progressON(Activity activity, String message) {

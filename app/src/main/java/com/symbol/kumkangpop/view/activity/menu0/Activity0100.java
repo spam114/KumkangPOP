@@ -16,6 +16,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.andremion.floatingnavigationview.FloatingNavigationView;
+import com.google.zxing.integration.android.IntentIntegrator;
 import com.symbol.kumkangpop.R;
 import com.symbol.kumkangpop.databinding.Activity0100Binding;
 import com.symbol.kumkangpop.model.SearchCondition;
@@ -127,7 +128,9 @@ public class Activity0100 extends BaseActivity {
                 sc.Barcode = barcode.Barcode;
                 commonViewModel.Get("GetItemTagCheck", sc);
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
+            }
         });
 
         commonViewModel.data.observe(this, data -> {
@@ -136,6 +139,7 @@ public class Activity0100 extends BaseActivity {
 
                 if (tempArrayList.get(0).ErrorCheck != null) {
                     Toast.makeText(this, tempArrayList.get(0).ErrorCheck, Toast.LENGTH_SHORT).show();
+                    Users.SoundManager.playSound(0, 2, 3);//에러
                 } else {
                     DecimalFormat numFormatter = new DecimalFormat("###,###");
                     binding.edtInput1.setText(tempArrayList.get(0).ItemTag);
@@ -149,12 +153,15 @@ public class Activity0100 extends BaseActivity {
                     binding.textInputLayout8.setHint(numFormatter.format(tempArrayList.get(0).StockOutOrderQty));
                     binding.textInputLayout9.setHint(numFormatter.format(tempArrayList.get(0).StockOutCheckQty));
                     Toast.makeText(this, Users.Language==0 ? "검수 완료되었습니다.": "The inspection is complete.", Toast.LENGTH_SHORT).show();
+                    Users.SoundManager.playSound(0, 2, 3);//에러
                 }
                 /*binding.recyclerView.setVisibility(View.VISIBLE);
                 // 어뎁터가 리스트를 수정한다.
                 adapter.updateAdapter(TypeChanger.changeTypeSalesOrderList(dataList));*/
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();                finish();
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
+                finish();
             }
         });
 
@@ -162,6 +169,7 @@ public class Activity0100 extends BaseActivity {
         commonViewModel.errorMsg.observe(this, models -> {
             if (models != null) {
                 Toast.makeText(this, models, Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
                 progressOFF2();
             }
         });
@@ -249,6 +257,25 @@ public class Activity0100 extends BaseActivity {
         if (result.equals(""))
             return;
         GetMainData(result);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode){
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                IntentIntegrator intentIntegrator = new IntentIntegrator(this);
+                intentIntegrator.setBeepEnabled(false);//바코드 인식시 소리 off
+                //intentIntegrator.setBeepEnabled(true);//바코드 인식시 소리 on
+                intentIntegrator.setPrompt(this.getString(R.string.qr_state_common));
+                intentIntegrator.setOrientationLocked(true);
+                // intentIntegrator.setCaptureActivity(QRReaderActivityStockOutMaster.class);
+                //intentIntegrator.initiateScan();
+                intentIntegrator.setRequestCode(7);
+                resultLauncher.launch(intentIntegrator.createScanIntent());
+                return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     /**

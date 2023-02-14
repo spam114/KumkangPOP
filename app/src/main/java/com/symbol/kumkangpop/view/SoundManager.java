@@ -1,5 +1,6 @@
 package com.symbol.kumkangpop.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.SoundPool;
@@ -27,10 +28,11 @@ public class SoundManager {
    private Context mContext;
 
    public SoundManager(Context mContext){
-      this.mContext = mContext;      
+      this.mContext = mContext;
+      ((Activity)mContext).setVolumeControlStream(AudioManager.STREAM_MUSIC); // 볼륨컨트롤의 기본 설정을 (STREAM_MUSIC) 음악 및 미디어로 바꾸겠다는 뜻
       mSoundPoolMap = new HashMap<Integer, Integer>();
       mAudioManager = (AudioManager)mContext.getSystemService(Context.AUDIO_SERVICE);
-      
+      mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, (int)(mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) * 0.1), AudioManager.FLAG_PLAY_SOUND); // 0.9 = 90% 크기로 설정
       initSoundPool();
    }
 

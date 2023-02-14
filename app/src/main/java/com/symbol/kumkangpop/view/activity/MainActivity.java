@@ -1,21 +1,15 @@
 package com.symbol.kumkangpop.view.activity;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.media.AudioManager;
-import android.media.SoundPool;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.PowerManager;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -37,12 +31,10 @@ import com.symbol.kumkangpop.model.SearchCondition;
 import com.symbol.kumkangpop.model.object.AppVersion;
 import com.symbol.kumkangpop.model.object.BusinessClass;
 import com.symbol.kumkangpop.model.object.MainMenuItem;
-import com.symbol.kumkangpop.model.object.SalesOrder;
 import com.symbol.kumkangpop.model.object.Users;
 import com.symbol.kumkangpop.view.BackPressControl;
 import com.symbol.kumkangpop.view.CommonMethod;
 import com.symbol.kumkangpop.view.PreferenceManager;
-import com.symbol.kumkangpop.view.SoundManager;
 import com.symbol.kumkangpop.view.TypeChanger;
 import com.symbol.kumkangpop.view.activity.menu0.Activity0010;
 import com.symbol.kumkangpop.view.activity.menu2.Activity2300;
@@ -65,18 +57,18 @@ public class MainActivity extends BaseActivity {
     private FloatingNavigationView mFloatingNavigationView;
     ArrayList<BusinessClass> businessClassList;
 
-    SoundManager soundManager; // 효과음 관리 객체
-    
+    //SoundManager soundManager; // 효과음 관리 객체
+
     // 전원버튼 컨트롤러
-    private BroadcastReceiver receiver; // 전원버튼 눌러 기기의 화면이 OFF, ON 되는 것을 확인한다.
-    private IntentFilter intentFilter; // ON,OFF를 등록하는 변수
-    PowerManager powerManager;
-    PowerManager.WakeLock wakeLock;
-    
+    //private BroadcastReceiver receiver; // 전원버튼 눌러 기기의 화면이 OFF, ON 되는 것을 확인한다.
+    //private IntentFilter intentFilter; // ON,OFF를 등록하는 변수
+    //PowerManager powerManager;
+    //PowerManager.WakeLock wakeLock;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON); // 화면 꺼짐 방지
+        //getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON); // 화면 꺼짐 방지
         init();
     }
 
@@ -89,53 +81,17 @@ public class MainActivity extends BaseActivity {
         setBar();
         setFloatingNavigationView();
         setResultLauncher();
-        setMediaSound();
         observerViewModel();
         ArrayList<MainMenuItem> menuItemArrayList = getMainMenuItem();
-        mainAdapter = new MainAdapter(menuItemArrayList,this);
+        mainAdapter = new MainAdapter(menuItemArrayList, this);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerView.setAdapter(mainAdapter);
         backpressed = new BackPressControl(this);
+
         /*if (Users.GboutSourcing) {//외주처의 경우 출고검수 사용금지
             mainAdapter.removeItem(17);
             //mainAdapter.notifyDataSetChanged();
         }*/
-
-        soundManager = new SoundManager(this);
-
-    }
-
-    private void setMediaSound(){
-        setVolumeControlStream(AudioManager.STREAM_MUSIC); // 볼륨컨트롤의 기본 설정을 (STREAM_MUSIC) 음악 및 미디어로 바꾸겠다는 뜻
-        AudioManager mAudioManager = (AudioManager)getSystemService(AUDIO_SERVICE);
-        mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, (int)(mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) * 0.40), AudioManager.FLAG_PLAY_SOUND); // 0.9 = 90% 크기로 설정
-    }
-
-
-    // 볼륨 설정 키를 조작하여 QR 카메라를 실행한다.
-    /*
-        KEYCODE의 기존 기능
-        true를 반환하면 기존의 KEYCODE의 기능을 사용할 수 없게된다.
-        false를 반환하면 기존의 KEYCODE의 기능을 사용한다.
-    * */
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-        switch (keyCode){
-            case KeyEvent.KEYCODE_VOLUME_DOWN:
-            case KeyEvent.KEYCODE_VOLUME_UP:
-                IntentIntegrator intentIntegrator = new IntentIntegrator(this);
-                intentIntegrator.setBeepEnabled(false);//바코드 인식시 소리 off
-                //intentIntegrator.setBeepEnabled(true);//바코드 인식시 소리 on
-                intentIntegrator.setPrompt(this.getString(R.string.qr_state_common));
-                intentIntegrator.setOrientationLocked(true);
-                // intentIntegrator.setCaptureActivity(QRReaderActivityStockOutMaster.class);
-                //intentIntegrator.initiateScan();
-                intentIntegrator.setRequestCode(7);
-                resultLauncher.launch(intentIntegrator.createScanIntent());
-                return true; // true를 반환함으로써 기존 기능을 막는다(true = 단순한 키입력을 막는다)
-        }
-        return super.onKeyDown(keyCode, event);
     }
 
     private void setListener() {
@@ -166,6 +122,7 @@ public class MainActivity extends BaseActivity {
                 Object errorCheck = appVersion.ErrorCheck;
                 if (errorCheck != null) {// SimpleDataViewModel 은 에러처리를 각각의 View에서 처리한다.(각각 다르므로)
                     Toast.makeText(this, errorCheck.toString(), Toast.LENGTH_SHORT).show();
+                    Users.SoundManager.playSound(0, 2, 3);//에러
                 } else {
                     boolean noticeFlag = PreferenceManager.getBoolean(this, "NoShowNotice");
                     //Object remark = linkedTreeMap.get("Remark");
@@ -174,7 +131,8 @@ public class MainActivity extends BaseActivity {
                         viewNotice(remark.toString());
                 }
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
                 finish();
             }
         });
@@ -185,6 +143,7 @@ public class MainActivity extends BaseActivity {
                 Object errorCheck = businessClassList.get(0).ErrorCheck;
                 if (errorCheck != null) {// SimpleDataViewModel 은 에러처리를 각각의 View에서 처리한다.(각각 다르므로)
                     Toast.makeText(this, errorCheck.toString(), Toast.LENGTH_SHORT).show();
+                    Users.SoundManager.playSound(0, 2, 3);//에러
                 } else {
                     ArrayList<String> stringArrayList = new ArrayList<>();
                     for (int i = 0; i < businessClassList.size(); i++) {
@@ -202,11 +161,11 @@ public class MainActivity extends BaseActivity {
                     yourSpinnerName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {//사업장이 변경될때마다, CustomerCode, LocationNo를 바꿔준다.
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                            Users.BusinessClassCode = (int)businessClassList.get(position).BusinessClassCode;
-                            if(!Users.GboutSourcing){
+                            Users.BusinessClassCode = (int) businessClassList.get(position).BusinessClassCode;
+                            if (!Users.GboutSourcing) {
                                 Users.CustomerCode = businessClassList.get(position).CustomerCode;
                             }
-                            Users.LocationNo = (int)businessClassList.get(position).LocationNo;
+                            Users.LocationNo = (int) businessClassList.get(position).LocationNo;
                         }
 
                         @Override
@@ -217,7 +176,8 @@ public class MainActivity extends BaseActivity {
                     //Log.i("스피너순서", "구성");
                 }
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
                 finish();
             }
         });
@@ -226,6 +186,7 @@ public class MainActivity extends BaseActivity {
         simpleDataViewModel.errorMsg.observe(this, models -> {
             if (models != null) {
                 Toast.makeText(this, models, Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
                 PreferenceManager.setBoolean(this, "AutoLogin", false);
                 PreferenceManager.setString(this, "ID", "");
                 PreferenceManager.setString(this, "PW", "");
@@ -252,38 +213,28 @@ public class MainActivity extends BaseActivity {
                 sc.BusinessClassCode = Users.BusinessClassCode;
                 sc.CustomerCode = Users.CustomerCode;
                 scanViewModel.GetScanMain(sc);
+            } else {
+                Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
             }
-            else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
         });
 
         scanViewModel.data.observe(this, data -> {
             if (data != null) {
                 int activityFlag = data.ActivityFlag;//1: Activity2300실행, 2: 종료, 3: Activity0010실행 + Get한 주문서 데이터 처리
-                if(activityFlag==1){//1: Activity2300실행 + barcode
+                if (activityFlag == 1) {//1: Activity2300실행 + barcode
                     String barCode = data.Barcode;
                     Intent intent = new Intent(MainActivity.this, Activity2300.class);
                     intent.putExtra("barCode", barCode);
                     startActivity(intent);
-                }
-                else if(activityFlag==2){//2: 종료
+                } else if (activityFlag == 2) {//2: 종료
                     return;
-                }
-                else if(activityFlag==3){//3: Activity0010실행 + Get한 주문서 데이터 처리(SalesOrderList)
+                } else if (activityFlag == 3) {//3: Activity0010실행 + Get한 주문서 데이터 처리(SalesOrderList)
 
                     Intent intent = new Intent(this, Activity0010.class);
                     intent.putExtra("saleOrderNo", data.SalesOrderList.get(0).SaleOrderNo);
                     activityResultLauncher.launch(intent);
                 }
-            }
-        });
-
-        scanViewModel.loadError.observe(this, data -> { // data: true = 에러, false = 에러x    ...  loadError에 담긴 값을 가져온다.
-            if(data) { // 에러 발생
-                soundManager.playSound(0, 2, 3);
-            }
-            else { // 정상
-                soundManager.playSound(0, 0, 3);
             }
         });
     }
@@ -336,8 +287,8 @@ public class MainActivity extends BaseActivity {
                     @Override
                     public void onActivityResult(ActivityResult result) {
                         *//**
-                         * QR코드 시작
-                         *//*
+         * QR코드 시작
+         *//*
                         IntentResult intentResult = IntentIntegrator.parseActivityResult(result.getResultCode(), result.getData());
                         if (intentResult.getContents() != null) {
                             String barcode = intentResult.getContents();
@@ -351,8 +302,8 @@ public class MainActivity extends BaseActivity {
                             return;
                         }
                         *//**
-                         * QR코드 끝
-                         *//*
+         * QR코드 끝
+         *//*
                         if (result.getResultCode() == 100) {
 
                         }
@@ -377,17 +328,17 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return CommonMethod.onOptionsItemSelected(this, item, resultLauncher,2);
+        return CommonMethod.onOptionsItemSelected(this, item, resultLauncher, 2);
     }
 
     ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 //result.getResultCode()를 통하여 결과값 확인
-                if(result.getResultCode() == RESULT_OK) {
+                if (result.getResultCode() == RESULT_OK) {
                     //ToDo
                 }
-                if(result.getResultCode() == RESULT_CANCELED){
+                if (result.getResultCode() == RESULT_CANCELED) {
                     //ToDo
                 }
             }
@@ -437,6 +388,24 @@ public class MainActivity extends BaseActivity {
         backpressed.onBackPressed();
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode){
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                IntentIntegrator intentIntegrator = new IntentIntegrator(this);
+                intentIntegrator.setBeepEnabled(false);//바코드 인식시 소리 off
+                //intentIntegrator.setBeepEnabled(true);//바코드 인식시 소리 on
+                intentIntegrator.setPrompt(this.getString(R.string.qr_state_common));
+                intentIntegrator.setOrientationLocked(true);
+                // intentIntegrator.setCaptureActivity(QRReaderActivityStockOutMaster.class);
+                //intentIntegrator.initiateScan();
+                intentIntegrator.setRequestCode(7);
+                resultLauncher.launch(intentIntegrator.createScanIntent());
+                return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
     /**
      * 공용부분 END
      */

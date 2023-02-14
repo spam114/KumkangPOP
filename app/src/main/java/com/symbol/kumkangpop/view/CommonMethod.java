@@ -207,6 +207,8 @@ public class CommonMethod {
         actionBar.setHomeAsUpIndicator(newdrawable);
     }
 
+
+
     /*public static String GetPackingNo(){
 
         commonViewModel.GetStr("GetPackingNo",new SearchCondition());
