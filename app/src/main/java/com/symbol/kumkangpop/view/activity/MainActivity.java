@@ -70,6 +70,8 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON); // 화면 꺼짐 방지
         init();
+
+        //test
     }
 
     private void init() {
