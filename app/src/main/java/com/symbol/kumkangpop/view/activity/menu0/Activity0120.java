@@ -128,7 +128,6 @@ public class Activity0120 extends BaseActivity {
         commonViewModel.data.observe(this, data -> {
             if (data != null) {
                 ArrayList<SalesOrder> tempArrayList = data.SalesOrderList;
-
                 if (tempArrayList.get(0).ErrorCheck != null) {
                     Toast.makeText(this, tempArrayList.get(0).ErrorCheck, Toast.LENGTH_SHORT).show();
                     Users.SoundManager.playSound(0, 2, 3);//에러
