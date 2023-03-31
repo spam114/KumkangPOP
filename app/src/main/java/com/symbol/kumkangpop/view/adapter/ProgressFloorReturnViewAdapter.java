@@ -196,7 +196,7 @@ public class ProgressFloorReturnViewAdapter extends RecyclerView.Adapter<Progres
 
 
     /*public void deleteDongProgressFloorReturn(String dong, Dong item) {
-        String url = context.getString(R.string.service_address) + "deleteDongProgressFloorReturn";
+        String url = Users.ServiceAddress; + "deleteDongProgressFloorReturn";
         ContentValues values = new ContentValues();
         values.put("ContractNo", contractNo);
         values.put("Dong", dong);
@@ -206,7 +206,7 @@ public class ProgressFloorReturnViewAdapter extends RecyclerView.Adapter<Progres
     }
 
     public void setDongProgressFloorReturn(String dong, TextView v, Dong item, String progressFloor) {
-        String url = context.getString(R.string.service_address) + "setDongProgressFloorReturn";
+        String url = Users.ServiceAddress; + "setDongProgressFloorReturn";
         ContentValues values = new ContentValues();
         values.put("ContractNo", contractNo);
         values.put("Dong", dong);

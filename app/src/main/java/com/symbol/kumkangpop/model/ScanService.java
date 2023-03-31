@@ -11,7 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ScanService {
 
     // 통신 설정 (우리 서버와 연결하는 내용)
-    private static final String BASE_URL = ApplicationClass.getResourses().getString(R.string.service_address); // 서버 주소 설정
+    private static final String BASE_URL = Users.ServiceAddress; // 서버 주소 설정
     private static ScanService instance;//todo
     public static DataApi api = new Retrofit.Builder() // 서버와 연결
             .baseUrl(BASE_URL)

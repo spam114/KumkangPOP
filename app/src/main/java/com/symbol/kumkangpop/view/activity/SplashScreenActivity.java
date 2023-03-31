@@ -33,6 +33,7 @@ import com.symbol.kumkangpop.databinding.ActivitySplashScreenBinding;
 import com.symbol.kumkangpop.model.object.Users;
 import com.symbol.kumkangpop.view.PermissionUtil;
 import com.symbol.kumkangpop.view.SoundManager;
+import com.symbol.kumkangpop.view.application.ApplicationClass;
 import com.symbol.kumkangpop.viewmodel.AppVersionViewModel;
 
 import java.io.File;
@@ -65,11 +66,11 @@ public class SplashScreenActivity extends BaseActivity {
         {
             addShortcut(this);
         }
-        //viewModel = ViewModelProviders.of(this).get(AppVersionViewModel.class);
+        Users.LoginServiceAddress = ApplicationClass.getResourses().getString(R.string.service_address_login);
         viewModel = new ViewModelProvider(this).get(AppVersionViewModel.class);
         viewModel.CheckAppVersion();
         observerViewModel();
-        Users.SoundManager =new SoundManager(this);
+        Users.SoundManager = new SoundManager(this);
     }
 
     private void observerViewModel() {
@@ -102,7 +103,8 @@ public class SplashScreenActivity extends BaseActivity {
                 intent.putExtra("FirstFlag", true);
                 startActivity(intent);
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();            }
+                Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
+            }
             finish();
         });
 
@@ -258,10 +260,9 @@ public class SplashScreenActivity extends BaseActivity {
             Users.Remark = "";
             android.bluetooth.BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             String deviceName;
-            if(bluetoothAdapter==null){
-                deviceName="";
-            }
-            else{
+            if (bluetoothAdapter == null) {
+                deviceName = "";
+            } else {
                 deviceName = bluetoothAdapter.getName();
             }
             Users.DeviceName = deviceName;//블루투스 권한(BLUETOOTH_CONNECT) 필요

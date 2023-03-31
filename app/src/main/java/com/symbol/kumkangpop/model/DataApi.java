@@ -6,12 +6,12 @@ import com.symbol.kumkangpop.model.object.CodeData;
 import com.symbol.kumkangpop.model.object.Common;
 import com.symbol.kumkangpop.model.object.Dong;
 import com.symbol.kumkangpop.model.object.LoginInfo;
-import com.symbol.kumkangpop.model.object.NumConvertData;
 import com.symbol.kumkangpop.model.object.Part;
 import com.symbol.kumkangpop.model.object.PartSpec;
 import com.symbol.kumkangpop.model.object.Report;
 import com.symbol.kumkangpop.model.object.SData;
 import com.symbol.kumkangpop.model.object.Scan;
+import com.symbol.kumkangpop.model.object.Users;
 
 import java.util.List;
 
@@ -21,6 +21,7 @@ import retrofit2.http.POST;
 
 
 public interface DataApi {
+
     // @Headers({"Content-Type: application/json"})
     //@FormUrlEncoded
     @POST("getDongProgressFloorReturn")
@@ -190,7 +191,7 @@ public interface DataApi {
 
     @POST("GetStockOutDataCnt")
     Single<Common> GetStockOutDataCnt(@Body SearchCondition searchCondition);
-    
+
     @POST("ScanStockOut")
     Single<Common> ScanStockOut(@Body SearchCondition searchCondition);
 
@@ -242,16 +243,23 @@ public interface DataApi {
     @POST("EditBundle")
     Single<Common> EditBundle(@Body SearchCondition searchCondition);
 
-    @POST("ScanTransfer")//이송
+    @POST("ScanTransfer")
+//이송
     Single<Common> ScanTransfer(@Body SearchCondition searchCondition);
 
-    @POST("EditTransfer")//이송수정
+    @POST("EditTransfer")
+//이송수정
     Single<Common> EditTransfer(@Body SearchCondition searchCondition);
 
-    @POST("ScanBring")//이입
+    @POST("ScanBring")
+//이입
     Single<Common> ScanBring(@Body SearchCondition searchCondition);
 
-    @POST("UpdateStockOutDetailData")//일괄이입 or 일괄제외
+    @POST("UpdateStockOutDetailData")
+//일괄이입 or 일괄제외
     Single<Common> UpdateStockOutDetailData(@Body SearchCondition searchCondition);
+
+    @POST("ChangeConnectionString")
+    Single<Common> ChangeConnectionString(@Body SearchCondition searchCondition);
 }
 

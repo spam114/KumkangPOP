@@ -7,13 +7,9 @@ import androidx.lifecycle.ViewModel;
 
 import com.symbol.kumkangpop.model.LoginService;
 import com.symbol.kumkangpop.model.SearchCondition;
-import com.symbol.kumkangpop.model.object.Authority;
 import com.symbol.kumkangpop.model.object.LoginInfo;
-import com.symbol.kumkangpop.model.object.ScanListViewItem2;
 import com.symbol.kumkangpop.model.object.Users;
 import com.symbol.kumkangpop.view.PreferenceManager;
-
-import java.util.ArrayList;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
@@ -73,7 +69,7 @@ public class LoginViewModel extends ViewModel {
 
                             @Override
                             public void onError(@NonNull Throwable e) {
-                                errorMsg.setValue(Users.Language==0 ? "서버 오류 발생": "Server error occurred");
+                                errorMsg.setValue(Users.Language == 0 ? "서버 오류 발생" : "Server error occurred");
                                 loadError.setValue(true);
                                 loading.setValue(false);
                                 e.printStackTrace();
@@ -96,7 +92,7 @@ public class LoginViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        errorMsg.setValue(Users.Language==0 ? "서버 오류 발생": "Server error occurred");
+                        errorMsg.setValue(Users.Language == 0 ? "서버 오류 발생" : "Server error occurred");
                         loadError.setValue(true);
                         loading.setValue(false);
                         e.printStackTrace();
@@ -138,14 +134,13 @@ public class LoginViewModel extends ViewModel {
                             @Override
                             public void onError(@NonNull Throwable e) {
                                 phoneNumberFlag.setValue(false);
-                                errorMsg.setValue(Users.Language==0 ? "서버 오류 발생": "Server error occurred");
+                                errorMsg.setValue(Users.Language == 0 ? "서버 오류 발생" : "Server error occurred");
                                 loading.setValue(false);
                                 e.printStackTrace();
                             }
                         })
         );
     }
-
 
     public void GetPrintPCData(SearchCondition sc, Context context) {
         loading.setValue(true);
@@ -174,7 +169,7 @@ public class LoginViewModel extends ViewModel {
 
                             @Override
                             public void onError(@NonNull Throwable e) {
-                                errorMsg.setValue(Users.Language==0 ? "서버 오류 발생": "Server error occurred");
+                                errorMsg.setValue(Users.Language == 0 ? "서버 오류 발생" : "Server error occurred");
                                 //loadError.setValue(true);
                                 //loading.setValue(false);
                                 loading.setValue(false);
@@ -184,6 +179,4 @@ public class LoginViewModel extends ViewModel {
                         })
         );
     }
-
-
 }

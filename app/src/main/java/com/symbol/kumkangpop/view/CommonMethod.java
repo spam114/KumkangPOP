@@ -416,7 +416,6 @@ public class CommonMethod {
                         btnCancel.setText("Cancel");
                     }
 
-
                     TextInputEditText edtTagNo = dialogView.findViewById(R.id.edtTagNo);
                     btnOK.setOnClickListener(new View.OnClickListener() {
                         @Override

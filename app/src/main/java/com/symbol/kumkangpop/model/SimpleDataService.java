@@ -13,7 +13,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SimpleDataService {
-    private static final String BASE_URL = ApplicationClass.getResourses().getString(R.string.service_address);
+    private static final String BASE_URL = Users.ServiceAddress;
     private static SimpleDataService instance;//todo
     public static DataApi api = new Retrofit.Builder()
             .baseUrl(BASE_URL)

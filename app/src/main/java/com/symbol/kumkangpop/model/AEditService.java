@@ -1,6 +1,7 @@
 package com.symbol.kumkangpop.model;
 
 import com.symbol.kumkangpop.R;
+import com.symbol.kumkangpop.model.object.Users;
 import com.symbol.kumkangpop.view.application.ApplicationClass;
 
 import io.reactivex.Single;
@@ -9,7 +10,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AEditService {
-    private static final String BASE_URL = ApplicationClass.getResourses().getString(R.string.service_address);
+    private static final String BASE_URL = Users.ServiceAddress;
     private static AEditService instance;//todo
     public static DataApi api = new Retrofit.Builder()
             .baseUrl(BASE_URL)

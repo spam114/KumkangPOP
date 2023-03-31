@@ -41,4 +41,7 @@ public class Users {
     public static int Language;
 
     public static String UserImage;
+    //public static int ServiceType;//0:금강공업(음성,진천),1:KKM,2:KKV,3:TEST
+    public static String ServiceAddress;
+    public static String LoginServiceAddress;
 }

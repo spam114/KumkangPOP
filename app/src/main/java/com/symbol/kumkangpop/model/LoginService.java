@@ -1,10 +1,8 @@
 package com.symbol.kumkangpop.model;
 
 
-import com.symbol.kumkangpop.R;
 import com.symbol.kumkangpop.model.object.LoginInfo;
 import com.symbol.kumkangpop.model.object.Users;
-import com.symbol.kumkangpop.view.application.ApplicationClass;
 
 import io.reactivex.Single;
 import retrofit2.Retrofit;
@@ -14,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class LoginService {
 
     // 통신 설정 (우리 서버와 연결하는 내용)
-    private static final String BASE_URL = ApplicationClass.getResourses().getString(R.string.service_address); // 서버 주소 설정
+    private static String BASE_URL = Users.ServiceAddress; // 서버 주소 설정
     private static LoginService instance;//todo
     public static DataApi api = new Retrofit.Builder() // 서버와 연결
             .baseUrl(BASE_URL)
@@ -29,6 +27,7 @@ public class LoginService {
             instance = new LoginService();
             //통신 에러로그 확인을 위한 코드
             /*OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
+
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             clientBuilder.addInterceptor(loggingInterceptor);
@@ -63,4 +62,14 @@ public class LoginService {
     public Single<LoginInfo> GetPrintPCData(SearchCondition searchCondition) {// 객체의 사용//todo
         return api.GetPrintPCData(searchCondition);//todo
     }
+
+    /*public static void changeApiBaseUrl() {
+        BASE_URL = Users.ServiceAddress;
+        api = new Retrofit.Builder() // 서버와 연결
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create()) // json 데이터를 java object로 변형해줌
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build()
+                .create(DataApi.class);
+    }*/
 }

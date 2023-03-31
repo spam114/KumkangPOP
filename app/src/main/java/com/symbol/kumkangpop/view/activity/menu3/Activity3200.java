@@ -565,6 +565,7 @@ public class Activity3200 extends BaseActivity {
                 new ActivityResultCallback<ActivityResult>() {
                     @Override
                     public void onActivityResult(ActivityResult result) {
+                        Users.SoundManager.playSound(0, 0, 3);
                         IntentResult intentResult = IntentIntegrator.parseActivityResult(result.getResultCode(), result.getData());
                         if (intentResult.getContents() != null) {
                             String scanResult = intentResult.getContents();

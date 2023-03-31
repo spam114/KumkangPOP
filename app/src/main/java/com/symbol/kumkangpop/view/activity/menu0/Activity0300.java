@@ -336,6 +336,7 @@ public class Activity0300 extends BaseActivity {
                 new ActivityResultCallback<ActivityResult>() {
                     @Override
                     public void onActivityResult(ActivityResult result) {
+                        Users.SoundManager.playSound(0, 0, 3);
                         /**
                          * QR코드 시작
                          */

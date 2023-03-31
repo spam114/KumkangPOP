@@ -65,6 +65,15 @@ public class Activity0000 extends BaseActivity {
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerView.setAdapter(adapter);
         GetMainData();
+
+
+        binding.txtInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SearchCondition sc = new SearchCondition();
+                commonViewModel.Get4("ChangeConnectionString",sc);
+            }
+        });
     }
 
     private void setView() {
@@ -156,7 +165,14 @@ public class Activity0000 extends BaseActivity {
             }
         });
 
-
+        commonViewModel.data4.observe(this, data -> {
+            if (data != null) {
+            }
+            else {
+                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
+            }
+        });
 
         //에러메시지
         commonViewModel.errorMsg.observe(this, models -> {

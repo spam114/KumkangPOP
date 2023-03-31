@@ -1,7 +1,10 @@
 <resources>
     <string name="app_name">금강공업 음성공장</string>
-    <!--<string name="service_address">http://211.245.239.53:2224/Service/json/</string>--><!--본DB-->
-    <string name="service_address">http://211.245.239.53:2228/Service/json/</string><!--테스트DB-->
+    <string name="service_address">http://211.245.239.53:2224/Service/json/</string><!--본DB-->
+    <string name="service_address_test">http://211.245.239.53:2228/Service/json/</string><!--테스트DB-->
+    <string name="service_address_kkm">http://211.245.239.53:2230/Service/json/</string><!--KKM-->
+    <string name="service_address_kkv">http://211.245.239.53:2231/Service/json/</string><!--KKV-->
+    <string name="service_address_login">http://211.245.239.53:2232/Service/json/</string><!--LoginService-->
     <string name="app_code">8</string>
     <string name="qr_state_common">TAG를 인식해주세요 (Please Scan TAG)</string>
     <string name="price_format">%,2d</string>
