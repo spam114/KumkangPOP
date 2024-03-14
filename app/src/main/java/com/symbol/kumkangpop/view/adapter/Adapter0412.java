@@ -60,7 +60,6 @@ public class Adapter0412 extends RecyclerView.Adapter<Adapter0412.ViewHolder>  i
         items.clear();
         items.addAll(newCountries);
         notifyDataSetChanged();
-
     }
 
     @NonNull

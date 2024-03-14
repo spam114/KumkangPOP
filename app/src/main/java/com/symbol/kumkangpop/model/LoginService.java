@@ -46,7 +46,6 @@ public class LoginService {
         SearchCondition sc = new SearchCondition();
         sc.PhoneNumber = Users.UserID;
         return api.GetUserImage(sc);
-
     }
 
     // api가 인터페이스로 존재하는데 해당 인터페이스를 통해 서버와 연결하여 checkAppVersion 으로 연결되어있는 서버 함수를 호출한다.

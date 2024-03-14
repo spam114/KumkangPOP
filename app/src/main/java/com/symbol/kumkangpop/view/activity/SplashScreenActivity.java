@@ -1,5 +1,6 @@
 package com.symbol.kumkangpop.view.activity;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
@@ -227,6 +228,22 @@ public class SplashScreenActivity extends BaseActivity {
     }
 
     private void CheckPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {//29이상
+            PermissionUtil.permissionList = new String[]{
+                    Manifest.permission.READ_PHONE_STATE,
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.READ_PHONE_NUMBERS
+            };
+        }
+        else{
+            PermissionUtil.permissionList = new String[]{
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_PHONE_STATE,
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.READ_PHONE_NUMBERS
+            };
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (PermissionUtil.haveAllpermission(this, PermissionUtil.permissionList)) {//모든 퍼미션 허용
                 insertAppLoginHistory();
@@ -297,10 +314,14 @@ public class SplashScreenActivity extends BaseActivity {
             }
             //거부 ,재거부
             else {
-                if (PermissionUtil.recheckPermission(this, PermissionUtil.permissionList)) {
+                //거부 눌렀을 때 로직
+                Toast.makeText(this, "앱에 로그인하기 위해 반드시 필요합니다.", Toast.LENGTH_LONG).show();
+                Intent intent = getIntent();
+                setResult(RESULT_CANCELED, intent);
+                finish();
+                /*if (PermissionUtil.recheckPermission(this, PermissionUtil.permissionList)) {
                     //거부 눌렀을 때 로직
                     Toast.makeText(this, "앱에 로그인하기 위해 반드시 필요합니다.", Toast.LENGTH_LONG).show();
-
                     Intent intent = getIntent();
                     setResult(RESULT_CANCELED, intent);
                     finish();
@@ -308,11 +329,10 @@ public class SplashScreenActivity extends BaseActivity {
                 } else {
                     //재거부 눌렀을 때 로직
                     Toast.makeText(this, "앱에 로그인하기 위해 반드시 필요합니다.", Toast.LENGTH_LONG).show();
-
                     Intent intent = getIntent();
                     setResult(RESULT_CANCELED, intent);
                     finish();
-                }
+                }*/
             }
         }
         //end region
