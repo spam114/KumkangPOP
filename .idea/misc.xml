@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  //ExampleLine
   <component name="CMakeSettings">
     <configurations>
       <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
