@@ -72,6 +72,7 @@
                     android:layout_height="0dp"
                     android:layout_marginLeft="50dp"
                     android:layout_marginRight="50dp"
+                    android:layout_marginBottom="5dp"
                     android:layout_weight="1.9"
                     android:hint="아이디(ID)"
                     android:textColorHint="@android:color/darker_gray"
@@ -81,11 +82,13 @@
                         android:id="@+id/edtID"
                         style="@style/TextInputEditTextStyle"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:drawableStart="@drawable/ic_person_black_24dp"
                         android:drawableLeft="@drawable/ic_person_black_24dp"
                         android:imeOptions="actionDone"
+                        android:paddingTop="0dp"
+                        android:paddingBottom="0dp"
                         android:singleLine="true"
                         android:textSize="12sp" />
 
@@ -98,6 +101,7 @@
                     android:layout_height="0dp"
                     android:layout_marginLeft="50dp"
                     android:layout_marginRight="50dp"
+                    android:layout_marginBottom="5dp"
                     android:layout_weight="1.9"
                     android:hint="비밀번호(PASSWORD)"
                     android:textColorHint="@android:color/darker_gray"
@@ -106,12 +110,14 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/edtPW"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:drawableStart="@drawable/ic_lock_black_24dp"
                         android:drawableLeft="@drawable/ic_lock_black_24dp"
                         android:imeOptions="actionDone"
                         android:inputType="textPassword"
+                        android:paddingTop="0dp"
+                        android:paddingBottom="0dp"
                         android:singleLine="true"
                         android:textSize="12sp" />
 
@@ -133,11 +139,13 @@
                         android:id="@+id/edtPC"
                         style="@style/TextInputEditTextStyle"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:drawableStart="@drawable/outline_dvr_24"
                         android:drawableLeft="@drawable/outline_dvr_24"
                         android:imeOptions="actionDone"
+                        android:paddingTop="0dp"
+                        android:paddingBottom="0dp"
                         android:singleLine="true"
                         android:textSize="12sp" />
 
@@ -172,7 +180,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:checked="true"
-                            android:text="한국어(KOR)"
+                            android:text="KOR"
                             android:textSize="11sp" />
 
                         <RadioButton
@@ -180,7 +188,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="영어(ENG)"
+                            android:text="ENG"
                             android:textSize="11sp" />
                     </RadioGroup>
                 </LinearLayout>

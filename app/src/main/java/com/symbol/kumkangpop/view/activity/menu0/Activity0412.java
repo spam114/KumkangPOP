@@ -33,6 +33,12 @@ import com.symbol.kumkangpop.viewmodel.CommonViewModel;
 
 import java.util.ArrayList;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.IntentFilter;
+import android.os.Build;
+import com.symbol.kumkangpop.view.MC3300X;
+
 public class Activity0412 extends BaseActivity {
     Activity0412Binding binding;
     Adapter0412 adapter;
@@ -45,6 +51,7 @@ public class Activity0412 extends BaseActivity {
     //String saleOrderNo;
     //String ho;
     //ArrayList<ItemTag> tempItemTagArrayList = new ArrayList<>();
+    MC3300X mc3300X;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +63,7 @@ public class Activity0412 extends BaseActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity0412);
         barcodeConvertPrintViewModel = new ViewModelProvider(this).get(BarcodeConvertPrintViewModel.class);
         commonViewModel = new ViewModelProvider(this).get(CommonViewModel.class);
+        SetMC3300X();
         binding.txtTitle.setText(Users.Language == 0 ? getString(R.string.detail_menu_0412) : getString(R.string.detail_menu_0412_eng));
         packingNo = getIntent().getStringExtra("packingNo");
         setView();
@@ -89,31 +97,30 @@ public class Activity0412 extends BaseActivity {
     }
 
     private void scanning(String barcode) {
-        String titleKor=getString(R.string.detail_menu_0412);
-        String titleEng=getString(R.string.detail_menu_0412_eng);
-        String messageKor="제품TAG \"" + barcode + "\"\n를 제외하겠습니까?";
-        String messageEng="Do you want to exclude ITEMTAG"+"("+barcode+")?";
-        String poButtonKor="확인";
-        String poButtonEng="OK";
-        String negaButtonKor="취소";
-        String negaButtonEng="Cancel";
+        String titleKor = getString(R.string.detail_menu_0412);
+        String titleEng = getString(R.string.detail_menu_0412_eng);
+        String messageKor = "제품TAG \"" + barcode + "\"\n를 제외하겠습니까?";
+        String messageEng = "Do you want to exclude ITEMTAG" + "(" + barcode + ")?";
+        String poButtonKor = "확인";
+        String poButtonEng = "OK";
+        String negaButtonKor = "취소";
+        String negaButtonEng = "Cancel";
 
         String strTitle;
         String strMessage;
         String strPoButton;
         String strNegaButton;
 
-        if(Users.Language ==0){
-            strTitle=titleKor;
-            strMessage=messageKor;
-            strPoButton=poButtonKor;
-            strNegaButton=negaButtonKor;
-        }
-        else{
-            strTitle=titleEng;
-            strMessage=messageEng;
-            strPoButton=poButtonEng;
-            strNegaButton=negaButtonEng;
+        if (Users.Language == 0) {
+            strTitle = titleKor;
+            strMessage = messageKor;
+            strPoButton = poButtonKor;
+            strNegaButton = negaButtonKor;
+        } else {
+            strTitle = titleEng;
+            strMessage = messageEng;
+            strPoButton = poButtonEng;
+            strNegaButton = negaButtonEng;
         }
 
         new MaterialAlertDialogBuilder(this)
@@ -148,7 +155,7 @@ public class Activity0412 extends BaseActivity {
                     return;
                 scanning(barcode.Barcode);
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
                 Users.SoundManager.playSound(0, 2, 3);//에러
             }
         });
@@ -168,7 +175,7 @@ public class Activity0412 extends BaseActivity {
 
                     GetMainData();
                     if (dFlag.equals("개별")) {
-                        Toast.makeText(this, Users.Language==0 ? "제외 되었습니다.": "It's excluded", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, Users.Language == 0 ? "제외 되었습니다." : "It's excluded", Toast.LENGTH_SHORT).show();
                     }
                      /*packing.ItemTag = tempItemTagArrayList.get(0).
 
@@ -187,7 +194,7 @@ public class Activity0412 extends BaseActivity {
                 }
 
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
                 Users.SoundManager.playSound(0, 2, 3);//에러
             }
         });
@@ -219,7 +226,7 @@ public class Activity0412 extends BaseActivity {
                 adapter.updateAdapter(data.PackingList);
                 adapter.getFilter().filter(binding.edtInput.getText().toString());
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
                 Users.SoundManager.playSound(0, 2, 3);//에러
                 finish();
             }
@@ -281,31 +288,30 @@ public class Activity0412 extends BaseActivity {
         binding.btnDeleteAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String titleKor="제품 일괄 제외";
-                String titleEng="ITEM Exclude ALL";
-                String messageKor="\"모든\" 제품TAG를 제외하겠습니까?";
-                String messageEng="Exclude \"all\" TAGs?";
-                String poButtonKor="확인";
-                String poButtonEng="OK";
-                String negaButtonKor="취소";
-                String negaButtonEng="Cancel";
+                String titleKor = "제품 일괄 제외";
+                String titleEng = "ITEM Exclude ALL";
+                String messageKor = "\"모든\" 제품TAG를 제외하겠습니까?";
+                String messageEng = "Exclude \"all\" TAGs?";
+                String poButtonKor = "확인";
+                String poButtonEng = "OK";
+                String negaButtonKor = "취소";
+                String negaButtonEng = "Cancel";
 
                 String strTitle;
                 String strMessage;
                 String strPoButton;
                 String strNegaButton;
 
-                if(Users.Language ==0){
-                    strTitle=titleKor;
-                    strMessage=messageKor;
-                    strPoButton=poButtonKor;
-                    strNegaButton=negaButtonKor;
-                }
-                else{
-                    strTitle=titleEng;
-                    strMessage=messageEng;
-                    strPoButton=poButtonEng;
-                    strNegaButton=negaButtonEng;
+                if (Users.Language == 0) {
+                    strTitle = titleKor;
+                    strMessage = messageKor;
+                    strPoButton = poButtonKor;
+                    strNegaButton = negaButtonKor;
+                } else {
+                    strTitle = titleEng;
+                    strMessage = messageEng;
+                    strPoButton = poButtonEng;
+                    strNegaButton = negaButtonEng;
                 }
                 try {
                     new MaterialAlertDialogBuilder(Activity0412.this)
@@ -319,7 +325,7 @@ public class Activity0412 extends BaseActivity {
                                     for (int i = 0; i < adapter.getItemList().size(); i++) {
                                         fnRemoveList(adapter.getItemList().get(i).ItemTag);
                                     }
-                                    Toast.makeText(getBaseContext(), Users.Language==0 ? "제외 되었습니다.": "It's excluded", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getBaseContext(), Users.Language == 0 ? "제외 되었습니다." : "It's excluded", Toast.LENGTH_SHORT).show();
                                     GetMainData();
                                 }
                             })
@@ -429,7 +435,7 @@ public class Activity0412 extends BaseActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        switch (keyCode){
+        switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_DOWN:
             case KeyEvent.KEYCODE_VOLUME_UP:
                 IntentIntegrator intentIntegrator = new IntentIntegrator(this);
@@ -445,6 +451,56 @@ public class Activity0412 extends BaseActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+    private void SetMC3300X() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"), RECEIVER_EXPORTED);
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"), RECEIVER_EXPORTED);
+        } else {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"));
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"));
+        }
+        this.mc3300X = new MC3300X(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"), RECEIVER_EXPORTED);
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"), RECEIVER_EXPORTED);
+        } else {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"));
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"));
+        }
+        mc3300X.registerReceivers();
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        mc3300X.unRegisterReceivers();
+        unregisterReceiver(mc3300GetReceiver);
+    }
+
+    BroadcastReceiver mc3300GetReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            String result = "";
+            if(intent.getAction().equals("mycustombroadcast")){
+                result = bundle.getString("mcx3300result");
+            }
+            else if(intent.getAction().equals("scan.rcv.message")){
+                result = bundle.getString("barcodeData");
+            }
+            if (result.equals(""))
+                return;
+            CommonMethod.FNBarcodeConvertPrint(result, barcodeConvertPrintViewModel);
+        }
+    };
+
     /**
      * 공통 끝
      */

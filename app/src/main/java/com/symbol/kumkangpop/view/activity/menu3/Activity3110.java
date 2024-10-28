@@ -8,7 +8,6 @@ import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -30,6 +29,11 @@ import com.symbol.kumkangpop.viewmodel.BarcodeConvertPrintViewModel;
 import com.symbol.kumkangpop.viewmodel.CommonViewModel;
 
 import java.util.ArrayList;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.IntentFilter;
+import android.os.Build;
+import com.symbol.kumkangpop.view.MC3300X;
 
 public class Activity3110 extends BaseActivity {
     Activity3110Binding binding;
@@ -38,6 +42,7 @@ public class Activity3110 extends BaseActivity {
     CommonViewModel commonViewModel;
     private ActivityResultLauncher<Intent> resultLauncher;//QR ResultLauncher
     private FloatingNavigationView mFloatingNavigationView;
+    MC3300X mc3300X;
     //String saleOrderNo;
     //String ho;
     //ArrayList<ItemTag> tempItemTagArrayList = new ArrayList<>();
@@ -52,7 +57,8 @@ public class Activity3110 extends BaseActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity3110);
         barcodeConvertPrintViewModel = new ViewModelProvider(this).get(BarcodeConvertPrintViewModel.class);
         commonViewModel = new ViewModelProvider(this).get(CommonViewModel.class);
-        binding.txtTitle.setText(Users.Language == 0 ? getString(R.string.detail_menu_3110):getString(R.string.detail_menu_3110_eng));
+        SetMC3300X();
+        binding.txtTitle.setText(Users.Language == 0 ? getString(R.string.detail_menu_3110) : getString(R.string.detail_menu_3110_eng));
         setView();
         setBar();
         setListener();
@@ -79,7 +85,7 @@ public class Activity3110 extends BaseActivity {
         sc.LocationNo = Users.LocationNo;
         sc.StockOutType = 3;
         sc.StockOutNo = "";
-        sc.StockInFlag= 1;
+        sc.StockInFlag = 1;
         commonViewModel.Get("GetStockOutData", sc);
     }
 
@@ -98,7 +104,7 @@ public class Activity3110 extends BaseActivity {
                 sc.Barcode = barcode.Barcode;
                 commonViewModel.Get2("GetNumConvertData", sc);
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
                 Users.SoundManager.playSound(0, 2, 3);//에러
             }
         });
@@ -108,7 +114,7 @@ public class Activity3110 extends BaseActivity {
             if (barcode != null) {
                 Toast.makeText(this, barcode.Result, Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
                 Users.SoundManager.playSound(0, 2, 3);//에러
             }
         });
@@ -141,7 +147,7 @@ public class Activity3110 extends BaseActivity {
                 adapter.updateAdapter(data.StockOutList);
                 adapter.getFilter().filter(binding.edtInput.getText().toString());
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
                 Users.SoundManager.playSound(0, 2, 3);//에러
                 finish();
             }
@@ -149,20 +155,19 @@ public class Activity3110 extends BaseActivity {
 
         commonViewModel.data2.observe(this, data -> {
             if (data != null) {
-                if (data.NumConvertDataList.size() == 0){
+                if (data.NumConvertDataList.size() == 0) {
                     if (Users.Language == 0) {
                         Toast.makeText(this, "해당 TAG의 이송정보를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(this, "TAG the transfer of information that can not be found.", Toast.LENGTH_SHORT).show();
                     }
                     Users.SoundManager.playSound(0, 2, 3);//에러
-                }
-                else{
+                } else {
                     String stockOutNo = data.NumConvertDataList.get(0).DestNum;
                     CommonMethod.FNSetPrintOrderData(this, barcodeConvertPrintViewModel, 4, stockOutNo);
                 }
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
                 Users.SoundManager.playSound(0, 2, 3);//에러
             }
         });
@@ -322,7 +327,7 @@ public class Activity3110 extends BaseActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        switch (keyCode){
+        switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_DOWN:
             case KeyEvent.KEYCODE_VOLUME_UP:
                 IntentIntegrator intentIntegrator = new IntentIntegrator(this);
@@ -338,6 +343,56 @@ public class Activity3110 extends BaseActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
+    private void SetMC3300X() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"), RECEIVER_EXPORTED);
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"), RECEIVER_EXPORTED);
+        } else {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"));
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"));
+        }
+        this.mc3300X = new MC3300X(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"), RECEIVER_EXPORTED);
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"), RECEIVER_EXPORTED);
+        } else {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"));
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"));
+        }
+        mc3300X.registerReceivers();
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        mc3300X.unRegisterReceivers();
+        unregisterReceiver(mc3300GetReceiver);
+    }
+
+    BroadcastReceiver mc3300GetReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            String result = "";
+            if(intent.getAction().equals("mycustombroadcast")){
+                result = bundle.getString("mcx3300result");
+            }
+            else if(intent.getAction().equals("scan.rcv.message")){
+                result = bundle.getString("barcodeData");
+            }
+            if (result.equals(""))
+                return;
+            CommonMethod.FNBarcodeConvertPrint(result, barcodeConvertPrintViewModel);
+        }
+    };
 
     /**
      * 공통 끝

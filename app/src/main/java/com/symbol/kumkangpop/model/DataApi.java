@@ -261,5 +261,23 @@ public interface DataApi {
 
     @POST("ChangeConnectionString")
     Single<Common> ChangeConnectionString(@Body SearchCondition searchCondition);
+
+    @POST("GetCarryOutData")
+    Single<Common> GetCarryOutData(@Body SearchCondition searchCondition);
+
+    @POST("GetTransferData")
+    Single<Common> GetTransferData(@Body SearchCondition searchCondition);
+
+    @POST("GetNotUsedData")
+    Single<Common> GetNotUsedData(@Body SearchCondition searchCondition);
+
+    @POST("InsertStockOut3POP")
+    Single<Common> InsertStockOut3POP(@Body SearchCondition searchCondition);
+
+    @POST("StockOutDeleteAll")
+    Single<Common> StockOutDeleteAll(@Body SearchCondition searchCondition);
+
+    @POST("GetLocation")
+    Single<Common> GetLocation(@Body SearchCondition searchCondition);
 }
 

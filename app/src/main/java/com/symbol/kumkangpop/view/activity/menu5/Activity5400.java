@@ -29,6 +29,11 @@ import com.symbol.kumkangpop.viewmodel.BarcodeConvertPrintViewModel;
 import com.symbol.kumkangpop.viewmodel.CommonViewModel;
 
 import java.util.ArrayList;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.IntentFilter;
+import android.os.Build;
+import com.symbol.kumkangpop.view.MC3300X;
 
 public class Activity5400 extends BaseActivity {
     Activity5400Binding binding;
@@ -39,6 +44,7 @@ public class Activity5400 extends BaseActivity {
     private FloatingNavigationView mFloatingNavigationView;
     int locationNo;
     int stockOutType = 0;
+    MC3300X mc3300X;
     //String saleOrderNo;
     //String ho;
     //ArrayList<ItemTag> tempItemTagArrayList = new ArrayList<>();
@@ -53,6 +59,7 @@ public class Activity5400 extends BaseActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity5400);
         barcodeConvertPrintViewModel = new ViewModelProvider(this).get(BarcodeConvertPrintViewModel.class);
         commonViewModel = new ViewModelProvider(this).get(CommonViewModel.class);
+        SetMC3300X();
         binding.txtTitle.setText(Users.Language == 0 ? getString(R.string.detail_menu_5400) : getString(R.string.detail_menu_5400_eng));
         locationNo = getIntent().getIntExtra("locationNo", -1);
         setView();
@@ -349,6 +356,56 @@ public class Activity5400 extends BaseActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
+    private void SetMC3300X() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"), RECEIVER_EXPORTED);
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"), RECEIVER_EXPORTED);
+        } else {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"));
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"));
+        }
+        this.mc3300X = new MC3300X(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"), RECEIVER_EXPORTED);
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"), RECEIVER_EXPORTED);
+        } else {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"));
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"));
+        }
+        mc3300X.registerReceivers();
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        mc3300X.unRegisterReceivers();
+        unregisterReceiver(mc3300GetReceiver);
+    }
+
+    BroadcastReceiver mc3300GetReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            String result = "";
+            if(intent.getAction().equals("mycustombroadcast")){
+                result = bundle.getString("mcx3300result");
+            }
+            else if(intent.getAction().equals("scan.rcv.message")){
+                result = bundle.getString("barcodeData");
+            }
+            if (result.equals(""))
+                return;
+            CommonMethod.FNBarcodeConvertPrint(result, barcodeConvertPrintViewModel);
+        }
+    };
 
     /**
      * 공통 끝

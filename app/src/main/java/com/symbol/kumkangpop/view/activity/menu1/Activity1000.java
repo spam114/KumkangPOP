@@ -28,7 +28,6 @@ import com.symbol.kumkangpop.databinding.Activity1000Binding;
 import com.symbol.kumkangpop.model.SearchCondition;
 import com.symbol.kumkangpop.model.object.Users;
 import com.symbol.kumkangpop.view.CommonMethod;
-import com.symbol.kumkangpop.view.TypeChanger;
 import com.symbol.kumkangpop.view.activity.BaseActivity;
 import com.symbol.kumkangpop.view.adapter.Adapter1000;
 import com.symbol.kumkangpop.viewmodel.CommonViewModel;
@@ -36,6 +35,11 @@ import com.symbol.kumkangpop.viewmodel.SimpleDataViewModel;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.IntentFilter;
+import android.os.Build;
+import com.symbol.kumkangpop.view.MC3300X;
 
 /**
  * A급
@@ -57,6 +61,7 @@ public class Activity1000 extends BaseActivity {
     public int tyear;
     public int tmonth;
     public int tdate;
+    MC3300X mc3300X;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,12 +73,13 @@ public class Activity1000 extends BaseActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity1000);
         simpleDataViewModel = new ViewModelProvider(this).get(SimpleDataViewModel.class);
         commonViewModel = new ViewModelProvider(this).get(CommonViewModel.class);
+        SetMC3300X();
         final Calendar calendar = Calendar.getInstance();
         tyear = calendar.get(Calendar.YEAR);
         tmonth = calendar.get(Calendar.MONTH);
         tdate = calendar.get(Calendar.DATE);
         binding.txtFromDate.setText("[ " + tyear + "-" + (tmonth + 1) + "-" + tdate + " ]");
-        binding.txtTitle.setText(Users.Language == 0 ? getString(R.string.menu3):getString(R.string.menu3_eng));
+        binding.txtTitle.setText(Users.Language == 0 ? getString(R.string.menu3) : getString(R.string.menu3_eng));
         setView();
         setBar();
         setListener();
@@ -89,7 +95,7 @@ public class Activity1000 extends BaseActivity {
     }
 
     private void setView() {
-        if(Users.Language==1){
+        if (Users.Language == 1) {
             binding.txtFromDate2.setText("Date");
             binding.rbNo.setText("unconfirmed");
             binding.rbYes.setText("confirmed");
@@ -156,7 +162,7 @@ public class Activity1000 extends BaseActivity {
                 // 어뎁터가 리스트를 수정한다.
                 adapter.updateAdapter(data.WoPartHistList);
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
                 Users.SoundManager.playSound(0, 2, 3);//에러
                 finish();
             }
@@ -190,12 +196,12 @@ public class Activity1000 extends BaseActivity {
                     //다시조회
                     String inDate = tyear + "-" + (tmonth + 1) + "-" + tdate;
                     GetRecyclerViewData(inDate, binding.rbNo.isChecked());
-                    Toast.makeText(this, Users.Language==0 ? "확인 되었습니다.": "It's been confirmed.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, Users.Language == 0 ? "확인 되었습니다." : "It's been confirmed.", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(this, data.toString(), Toast.LENGTH_SHORT).show();
                 }
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
                 Users.SoundManager.playSound(0, 2, 3);//에러
                 finish();
             }
@@ -255,7 +261,7 @@ public class Activity1000 extends BaseActivity {
                          */
 
 
-                        if (result.getResultCode() == 100){
+                        if (result.getResultCode() == 100) {
                             String inDate = tyear + "-" + (tmonth + 1) + "-" + tdate;
                             GetRecyclerViewData(inDate, binding.rbNo.isChecked());
                         }
@@ -273,7 +279,7 @@ public class Activity1000 extends BaseActivity {
     }
 
     public void getKeyInResult(String result) {
-        result="WP-"+result;
+        result = "WP-" + result;
         if (binding.rbNo.isChecked())//미확인 탭에 위치
             CheckAQR(result);
         else//확인 탭에 위치
@@ -287,7 +293,7 @@ public class Activity1000 extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return CommonMethod.onOptionsItemSelected(this, item, resultLauncher,1);
+        return CommonMethod.onOptionsItemSelected(this, item, resultLauncher, 1);
     }
 
     private void GoActivity1100(String result) {
@@ -320,7 +326,7 @@ public class Activity1000 extends BaseActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        switch (keyCode){
+        switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_DOWN:
             case KeyEvent.KEYCODE_VOLUME_UP:
                 IntentIntegrator intentIntegrator = new IntentIntegrator(this);
@@ -336,6 +342,59 @@ public class Activity1000 extends BaseActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
+    private void SetMC3300X() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"), RECEIVER_EXPORTED);
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"), RECEIVER_EXPORTED);
+        } else {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"));
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"));
+        }
+        this.mc3300X = new MC3300X(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"), RECEIVER_EXPORTED);
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"), RECEIVER_EXPORTED);
+        } else {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"));
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"));
+        }
+        mc3300X.registerReceivers();
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        mc3300X.unRegisterReceivers();
+        unregisterReceiver(mc3300GetReceiver);
+    }
+
+    BroadcastReceiver mc3300GetReceiver =  new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            String result = "";
+            if(intent.getAction().equals("mycustombroadcast")){
+                result = bundle.getString("mcx3300result");
+            }
+            else if(intent.getAction().equals("scan.rcv.message")){
+                result = bundle.getString("barcodeData");
+            }
+            if (result.equals(""))
+                return;
+            if (binding.rbNo.isChecked())//미확인 탭에 위치
+                CheckAQR(result);
+            else//확인 탭에 위치
+                GoActivity1100(result);
+        }
+    };
 
     /**
      * 공용부분 END

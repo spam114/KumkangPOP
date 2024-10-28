@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">금강공업 음성공장</string>
+    <string name="app_name">KK POP</string>
     <string name="service_address">http://211.245.239.53:2224/Service/json/</string><!--본DB-->
     <string name="service_address_test">http://211.245.239.53:2228/Service/json/</string><!--테스트DB-->
     <string name="service_address_kkm">http://211.245.239.53:2230/Service/json/</string><!--KKM-->
@@ -39,14 +39,17 @@
     <string name="menu18">재고 이입</string>
     <string name="menu19">출고 검수</string>
     <string name="menu20">자료 송신</string>
+    <string name="menu21">원자재</string>
+    <string name="menu22">원자재 불출</string>
+    <string name="menu23">원자재 이동</string>
 
     <string name="menu1_eng">Production Result</string>
-    <string name="menu2_eng">Register Short Blast</string>
+    <string name="menu2_eng">Register Shot Blast</string>
     <string name="menu3_eng">Register Planned Production</string>
     <string name="menu4_eng">Analysis of the status</string>
     <string name="menu5_eng">Carry-in status(Weight)</string>
     <string name="menu6_eng">Carry-in status(Classification)</string>
-    <string name="menu7_eng">Short Blast Prodcution Status</string>
+    <string name="menu7_eng">Shot Blast Prodcution Status</string>
     <string name="menu8_eng">Production Result(New/Repair)</string>
     <string name="menu9_eng">Release Status</string>
     <string name="menu10_eng">Packing/Release</string>
@@ -60,6 +63,9 @@
     <string name="menu18_eng">Bring in Stock</string>
     <string name="menu19_eng">Check Shipment</string>
     <string name="menu20_eng">Transmit Data</string>
+    <string name="menu21_eng">Raw Material</string>
+    <string name="menu22_eng">Carry Out Raw Material</string>
+    <string name="menu23_eng">Transfer Raw Material</string>
 
     <string name="detail_menu_0000">제품 포장</string>
     <string name="detail_menu_0010">제품 포장</string>
@@ -156,4 +162,11 @@
     <string name="detail_menu_6200_eng">Inspect Packing</string>
     <string name="detail_menu_6130_eng">Inspect Production</string>
     <string name="detail_menu_6300_eng">Inspect Production</string>
+
+    <string name="activity_intent_filter_action">com.zebra.datacapture1.ACTION</string>
+    <string name="activity_action_from_service">com.zebra.datacapture1.service.ACTION</string>
+    <string name="datawedge_intent_key_source">com.symbol.datawedge.source</string>
+    <string name="datawedge_intent_key_label_type">com.symbol.datawedge.label_type</string>
+    <string name="datawedge_intent_key_data">com.symbol.datawedge.data_string</string>
+
 </resources>

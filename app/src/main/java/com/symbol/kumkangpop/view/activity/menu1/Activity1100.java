@@ -1,5 +1,6 @@
 package com.symbol.kumkangpop.view.activity.menu1;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -31,11 +32,15 @@ import com.symbol.kumkangpop.model.object.Users;
 import com.symbol.kumkangpop.model.object.WoPartHist;
 import com.symbol.kumkangpop.view.TypeChanger;
 import com.symbol.kumkangpop.view.activity.BaseActivity;
-import com.symbol.kumkangpop.view.activity.menu9.Activity9100;
 import com.symbol.kumkangpop.viewmodel.AEditModel;
 import com.symbol.kumkangpop.viewmodel.SimpleDataViewModel;
 
 import java.text.DecimalFormat;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.IntentFilter;
+import android.os.Build;
+import com.symbol.kumkangpop.view.MC3300X;
 
 /**
  * A급
@@ -46,6 +51,7 @@ public class Activity1100 extends BaseActivity {
     AEditModel aEditModel;
     String tagNo;
     WoPartHist woPartHist;
+    MC3300X mc3300X;
     int selectedPartIndex = 0;
     int selectedPartSpecIndex = 0;
     //List<Part> part
@@ -62,6 +68,7 @@ public class Activity1100 extends BaseActivity {
         woPartHist = new WoPartHist();
         simpleDataViewModel = new ViewModelProvider(this).get(SimpleDataViewModel.class);
         aEditModel = new ViewModelProvider(this).get(AEditModel.class);
+        SetMC3300X();
         tagNo = getIntent().getStringExtra("result");
         createQRcode(binding.imvQR, tagNo);
         setListener();
@@ -110,11 +117,11 @@ public class Activity1100 extends BaseActivity {
                 sc.WorksOrderNo = woPartHist.WorksOrderNo;
                 sc.WorderRequestNo = woPartHist.WorderRequestNo;
                 sc.PartCode = woPartHist.PartCode;
-                sc.PartSpec= woPartHist.PartSpec;
+                sc.PartSpec = woPartHist.PartSpec;
                 sc.MSpec = woPartHist.MSpec;
-                sc.ProductionType = (int)woPartHist.ProductionType;
+                sc.ProductionType = (int) woPartHist.ProductionType;
                 sc.ReceivedQty = woPartHist.ReceivedQty;
-                sc.AssetsType = (int)woPartHist.AssetsType;
+                sc.AssetsType = (int) woPartHist.AssetsType;
                 sc.WorkDate = woPartHist.WorkDate;
                 sc.BundelQty = woPartHist.BundelQty;
 
@@ -128,12 +135,12 @@ public class Activity1100 extends BaseActivity {
         String msg;
         String hint;
         if (type == 1) {//번들순번
-            titleName = Users.Language==0 ? "포장수량 입력": "Input packing quantity";
-            msg = Users.Language==0 ? "포장수량을 입력해 주세요.": "Please input packing quantity";
+            titleName = Users.Language == 0 ? "포장수량 입력" : "Input packing quantity";
+            msg = Users.Language == 0 ? "포장수량을 입력해 주세요." : "Please input packing quantity";
             hint = "Quantity";
         } else {//중량
-            titleName = Users.Language==0 ? "번들 순번 입력": "Enter bundle order";
-            msg = Users.Language==0 ? "번들 순번을 입력해 주세요.": "Please enter bundle order";
+            titleName = Users.Language == 0 ? "번들 순번 입력" : "Enter bundle order";
+            msg = Users.Language == 0 ? "번들 순번을 입력해 주세요." : "Please enter bundle order";
             hint = "Bundle order";
         }
 
@@ -168,14 +175,14 @@ public class Activity1100 extends BaseActivity {
                 if (type == 1) {//포장수량 확인 버튼
                     double num = Double.parseDouble(output);
 
-                    if(num<=0){
-                        Toast.makeText(Activity1100.this, Users.Language==0 ? "수량은 0보다 커야합니다.": "Quantity must be greater than zero.", Toast.LENGTH_SHORT).show();
+                    if (num <= 0) {
+                        Toast.makeText(Activity1100.this, Users.Language == 0 ? "수량은 0보다 커야합니다." : "Quantity must be greater than zero.", Toast.LENGTH_SHORT).show();
                         Users.SoundManager.playSound(0, 2, 3);//에러
                         return;
                     }
 
-                    if(woPartHist.ReceivedQty-num >10 || woPartHist.ReceivedQty-num < -10){
-                        Toast.makeText(Activity1100.this, Users.Language==0 ? "포장수량은 ±10개까지 변경 가능합니다.": "Packing quantity can be changed up to ±10.", Toast.LENGTH_SHORT).show();
+                    if (woPartHist.ReceivedQty - num > 10 || woPartHist.ReceivedQty - num < -10) {
+                        Toast.makeText(Activity1100.this, Users.Language == 0 ? "포장수량은 ±10개까지 변경 가능합니다." : "Packing quantity can be changed up to ±10.", Toast.LENGTH_SHORT).show();
                         Users.SoundManager.playSound(0, 2, 3);//에러
                         return;
                     }
@@ -245,7 +252,7 @@ public class Activity1100 extends BaseActivity {
                     DrawTag(woPartHist);
                 }
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
                 Users.SoundManager.playSound(0, 2, 3);//에러
                 finish();
             }
@@ -276,13 +283,12 @@ public class Activity1100 extends BaseActivity {
         DecimalFormat numFormatter = new DecimalFormat("###,###");
         binding.txtQty.setText(numFormatter.format(woPartHist.ReceivedQty) + " EA");
         String workDate;
-        try{
-            workDate = woPartHist.WorkDate.split("-")[1]+"/"+woPartHist.WorkDate.split("-")[2];
+        try {
+            workDate = woPartHist.WorkDate.split("-")[1] + "/" + woPartHist.WorkDate.split("-")[2];
+        } catch (Exception e) {
+            workDate = "";
         }
-        catch (Exception e){
-            workDate="";
-        }
-        binding.txtWorkDate.setText(workDate+" ("+numFormatter.format(woPartHist.BundelQty)+")");
+        binding.txtWorkDate.setText(workDate + " (" + numFormatter.format(woPartHist.BundelQty) + ")");
     }
 
     /**
@@ -302,7 +308,7 @@ public class Activity1100 extends BaseActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        switch (keyCode){
+        switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_DOWN:
             case KeyEvent.KEYCODE_VOLUME_UP:
                 IntentIntegrator intentIntegrator = new IntentIntegrator(this);
@@ -318,6 +324,56 @@ public class Activity1100 extends BaseActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
+    private void SetMC3300X() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"), RECEIVER_EXPORTED);
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"), RECEIVER_EXPORTED);
+        } else {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"));
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"));
+        }
+        this.mc3300X = new MC3300X(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"), RECEIVER_EXPORTED);
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"), RECEIVER_EXPORTED);
+        } else {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"));
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"));
+        }
+        mc3300X.registerReceivers();
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        mc3300X.unRegisterReceivers();
+        unregisterReceiver(mc3300GetReceiver);
+    }
+
+    BroadcastReceiver mc3300GetReceiver =  new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            String result = "";
+            if(intent.getAction().equals("mycustombroadcast")){
+                result = bundle.getString("mcx3300result");
+            }
+            else if(intent.getAction().equals("scan.rcv.message")){
+                result = bundle.getString("barcodeData");
+            }
+            if (result.equals(""))
+                return;
+            getKeyInResult(result);
+        }
+    };
 
     /**
      * 공용부분 END

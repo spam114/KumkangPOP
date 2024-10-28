@@ -34,6 +34,11 @@ import com.symbol.kumkangpop.viewmodel.CommonViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.IntentFilter;
+import android.os.Build;
+import com.symbol.kumkangpop.view.MC3300X;
 
 public class Activity3200 extends BaseActivity {
     Activity3200Binding binding;
@@ -48,8 +53,8 @@ public class Activity3200 extends BaseActivity {
     int stockOutType = 3;
     int gStockOutLocationNo = 0;
     String packingNo = "";
-
     public String tempPackingNo = "";
+    MC3300X mc3300X;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +66,7 @@ public class Activity3200 extends BaseActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity3200);
         barcodeConvertPrintViewModel = new ViewModelProvider(this).get(BarcodeConvertPrintViewModel.class);
         commonViewModel = new ViewModelProvider(this).get(CommonViewModel.class);
+        SetMC3300X();
         binding.txtTitle.setText(Users.Language == 0 ? getString(R.string.detail_menu_3200) : getString(R.string.detail_menu_3200_eng));
         gStockOutLocationNo = getIntent().getIntExtra("locationNo", -1);
         setView();
@@ -688,6 +694,89 @@ public class Activity3200 extends BaseActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
+    private void SetMC3300X() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"), RECEIVER_EXPORTED);
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"), RECEIVER_EXPORTED);
+        } else {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"));
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"));
+        }
+        this.mc3300X = new MC3300X(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"), RECEIVER_EXPORTED);
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"), RECEIVER_EXPORTED);
+        } else {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"));
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"));
+        }
+        mc3300X.registerReceivers();
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        mc3300X.unRegisterReceivers();
+        unregisterReceiver(mc3300GetReceiver);
+    }
+
+    BroadcastReceiver mc3300GetReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            String result = "";
+            if(intent.getAction().equals("mycustombroadcast")){
+                result = bundle.getString("mcx3300result");
+            }
+            else if(intent.getAction().equals("scan.rcv.message")){
+                result = bundle.getString("barcodeData");
+            }
+
+            for (int i = 0; i < adapter.getItemList().size(); i++) {
+                if (adapter.getItem(i).PackingNo.equalsIgnoreCase(result)) {
+                    String title = "작업목록 제외";
+                    String message = "작업목록에서 제외하시겠습니까?\n" + result;
+                    String okString = "확인";
+                    String noString = "취소";
+
+                    if (Users.Language != 0) {
+                        title = "Exclude Task List";
+                        message = "Are you sure you want to exclude it from the task list?\n" + result;
+                        okString = "Confirm";
+                        noString = "Cancel";
+                    }
+
+                    String finalResult = result;
+                    new MaterialAlertDialogBuilder(Activity3200.this)
+                            .setTitle(title)
+                            .setMessage(message)
+                            .setCancelable(true)
+                            .setPositiveButton(okString, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Scanning(finalResult);
+                                }
+                            })
+                            .setNegativeButton(noString, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            }).show();
+                    return;
+                }
+            }
+            Scanning(result);
+        }
+    };
 
     /**
      * 공통 끝

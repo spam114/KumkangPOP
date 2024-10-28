@@ -82,7 +82,6 @@ public class AEditModel extends ViewModel {
                         loadError.setValue(false);
                         loading.setValue(false);
                     }
-
                     @Override
                     public void onError(@NonNull Throwable e) {
                         errorMsg.setValue("서버 오류 발생");

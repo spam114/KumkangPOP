@@ -139,21 +139,24 @@ public class SplashScreenActivity extends BaseActivity {
 
                 Uri uri = Uri.parse(downloadUrl);
                 DownloadManager.Request req = new DownloadManager.Request(uri);
-                req.setTitle("금강공업 POP 어플리케이션 다운로드");
+                req.setTitle("KK POP 어플리케이션 다운로드");
                 req.setDestinationInExternalFilesDir(SplashScreenActivity.this, Environment.DIRECTORY_DOWNLOADS, "KUMKANG.apk");
 
                 //req.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, pathSegments.get(pathSegments.size() - 1));
                 //Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).mkdirs();
 
 
-                req.setDescription("금강공업 POP 어플리케이션 설치파일을 다운로드 합니다.");
+                req.setDescription("KK POP 어플리케이션 설치파일을 다운로드 합니다.");
                 req.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
                 mId = mDm.enqueue(req);
                 IntentFilter filter = new IntentFilter();
                 filter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
 
-                registerReceiver(mDownComplete2, filter);
-
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    registerReceiver(mDownComplete2, filter, RECEIVER_EXPORTED);
+                }else {
+                    registerReceiver(mDownComplete2, filter);
+                }
             }
         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override

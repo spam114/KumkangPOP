@@ -4,11 +4,11 @@
 
     <item
         android:id="@+id/itemBusiness"
-        android:title="메뉴0"
-        app:showAsAction="always"
         android:background="#FFFFFF"
+        android:enabled="true"
+        android:title="메뉴0"
         app:actionViewClass="android.widget.Spinner"
-        />
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/itemKeyboard"

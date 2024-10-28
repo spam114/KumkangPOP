@@ -1,4 +1,4 @@
-package com.symbol.kumkangpop.view.activity.menu0;
+package com.symbol.kumkangpop.view.activity.rawmaterial;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -7,14 +7,16 @@ import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.databinding.DataBindingUtil;
@@ -23,15 +25,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.andremion.floatingnavigationview.FloatingNavigationView;
 import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.symbol.kumkangpop.R;
-import com.symbol.kumkangpop.databinding.Activity0122Binding;
+import com.symbol.kumkangpop.databinding.ActivityCarryOutRawMaterialBinding;
 import com.symbol.kumkangpop.model.SearchCondition;
 import com.symbol.kumkangpop.model.object.Users;
 import com.symbol.kumkangpop.view.CommonMethod;
 import com.symbol.kumkangpop.view.MC3300X;
 import com.symbol.kumkangpop.view.activity.BaseActivity;
-import com.symbol.kumkangpop.view.adapter.Adapter0122;
-import com.symbol.kumkangpop.viewmodel.BarcodeConvertPrintViewModel;
+import com.symbol.kumkangpop.view.adapter.CarryOutRawMaterialAdapter;
 import com.symbol.kumkangpop.viewmodel.CommonViewModel;
 
 import java.util.ArrayList;
@@ -39,14 +41,12 @@ import java.util.ArrayList;
 /**
  * 제품포장
  */
-public class Activity0122 extends BaseActivity {
-    Activity0122Binding binding;
-    Adapter0122 adapter;
-    BarcodeConvertPrintViewModel barcodeConvertPrintViewModel;
+public class CarryOutRawMaterialActivity extends BaseActivity {
+    ActivityCarryOutRawMaterialBinding binding;
+    CarryOutRawMaterialAdapter adapter;
     CommonViewModel commonViewModel;
     private ActivityResultLauncher<Intent> resultLauncher;//QR ResultLauncher
     private FloatingNavigationView mFloatingNavigationView;
-    String saleOrderNo;
     MC3300X mc3300X;
 
     @Override
@@ -56,78 +56,73 @@ public class Activity0122 extends BaseActivity {
     }
 
     private void init() {
-        binding = DataBindingUtil.setContentView(this, R.layout.activity0122);
-        barcodeConvertPrintViewModel = new ViewModelProvider(this).get(BarcodeConvertPrintViewModel.class);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_carry_out_raw_material);
         commonViewModel = new ViewModelProvider(this).get(CommonViewModel.class);
         SetMC3300X();
-        binding.txtTitle.setText(Users.Language == 0 ? getString(R.string.detail_menu_0122) : getString(R.string.detail_menu_0122_eng));
-        saleOrderNo = getIntent().getStringExtra("saleOrderNo");
+        binding.txtTitle.setText(Users.Language == 0 ? getString(R.string.menu22) : getString(R.string.menu22_eng));
         setView();
         setBar();
         setListener();
         setFloatingNavigationView();
         setResultLauncher();
-        adapter = new Adapter0122(new ArrayList<>(), this, resultLauncher, commonViewModel, barcodeConvertPrintViewModel);
+        adapter = new CarryOutRawMaterialAdapter(new ArrayList<>(), this, resultLauncher, commonViewModel);
         observerViewModel();
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerView.setAdapter(adapter);
-        GetMainData();
+        GetBusinessClassDataAll();
     }
 
     private void setView() {
         if (Users.Language == 1) {
-            binding.textViewWorkDate4.setText("PackingNo");
-            binding.textViewWorkDate.setText("Block");
-            binding.textViewWorkType.setText("Zone");
-            binding.textViewWorkType4.setText("NO");
-            binding.textInputLayout.setHint("PackingNo");
+            binding.textView24.setText("Company");//사업장
+            binding.textView51.setText("Please scan the raw material TAG.");
+            binding.textViewWorkDate.setText("TAG NO");
+            binding.textViewWorkDate2.setText("Location");
+            binding.textViewWorkDate3.setText("Part");
+            binding.textViewWorkDate4.setText("Spec");
+            binding.textViewWorkDate5.setText("Qty");
+            binding.textViewWorkDate6.setText("StockoutNo");
         }
     }
 
-    private void GetMainData() {
+    private void GetBusinessClassDataAll() {
         SearchCondition sc = new SearchCondition();
-        sc.SaleOrderNo = saleOrderNo;
-        sc.LocationNo = Users.LocationNo;
-        sc.PackingNo = "";
-        commonViewModel.Get("GetPackingData", sc);
+        commonViewModel.Get("GetBusinessClassDataAll", sc);
+    }
+
+    private void GetMainData(String itemTag) {
+        SearchCondition sc = new SearchCondition();
+        int businessClassCode = 0;
+        try {
+            businessClassCode = Integer.parseInt(binding.comboBusiness.getText().toString().split("-")[0]);
+        } catch (Exception et) {
+            Users.SoundManager.playSound(0, 2, 3);//에러
+            return;
+        }
+        sc.BusinessClassCode = businessClassCode;
+        sc.ItemTag = itemTag;
+        commonViewModel.Get2("GetCarryOutData", sc);
     }
 
     public void observerViewModel() {
-        //바코드 스캔 후 동작
-        barcodeConvertPrintViewModel.data.observe(this, barcode -> {
-            if (barcode != null) {
-                if (barcode.Barcode.equals("")) return;
 
-                SearchCondition sc = new SearchCondition();
-                sc.IConvetDivision = 2;
-                sc.Barcode = barcode.Barcode;
-                //recyclerViewModel.cData = sc.Barcode;
-                commonViewModel.Get2("GetNumConvertData", sc);
-            } else {
-                Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
-                Users.SoundManager.playSound(0, 2, 3);//에러
-            }
-        });
-
-        barcodeConvertPrintViewModel.data2.observe(this, result -> {
+        /*barcodeConvertPrintViewModel.data2.observe(this, result -> {
             if (result != null) {
                 Toast.makeText(this, result.Result, Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
-                Users.SoundManager.playSound(0, 2, 3);//에러
+                Toast.makeText(this, "서버 연결 오류", Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
 
-        //에러메시지
+        /*//에러메시지
         barcodeConvertPrintViewModel.errorMsg.observe(this, models -> {
             if (models != null) {
                 Toast.makeText(this, models, Toast.LENGTH_SHORT).show();
-                Users.SoundManager.playSound(0, 2, 3);//에러
                 progressOFF2();
             }
-        });
+        });*/
 
-        barcodeConvertPrintViewModel.loading.observe(this, isLoading -> {
+        /*barcodeConvertPrintViewModel.loading.observe(this, isLoading -> {
             if (isLoading != null) {
                 if (isLoading) {//로딩중
                     startProgress();
@@ -135,13 +130,29 @@ public class Activity0122 extends BaseActivity {
                     progressOFF2();
                 }
             }
-        });
+        });*/
 
         commonViewModel.data.observe(this, data -> {
             if (data != null) {
-                binding.recyclerView.setVisibility(View.VISIBLE);
+                String[] items = new String[data.BusinessClassList.size()];
+                String initBusiness = "";
+                for (int i = 0; i < items.length; i++) {
+                    items[i] = (int) data.BusinessClassList.get(i).BusinessClassCode + "-" + data.BusinessClassList.get(i).CompanyName.replace("금강공업(주)", "");
+                    if (Users.BusinessClassCode == data.BusinessClassList.get(i).BusinessClassCode) {
+                        initBusiness = items[i];
+                    }
+                }
+
+                ArrayAdapter<String> itemAdapter = new ArrayAdapter<>(this, R.layout.item_list, items);
+                binding.comboBusiness.setAdapter(itemAdapter);
+                binding.comboBusiness.setInputType(0);
+                binding.comboBusiness.setText(initBusiness, false);
+
+                GetMainData("");
+
+                /*binding.recyclerView.setVisibility(View.VISIBLE);
                 // 어뎁터가 리스트를 수정한다.
-                adapter.updateAdapter(data.PackingList);
+                adapter.updateAdapter(data.PackingList);*/
             } else {
                 Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
                 Users.SoundManager.playSound(0, 2, 3);//에러
@@ -151,13 +162,7 @@ public class Activity0122 extends BaseActivity {
 
         commonViewModel.data2.observe(this, data -> {
             if (data != null) {
-                if (data.NumConvertDataList.size() == 0) {
-                    Toast.makeText(this, Users.Language == 0 ? "해당 TAG의 포장정보를 찾을 수 없습니다." : "TAG's packaging information that could not be found.", Toast.LENGTH_SHORT).show();
-                    Users.SoundManager.playSound(0, 2, 3);//에러
-                    return;
-                } else {
-                    CommonMethod.FNSetPrintOrderData(this, barcodeConvertPrintViewModel, 1, data.NumConvertDataList.get(0).DestNum);
-                }
+                adapter.updateAdapter(data.StockOut3DetailList, data.StrResult);
             } else {
                 Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
                 Users.SoundManager.playSound(0, 2, 3);//에러
@@ -166,14 +171,13 @@ public class Activity0122 extends BaseActivity {
 
         commonViewModel.data3.observe(this, data -> {
             if (data != null) {
-
-
+                //adapter.updateAdapter(data.StockOut3DetailList);
+                GetMainData(data.StrResult);
             } else {
                 Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
                 Users.SoundManager.playSound(0, 2, 3);//에러
             }
         });
-
 
         //에러메시지
         commonViewModel.errorMsg.observe(this, models -> {
@@ -199,7 +203,7 @@ public class Activity0122 extends BaseActivity {
         /**
          * forfilter
          */
-        binding.edtInput.addTextChangedListener(new TextWatcher() {
+        /*binding.edtInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -214,7 +218,32 @@ public class Activity0122 extends BaseActivity {
             public void afterTextChanged(Editable s) {
 
             }
+        });*/
+
+        binding.comboBusiness.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                GetMainData("");
+            }
         });
+    }
+
+    private void InsertCarryOutRawMaterial(String itemTag) {
+        SearchCondition sc = new SearchCondition();
+        int businessClassCode = 0;
+        try {
+            businessClassCode = Integer.parseInt(binding.comboBusiness.getText().toString().split("-")[0]);
+        } catch (Exception et) {
+            Users.SoundManager.playSound(0, 2, 3);//에러
+            return;
+        }
+        sc.BusinessClassCode = businessClassCode;
+        sc.ItemTag = itemTag;
+        sc.StockOutType = 12;//11:창고이동, 12:투입불출
+        sc.LocationNo = -1;//투입불출은 로직에서 itemTag의 GetByKey로 창고를 찾는다.
+        sc.ServiceType = Users.ServiceType;
+        sc.UserID = Users.UserID;
+        commonViewModel.Get3("InsertStockOut3POP", sc);
     }
 
     /**
@@ -251,7 +280,7 @@ public class Activity0122 extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return CommonMethod.onOptionsItemSelected(this, item, resultLauncher, 2);
+        return CommonMethod.onOptionsItemSelected(this, item, resultLauncher, 1);
     }
 
     ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
@@ -271,13 +300,35 @@ public class Activity0122 extends BaseActivity {
      * 스캔 인식
      */
     private void setResultLauncher() {
-        resultLauncher = CommonMethod.FNBarcodeConvertPrint(this, barcodeConvertPrintViewModel);
-    }
+        resultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
 
+                        /**
+                         * QR코드 시작
+                         */
+                        IntentResult intentResult = IntentIntegrator.parseActivityResult(result.getResultCode(), result.getData());
+                        if (intentResult.getContents() != null) {
+                            String scanResult = intentResult.getContents();
+                            //scanResult = result.getContents();
+                            InsertCarryOutRawMaterial(scanResult);
+                            return;
+                        }
+                        /**
+                         * QR코드 끝
+                         */
+                        if (result.getResultCode() == 100) {
+                            GetMainData("");
+                        }
+                    }
+                });
+    }
     public void getKeyInResult(String result) {
         if (result.equals(""))
             return;
-        CommonMethod.FNBarcodeConvertPrint(result, barcodeConvertPrintViewModel);
+        InsertCarryOutRawMaterial("EI-" + result);
     }
 
     @Override
@@ -336,15 +387,14 @@ public class Activity0122 extends BaseActivity {
         public void onReceive(Context context, Intent intent) {
             Bundle bundle = intent.getExtras();
             String result = "";
-            if(intent.getAction().equals("mycustombroadcast")){
+            if (intent.getAction().equals("mycustombroadcast")) {
                 result = bundle.getString("mcx3300result");
-            }
-            else if(intent.getAction().equals("scan.rcv.message")){
+            } else if (intent.getAction().equals("scan.rcv.message")) {
                 result = bundle.getString("barcodeData");
             }
             if (result.equals(""))
                 return;
-            getKeyInResult(result);
+            InsertCarryOutRawMaterial(result);
         }
     };
 

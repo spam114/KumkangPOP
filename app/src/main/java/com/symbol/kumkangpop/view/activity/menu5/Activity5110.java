@@ -7,7 +7,6 @@ import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Base64;
@@ -43,6 +42,11 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.IntentFilter;
+import android.os.Build;
+import com.symbol.kumkangpop.view.MC3300X;
 
 /**
  * 제품포장
@@ -56,6 +60,7 @@ public class Activity5110 extends BaseActivity {
     String containerNo;
     int locationNo;
     File filePath;
+    MC3300X mc3300X;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +72,8 @@ public class Activity5110 extends BaseActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity5110);
         barcodeConvertPrintViewModel = new ViewModelProvider(this).get(BarcodeConvertPrintViewModel.class);
         commonViewModel = new ViewModelProvider(this).get(CommonViewModel.class);
-        binding.txtTitle.setText(Users.Language == 0 ? getString(R.string.detail_menu_5110):getString(R.string.detail_menu_5110_eng));
+        SetMC3300X();
+        binding.txtTitle.setText(Users.Language == 0 ? getString(R.string.detail_menu_5110) : getString(R.string.detail_menu_5110_eng));
         containerNo = getIntent().getStringExtra("containerNo");
         locationNo = getIntent().getIntExtra("locationNo", -1);
         setView();
@@ -147,7 +153,7 @@ public class Activity5110 extends BaseActivity {
                 if (barcode.Barcode.equals(""))
                     return;
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
                 Users.SoundManager.playSound(0, 2, 3);//에러
             }
         });
@@ -186,7 +192,7 @@ public class Activity5110 extends BaseActivity {
                 // 어뎁터가 리스트를 수정한다.
                 adapter.updateAdapter(TypeChanger.changeTypeSalesOrderList(dataList));*/
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
                 Users.SoundManager.playSound(0, 2, 3);//에러
                 finish();
             }
@@ -206,7 +212,7 @@ public class Activity5110 extends BaseActivity {
                 }
                 saveContainer();
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
                 Users.SoundManager.playSound(0, 2, 3);//에러
                 finish();
             }
@@ -250,7 +256,7 @@ public class Activity5110 extends BaseActivity {
                 }
                 //Toast.makeText(this, "완료되었습니다.", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
                 Users.SoundManager.playSound(0, 2, 3);//에러
                 finish();
             }
@@ -258,14 +264,13 @@ public class Activity5110 extends BaseActivity {
 
         commonViewModel.data4.observe(this, data -> {
             if (data != null) {
-                if(data.BoolResult){
+                if (data.BoolResult) {
                     if (Users.Language == 0) {
                         Toast.makeText(this, "사진이 저장되었습니다.", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(this, "Photos have been saved.", Toast.LENGTH_SHORT).show();
                     }
-                }
-                else{
+                } else {
                     if (Users.Language == 0) {
                         Toast.makeText(this, "진행중에 오류가 발생하였습니다.", Toast.LENGTH_SHORT).show();
                     } else {
@@ -274,7 +279,7 @@ public class Activity5110 extends BaseActivity {
                     Users.SoundManager.playSound(0, 2, 3);//에러
                 }
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
                 Users.SoundManager.playSound(0, 2, 3);//에러
                 finish();
             }
@@ -349,7 +354,7 @@ public class Activity5110 extends BaseActivity {
         binding.btnImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(binding.edtContainerNo2.getText().toString().equals("")){
+                if (binding.edtContainerNo2.getText().toString().equals("")) {
                     if (Users.Language == 0) {
                         Toast.makeText(getBaseContext(), "컨테이너 정보를 먼저 저장해 주십시요.", Toast.LENGTH_SHORT).show();
                     } else {
@@ -366,7 +371,7 @@ public class Activity5110 extends BaseActivity {
 
     private void startCamera() {
         try {
-            Uri photoUri = FileProvider.getUriForFile(getBaseContext(), getApplication().getPackageName() + ".fileprovider" , filePath);
+            Uri photoUri = FileProvider.getUriForFile(getBaseContext(), getApplication().getPackageName() + ".fileprovider", filePath);
 
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
@@ -465,7 +470,7 @@ public class Activity5110 extends BaseActivity {
 
                         Bitmap bmRotated = rotateBitmap(bitmap, orientation);
 
-                        try{
+                        try {
                             byte[] byteArray = null;
                             ByteArrayOutputStream bStream = new ByteArrayOutputStream();
                             bmRotated.compress(Bitmap.CompressFormat.JPEG, 100, bStream);
@@ -479,8 +484,7 @@ public class Activity5110 extends BaseActivity {
                             //sc.ImageName = sc.ContainerNo+"_"+
                             sc.UserID = Users.UserID;
                             commonViewModel.Get4("InsertContainerPictureData", sc);
-                        }
-                        catch (Exception et){
+                        } catch (Exception et) {
                             et.printStackTrace();
                         }
 
@@ -574,7 +578,7 @@ public class Activity5110 extends BaseActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        switch (keyCode){
+        switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_DOWN:
             case KeyEvent.KEYCODE_VOLUME_UP:
                 IntentIntegrator intentIntegrator = new IntentIntegrator(this);
@@ -590,6 +594,56 @@ public class Activity5110 extends BaseActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
+    private void SetMC3300X() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"), RECEIVER_EXPORTED);
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"), RECEIVER_EXPORTED);
+        } else {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"));
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"));
+        }
+        this.mc3300X = new MC3300X(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"), RECEIVER_EXPORTED);
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"), RECEIVER_EXPORTED);
+        } else {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"));
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"));
+        }
+        mc3300X.registerReceivers();
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        mc3300X.unRegisterReceivers();
+        unregisterReceiver(mc3300GetReceiver);
+    }
+
+    BroadcastReceiver mc3300GetReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            String result = "";
+            if(intent.getAction().equals("mycustombroadcast")){
+                result = bundle.getString("mcx3300result");
+            }
+            else if(intent.getAction().equals("scan.rcv.message")){
+                result = bundle.getString("barcodeData");
+            }
+            if (result.equals(""))
+                return;
+            CommonMethod.FNBarcodeConvertPrint(result, barcodeConvertPrintViewModel);
+        }
+    };
 
     /**
      * 공통 끝

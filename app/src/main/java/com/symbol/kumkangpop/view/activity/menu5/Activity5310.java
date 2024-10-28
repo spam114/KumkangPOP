@@ -1,6 +1,5 @@
 package com.symbol.kumkangpop.view.activity.menu5;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,6 +32,12 @@ import com.symbol.kumkangpop.viewmodel.BarcodeConvertPrintViewModel;
 import com.symbol.kumkangpop.viewmodel.CommonViewModel;
 
 import java.util.ArrayList;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.IntentFilter;
+import android.os.Build;
+import com.symbol.kumkangpop.view.MC3300X;
+
 
 /**
  * 제품포장
@@ -45,7 +50,8 @@ public class Activity5310 extends BaseActivity {
     private FloatingNavigationView mFloatingNavigationView;
     String stockOutNo;
     int locationNo;
-    int stockOutType=0;
+    int stockOutType = 0;
+    MC3300X mc3300X;
     //File filePath;
 
     @Override
@@ -58,7 +64,8 @@ public class Activity5310 extends BaseActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity5310);
         barcodeConvertPrintViewModel = new ViewModelProvider(this).get(BarcodeConvertPrintViewModel.class);
         commonViewModel = new ViewModelProvider(this).get(CommonViewModel.class);
-        binding.txtTitle.setText(Users.Language == 0 ? getString(R.string.detail_menu_5310):getString(R.string.detail_menu_5310_eng));
+        SetMC3300X();
+        binding.txtTitle.setText(Users.Language == 0 ? getString(R.string.detail_menu_5310) : getString(R.string.detail_menu_5310_eng));
         stockOutNo = getIntent().getStringExtra("stockOutNo");
         locationNo = getIntent().getIntExtra("locationNo", -1);
         setView();
@@ -119,7 +126,7 @@ public class Activity5310 extends BaseActivity {
                 if (barcode.Barcode.equals(""))
                     return;
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
                 Users.SoundManager.playSound(0, 2, 3);//에러
             }
         });
@@ -143,13 +150,13 @@ public class Activity5310 extends BaseActivity {
                     }
                     binding.edt6.setText(tempArrayList.get(0).AreaCode);
                     binding.edt7.setText(Double.toString(tempArrayList.get(0).CarTon));
-                    binding.edt8.setText(Integer.toString((int)tempArrayList.get(0).TransportAmt));
+                    binding.edt8.setText(Integer.toString((int) tempArrayList.get(0).TransportAmt));
                     binding.edt9.setText(tempArrayList.get(0).CarNumber);
                     binding.edt10.setText(tempArrayList.get(0).Remark1);
                     binding.edt11.setText(tempArrayList.get(0).Remark2);
                 }
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
                 Users.SoundManager.playSound(0, 2, 3);//에러
                 finish();
             }
@@ -157,14 +164,13 @@ public class Activity5310 extends BaseActivity {
 
         commonViewModel.data2.observe(this, data -> {
             if (data != null) {
-                if(data.BoolResult){
+                if (data.BoolResult) {
                     if (Users.Language == 0) {
                         Toast.makeText(this, "정상 등록되었습니다.", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(this, "Normal has been registered.", Toast.LENGTH_SHORT).show();
                     }
-                }
-                else{
+                } else {
                     if (Users.Language == 0) {
                         Toast.makeText(this, "진행중에 오류가 발생하였습니다.", Toast.LENGTH_SHORT).show();
                     } else {
@@ -174,7 +180,7 @@ public class Activity5310 extends BaseActivity {
                 }
 
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
                 Users.SoundManager.playSound(0, 2, 3);//에러
                 finish();
             }
@@ -277,40 +283,36 @@ public class Activity5310 extends BaseActivity {
                 sc.DeptCode = binding.edt2.getText().toString();//출고부서
                 sc.CustomerCode = binding.edt3.getText().toString();//운송사
 
-                if(binding.edt4.getText().toString().substring(binding.edt4.getText().toString().length()-1).equals(".")){
-                    binding.edt4.setText(binding.edt4.getText().toString().replace(".",""));
+                if (binding.edt4.getText().toString().substring(binding.edt4.getText().toString().length() - 1).equals(".")) {
+                    binding.edt4.setText(binding.edt4.getText().toString().replace(".", ""));
                 }
-                if(binding.edt4.getText().toString().equals("")){
+                if (binding.edt4.getText().toString().equals("")) {
                     sc.ActualWeight = 0;//실중량
-                }
-                else{
+                } else {
                     sc.ActualWeight = Double.parseDouble(binding.edt4.getText().toString());//실중량
                 }
 
 
-                if(binding.radioButton.isChecked()){//운반비구분
+                if (binding.radioButton.isChecked()) {//운반비구분
                     sc.TransportDivision = 1;
-                }
-                else
-                    sc.TransportDivision=2;
+                } else
+                    sc.TransportDivision = 2;
 
                 sc.AreaCode = binding.edt6.getText().toString();//지역
-                if(binding.edt7.getText().toString().substring(binding.edt7.getText().toString().length()-1).equals(".")){
-                    binding.edt7.setText(binding.edt7.getText().toString().replace(".",""));
+                if (binding.edt7.getText().toString().substring(binding.edt7.getText().toString().length() - 1).equals(".")) {
+                    binding.edt7.setText(binding.edt7.getText().toString().replace(".", ""));
                 }
-                if(binding.edt7.getText().toString().equals("")){
+                if (binding.edt7.getText().toString().equals("")) {
                     sc.CarTon = 0;//차톤수
-                }
-                else{
+                } else {
                     sc.CarTon = Double.parseDouble(binding.edt7.getText().toString());//차톤수
                 }
-                if(binding.edt8.getText().toString().substring(binding.edt8.getText().toString().length()-1).equals(".")){
-                    binding.edt8.setText(binding.edt8.getText().toString().replace(".",""));
+                if (binding.edt8.getText().toString().substring(binding.edt8.getText().toString().length() - 1).equals(".")) {
+                    binding.edt8.setText(binding.edt8.getText().toString().replace(".", ""));
                 }
-                if(binding.edt8.getText().toString().equals("")){
+                if (binding.edt8.getText().toString().equals("")) {
                     sc.TransportAmt = 0;//운반비
-                }
-                else{
+                } else {
                     sc.TransportAmt = Double.parseDouble(binding.edt8.getText().toString());//운반비
                 }
 
@@ -443,7 +445,7 @@ public class Activity5310 extends BaseActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        switch (keyCode){
+        switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_DOWN:
             case KeyEvent.KEYCODE_VOLUME_UP:
                 IntentIntegrator intentIntegrator = new IntentIntegrator(this);
@@ -459,6 +461,56 @@ public class Activity5310 extends BaseActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
+    private void SetMC3300X() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"), RECEIVER_EXPORTED);
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"), RECEIVER_EXPORTED);
+        } else {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"));
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"));
+        }
+        this.mc3300X = new MC3300X(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"), RECEIVER_EXPORTED);
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"), RECEIVER_EXPORTED);
+        } else {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"));
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"));
+        }
+        mc3300X.registerReceivers();
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        mc3300X.unRegisterReceivers();
+        unregisterReceiver(mc3300GetReceiver);
+    }
+
+    BroadcastReceiver mc3300GetReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            String result = "";
+            if(intent.getAction().equals("mycustombroadcast")){
+                result = bundle.getString("mcx3300result");
+            }
+            else if(intent.getAction().equals("scan.rcv.message")){
+                result = bundle.getString("barcodeData");
+            }
+            if (result.equals(""))
+                return;
+            CommonMethod.FNBarcodeConvertPrint(result, barcodeConvertPrintViewModel);
+        }
+    };
 
     /**
      * 공통 끝

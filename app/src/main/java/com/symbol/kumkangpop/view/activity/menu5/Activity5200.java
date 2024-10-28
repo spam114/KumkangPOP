@@ -28,13 +28,17 @@ import com.symbol.kumkangpop.model.SearchCondition;
 import com.symbol.kumkangpop.model.object.Users;
 import com.symbol.kumkangpop.view.CommonMethod;
 import com.symbol.kumkangpop.view.activity.BaseActivity;
-import com.symbol.kumkangpop.view.activity.menu2.Activity2100;
 import com.symbol.kumkangpop.view.adapter.Adapter5200;
 import com.symbol.kumkangpop.view.dialog.Dialog5320;
 import com.symbol.kumkangpop.viewmodel.BarcodeConvertPrintViewModel;
 import com.symbol.kumkangpop.viewmodel.CommonViewModel;
 
 import java.util.ArrayList;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.IntentFilter;
+import android.os.Build;
+import com.symbol.kumkangpop.view.MC3300X;
 
 public class Activity5200 extends BaseActivity {
     Activity5200Binding binding;
@@ -45,6 +49,7 @@ public class Activity5200 extends BaseActivity {
     private FloatingNavigationView mFloatingNavigationView;
     int StockOutType = 0;
     int gLocationNo = 0;
+    MC3300X mc3300X;
     //String saleOrderNo;
     //String ho;
     //ArrayList<ItemTag> tempItemTagArrayList = new ArrayList<>();
@@ -59,7 +64,8 @@ public class Activity5200 extends BaseActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity5200);
         barcodeConvertPrintViewModel = new ViewModelProvider(this).get(BarcodeConvertPrintViewModel.class);
         commonViewModel = new ViewModelProvider(this).get(CommonViewModel.class);
-        binding.txtTitle.setText(Users.Language == 0 ? getString(R.string.detail_menu_5200):getString(R.string.detail_menu_5200_eng));
+        SetMC3300X();
+        binding.txtTitle.setText(Users.Language == 0 ? getString(R.string.detail_menu_5200) : getString(R.string.detail_menu_5200_eng));
         gLocationNo = getIntent().getIntExtra("locationNo", -1);
         setView();
         setBar();
@@ -111,7 +117,7 @@ public class Activity5200 extends BaseActivity {
                 sc.Barcode = barcode.Barcode;
                 commonViewModel.Get2("GetNumConvertData", sc);
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
                 Users.SoundManager.playSound(0, 2, 3);//에러
             }
         });
@@ -144,7 +150,7 @@ public class Activity5200 extends BaseActivity {
                 adapter.updateAdapter(data.CustomerList);
                 adapter.getFilter().filter(binding.edtInput.getText().toString());
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
                 Users.SoundManager.playSound(0, 2, 3);//에러
                 finish();
             }
@@ -162,22 +168,20 @@ public class Activity5200 extends BaseActivity {
                     return;
                 }
                 String locationNo = data.NumConvertDataList.get(0).DestNum;
-                int StockOrderLocationNo = (int)Double.parseDouble(locationNo);
+                int StockOrderLocationNo = (int) Double.parseDouble(locationNo);
                 ScanStockOutTag(StockOrderLocationNo);
 
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
                 Users.SoundManager.playSound(0, 2, 3);//에러
             }
         });
 
         commonViewModel.data3.observe(this, data -> {
             if (data != null) {
-                if (data.StrResult!=null)
-                {
+                if (data.StrResult != null) {
                     Toast.makeText(this, data.StrResult, Toast.LENGTH_SHORT).show();
-                }
-                else {
+                } else {
                     /*Intent intent = new Intent(getBaseContext(), Activity5110.class);
                     intent.putExtra("containerNo", data.ContainerList.get(0).ContainerNo);
                     intent.putExtra("locationNo", locationNo);
@@ -185,7 +189,7 @@ public class Activity5200 extends BaseActivity {
                 }
 
             } else {
-                Toast.makeText(this, Users.Language==0 ? "서버 연결 오류": "Server connection error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
                 Users.SoundManager.playSound(0, 2, 3);//에러
             }
         });
@@ -213,44 +217,41 @@ public class Activity5200 extends BaseActivity {
     public void ScanStockOutTag(int stockOrderLocationNo) {
         boolean bReturn = true;
         int numPrint = 1;
-        if(!binding.edt2.getText().toString().equals("")){
-            try{
+        if (!binding.edt2.getText().toString().equals("")) {
+            try {
                 numPrint = Integer.parseInt(binding.edt2.getText().toString());
-            }
-            catch (Exception et){
+            } catch (Exception et) {
                 Users.SoundManager.playSound(0, 2, 3);//에러
                 return;
             }
 
         }
 
-        String titleKor="출고상차TAG 출력";
-        String titleEng="Reprint OUT TAG";
-        String messageKor="출력작업을 진행하시겠습니까?\n(출고번호가 생성됩니다.)\n"+"수량: "+numPrint+"\n컨테이너: "+binding.edt1.getText().toString();
-        String messageEng="Are you sure you want to proceed with the output?\n(The Release number is generated.)\nQTY: "+numPrint+"\nContainer: "+binding.edt1.getText().toString();
-        String poButtonKor="확인";
-        String poButtonEng="OK";
-        String negaButtonKor="취소";
-        String negaButtonEng="Cancel";
+        String titleKor = "출고상차TAG 출력";
+        String titleEng = "Reprint OUT TAG";
+        String messageKor = "출력작업을 진행하시겠습니까?\n(출고번호가 생성됩니다.)\n" + "수량: " + numPrint + "\n컨테이너: " + binding.edt1.getText().toString();
+        String messageEng = "Are you sure you want to proceed with the output?\n(The Release number is generated.)\nQTY: " + numPrint + "\nContainer: " + binding.edt1.getText().toString();
+        String poButtonKor = "확인";
+        String poButtonEng = "OK";
+        String negaButtonKor = "취소";
+        String negaButtonEng = "Cancel";
 
         String strTitle;
         String strMessage;
         String strPoButton;
         String strNegaButton;
 
-        if(Users.Language ==0){
-            strTitle=titleKor;
-            strMessage=messageKor;
-            strPoButton=poButtonKor;
-            strNegaButton=negaButtonKor;
+        if (Users.Language == 0) {
+            strTitle = titleKor;
+            strMessage = messageKor;
+            strPoButton = poButtonKor;
+            strNegaButton = negaButtonKor;
+        } else {
+            strTitle = titleEng;
+            strMessage = messageEng;
+            strPoButton = poButtonEng;
+            strNegaButton = negaButtonEng;
         }
-        else{
-            strTitle=titleEng;
-            strMessage=messageEng;
-            strPoButton=poButtonEng;
-            strNegaButton=negaButtonEng;
-        }
-
 
 
         int finalNumPrint = numPrint;
@@ -264,7 +265,7 @@ public class Activity5200 extends BaseActivity {
                         //Toast.makeText(getBaseContext(), "삭제되었습니다.", Toast.LENGTH_SHORT).show();
 
                         if (Users.PCCode.equals("")) {
-                            Toast.makeText(Activity5200.this, Users.Language==0 ? "출력 PC가 연결되어 있지 않습니다.": "There is no PC connected.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Activity5200.this, Users.Language == 0 ? "출력 PC가 연결되어 있지 않습니다." : "There is no PC connected.", Toast.LENGTH_SHORT).show();
                             Users.SoundManager.playSound(0, 2, 3);//에러
                             return;
                         }
@@ -427,7 +428,7 @@ public class Activity5200 extends BaseActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        switch (keyCode){
+        switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_DOWN:
             case KeyEvent.KEYCODE_VOLUME_UP:
                 IntentIntegrator intentIntegrator = new IntentIntegrator(this);
@@ -443,6 +444,56 @@ public class Activity5200 extends BaseActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
+    private void SetMC3300X() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"), RECEIVER_EXPORTED);
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"), RECEIVER_EXPORTED);
+        } else {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"));
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"));
+        }
+        this.mc3300X = new MC3300X(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"), RECEIVER_EXPORTED);
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"), RECEIVER_EXPORTED);
+        } else {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"));
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"));
+        }
+        mc3300X.registerReceivers();
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        mc3300X.unRegisterReceivers();
+        unregisterReceiver(mc3300GetReceiver);
+    }
+
+    BroadcastReceiver mc3300GetReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            String result = "";
+            if(intent.getAction().equals("mycustombroadcast")){
+                result = bundle.getString("mcx3300result");
+            }
+            else if(intent.getAction().equals("scan.rcv.message")){
+                result = bundle.getString("barcodeData");
+            }
+            if (result.equals(""))
+                return;
+            CommonMethod.FNBarcodeConvertPrint(result, barcodeConvertPrintViewModel);
+        }
+    };
 
     /**
      * 공통 끝

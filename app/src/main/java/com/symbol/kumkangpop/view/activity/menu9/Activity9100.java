@@ -1,6 +1,7 @@
 package com.symbol.kumkangpop.view.activity.menu9;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -41,6 +42,12 @@ import com.symbol.kumkangpop.viewmodel.SimpleDataViewModel;
 import java.text.DecimalFormat;
 import java.util.List;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.IntentFilter;
+import android.os.Build;
+import com.symbol.kumkangpop.view.MC3300X;
+
 /**
  * A급대기 Detail
  */
@@ -52,6 +59,7 @@ public class Activity9100 extends BaseActivity {
     StockIn stockIn;
     int selectedPartIndex = 0;
     int selectedPartSpecIndex = 0;
+    MC3300X mc3300X;
     //List<Part> part
 
     @Override
@@ -66,6 +74,7 @@ public class Activity9100 extends BaseActivity {
         stockIn = new StockIn();
         simpleDataViewModel = new ViewModelProvider(this).get(SimpleDataViewModel.class);
         aWaitingEditModel = new ViewModelProvider(this).get(AWaitingEditModel.class);
+        SetMC3300X();
         tagNo = getIntent().getStringExtra("result");
         createQRcode(binding.imvQR, tagNo);
         setView();
@@ -468,6 +477,56 @@ public class Activity9100 extends BaseActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
+    private void SetMC3300X() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"), RECEIVER_EXPORTED);
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"), RECEIVER_EXPORTED);
+        } else {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"));
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"));
+        }
+        this.mc3300X = new MC3300X(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"), RECEIVER_EXPORTED);
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"), RECEIVER_EXPORTED);
+        } else {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"));
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"));
+        }
+        mc3300X.registerReceivers();
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        mc3300X.unRegisterReceivers();
+        unregisterReceiver(mc3300GetReceiver);
+    }
+
+    BroadcastReceiver mc3300GetReceiver =  new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            String result = "";
+            if(intent.getAction().equals("mycustombroadcast")){
+                result = bundle.getString("mcx3300result");
+            }
+            else if(intent.getAction().equals("scan.rcv.message")){
+                result = bundle.getString("barcodeData");
+            }
+            if (result.equals(""))
+                return;
+            getKeyInResult(result);
+        }
+    };
 
     /**
      * 공용부분 END

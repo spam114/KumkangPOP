@@ -177,7 +177,24 @@ public class CommonService {
         else if(apiName.equals("ChangeConnectionString")){
             return api.ChangeConnectionString(sc);
         }
-
+        else if(apiName.equals("GetCarryOutData")){
+            return api.GetCarryOutData(sc);
+        }
+        else if(apiName.equals("GetTransferData")){
+            return api.GetTransferData(sc);
+        }
+        else if(apiName.equals("GetNotUsedData")){
+            return api.GetNotUsedData(sc);
+        }
+        else if(apiName.equals("InsertStockOut3POP")){
+            return api.InsertStockOut3POP(sc);
+        }
+        else if(apiName.equals("StockOutDeleteAll")){
+            return api.StockOutDeleteAll(sc);
+        }
+        else if(apiName.equals("GetLocation")){
+            return api.GetLocation(sc);
+        }
         else {
             return null;
         }

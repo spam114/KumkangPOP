@@ -24,6 +24,8 @@ import com.symbol.kumkangpop.view.activity.menu3.Activity3000;
 import com.symbol.kumkangpop.view.activity.menu4.Activity4000;
 import com.symbol.kumkangpop.view.activity.menu5.Activity5000;
 import com.symbol.kumkangpop.view.activity.menu9.Activity9000;
+import com.symbol.kumkangpop.view.activity.rawmaterial.CarryOutRawMaterialActivity;
+import com.symbol.kumkangpop.view.activity.rawmaterial.TransferRawMaterialActivity;
 import com.symbol.kumkangpop.view.activity.report.ActivityReport1;
 import com.symbol.kumkangpop.view.activity.report.ActivityReport2;
 import com.symbol.kumkangpop.view.activity.report.ActivityReport3;
@@ -218,6 +220,16 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
                             item.menuName.equals(context.getString(R.string.menu20_eng))) {//자료송신
                         /*Intent intent = new Intent(context, Activity0000.class);
                         context.startActivity(intent);*/
+                    }
+                    else if (item.menuName.equals(context.getString(R.string.menu22)) ||
+                            item.menuName.equals(context.getString(R.string.menu22_eng))) {//원자재불출
+                        Intent intent = new Intent(context, CarryOutRawMaterialActivity.class);
+                        context.startActivity(intent);
+                    }
+                    else if (item.menuName.equals(context.getString(R.string.menu23)) ||
+                            item.menuName.equals(context.getString(R.string.menu23_eng))) {//원자재이동
+                        Intent intent = new Intent(context, TransferRawMaterialActivity.class);
+                        context.startActivity(intent);
                     }
 
                 }

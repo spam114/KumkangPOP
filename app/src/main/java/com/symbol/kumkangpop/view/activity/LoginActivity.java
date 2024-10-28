@@ -65,15 +65,19 @@ public class LoginActivity extends BaseActivity {
     private void setServiceAddress(){
         if(PreferenceManager.getInt(this, "ServiceType")==0){//금강
             Users.ServiceAddress = ApplicationClass.getResourses().getString(R.string.service_address);
+            Users.ServiceType = 0;//0:금강공업(음성,진천),1:KKM,2:KKV,-1:TEST
         }
         else if(PreferenceManager.getInt(this, "ServiceType")==1){//KKM
             Users.ServiceAddress = ApplicationClass.getResourses().getString(R.string.service_address_kkm);
+            Users.ServiceType = 1;//0:금강공업(음성,진천),1:KKM,2:KKV,-1:TEST
         }
         else if(PreferenceManager.getInt(this, "ServiceType")==2){//KKV
             Users.ServiceAddress = ApplicationClass.getResourses().getString(R.string.service_address_kkv);
+            Users.ServiceType = 2;//0:금강공업(음성,진천),1:KKM,2:KKV,-1:TEST
         }
         else{//TEST
             Users.ServiceAddress = ApplicationClass.getResourses().getString(R.string.service_address_test);
+            Users.ServiceType = -1;//0:금강공업(음성,진천),1:KKM,2:KKV,-1:TEST
         }
     }
 
@@ -232,7 +236,8 @@ public class LoginActivity extends BaseActivity {
         ComponentName componentName = intent.getComponent();
         Intent mainIntent = Intent.makeRestartActivityTask(componentName);
         context.startActivity(mainIntent);
-        Runtime.getRuntime().exit(0);
+        //Runtime.getRuntime().exit(0);
+        System.exit(0);
     }
 
 

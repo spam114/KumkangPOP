@@ -26,4 +26,6 @@ public class Common {
     public ArrayList<StockOutDetail> StockOutDetailList;
     public ArrayList<ScanListViewItem2> ScanListViewItem2List;
     public ArrayList<Bundle> BundleList;
+    public ArrayList<StockOut3Detail> StockOut3DetailList;
+    public ArrayList<Location> LocationList;
 }

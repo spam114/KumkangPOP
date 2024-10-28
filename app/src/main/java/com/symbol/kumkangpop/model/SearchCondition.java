@@ -330,6 +330,12 @@ public class SearchCondition {
     @SerializedName("WorkDivision")
     public int WorkDivision;
 
+    @SerializedName("ItemTag")
+    public String ItemTag;
+
+    @SerializedName("ServiceType")
+    public int ServiceType;
+
     public SearchCondition(){}
 
 }

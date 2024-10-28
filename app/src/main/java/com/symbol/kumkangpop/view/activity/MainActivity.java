@@ -1,8 +1,11 @@
 package com.symbol.kumkangpop.view.activity;
 
-import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.KeyEvent;
@@ -34,6 +37,7 @@ import com.symbol.kumkangpop.model.object.MainMenuItem;
 import com.symbol.kumkangpop.model.object.Users;
 import com.symbol.kumkangpop.view.BackPressControl;
 import com.symbol.kumkangpop.view.CommonMethod;
+import com.symbol.kumkangpop.view.MC3300X;
 import com.symbol.kumkangpop.view.PreferenceManager;
 import com.symbol.kumkangpop.view.TypeChanger;
 import com.symbol.kumkangpop.view.activity.menu0.Activity0010;
@@ -56,6 +60,7 @@ public class MainActivity extends BaseActivity {
     private ActivityResultLauncher<Intent> resultLauncher;
     private FloatingNavigationView mFloatingNavigationView;
     ArrayList<BusinessClass> businessClassList;
+    MC3300X mc3300X;
 
     //SoundManager soundManager; // 효과음 관리 객체
 
@@ -80,6 +85,7 @@ public class MainActivity extends BaseActivity {
         simpleDataViewModel.GetSimpleData("GetNoticeData2");
         barcodeConvertPrintViewModel = new ViewModelProvider(this).get(BarcodeConvertPrintViewModel.class);
         scanViewModel = new ViewModelProvider(this).get(ScanViewModel.class);
+        SetMC3300X();
         setBar();
         setFloatingNavigationView();
         setResultLauncher();
@@ -94,6 +100,17 @@ public class MainActivity extends BaseActivity {
             mainAdapter.removeItem(17);
             //mainAdapter.notifyDataSetChanged();
         }*/
+    }
+
+    private void SetMC3300X() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"), RECEIVER_EXPORTED);
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"), RECEIVER_EXPORTED);
+        } else {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"));
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"));
+        }
+        this.mc3300X = new MC3300X(this);
     }
 
     private void setListener() {
@@ -392,7 +409,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        switch (keyCode){
+        switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_DOWN:
             case KeyEvent.KEYCODE_VOLUME_UP:
                 IntentIntegrator intentIntegrator = new IntentIntegrator(this);
@@ -408,6 +425,45 @@ public class MainActivity extends BaseActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"), RECEIVER_EXPORTED);
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"), RECEIVER_EXPORTED);
+        } else {
+            registerReceiver(mc3300GetReceiver, new IntentFilter("mycustombroadcast"));
+            registerReceiver(mc3300GetReceiver, new IntentFilter("scan.rcv.message"));
+        }
+        mc3300X.registerReceivers();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mc3300X.unRegisterReceivers();
+        unregisterReceiver(mc3300GetReceiver);
+    }
+
+    BroadcastReceiver mc3300GetReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            String result = "";
+            if(intent.getAction().equals("mycustombroadcast")){
+                result = bundle.getString("mcx3300result");
+            }
+            else if(intent.getAction().equals("scan.rcv.message")){
+                result = bundle.getString("barcodeData");
+            }
+            if (result.equals(""))
+                return;
+            CommonMethod.FNBarcodeConvertPrint(result, barcodeConvertPrintViewModel);
+        }
+    };
+
     /**
      * 공용부분 END
      */

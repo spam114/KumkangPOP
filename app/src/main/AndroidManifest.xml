@@ -284,6 +284,16 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
+            android:name="com.symbol.kumkangpop.view.activity.rawmaterial.CarryOutRawMaterialActivity"
+            tools:ignore="LockedOrientationActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.symbol.kumkangpop.view.activity.rawmaterial.TransferRawMaterialActivity"
+            tools:ignore="LockedOrientationActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="fullSensor"
             tools:replace="screenOrientation" />
