@@ -38,7 +38,7 @@ public class Users {
     public static int DeptCode;
     public static int BusinessClassCode;
     public static int LocationNo;
-    public static int Language;
+    public static int Language;//0:한글, 1:영어
 
     public static String UserImage;
     public static int ServiceType;//0:금강공업(음성,진천),1:KKM,2:KKV,-1:TEST

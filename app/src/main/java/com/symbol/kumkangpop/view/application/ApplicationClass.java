@@ -229,7 +229,7 @@ public class ApplicationClass extends Application {
 
             menuItemArrayList.add(new MainMenuItem(1, 4, Users.Language == 0 ? getString(R.string.menu21) : getString(R.string.menu21_eng), false, -1));
             menuItemArrayList.add(new MainMenuItem(2, 4, Users.Language == 0 ? getString(R.string.menu22) : getString(R.string.menu22_eng), false, R.drawable.delete_sweep_24px));
-            menuItemArrayList.add(new MainMenuItem(2, 4, Users.Language == 0 ? getString(R.string.menu23) : getString(R.string.menu23_eng), false, R.drawable.flex_direction_24px));
+            //menuItemArrayList.add(new MainMenuItem(2, 4, Users.Language == 0 ? getString(R.string.menu23) : getString(R.string.menu23_eng), false, R.drawable.flex_direction_24px));
             //menuItemArrayList.add(new MainMenuItem(2,3,getString(R.string.menu19),false, R.drawable.checklist_rtl_48px));
             //menuItemArrayList.add(new MainMenuItem(2,3,getString(R.string.menu15),false, R.drawable.download_48px));
             //menuItemArrayList.add(new MainMenuItem(2,3,getString(R.string.menu20),true, R.drawable.file_upload_48px));
@@ -248,7 +248,7 @@ public class ApplicationClass extends Application {
 
             menuItemArrayList.add(new MainMenuItem(1, 2, Users.Language == 0 ? getString(R.string.menu21) : getString(R.string.menu21_eng), false, -1));
             menuItemArrayList.add(new MainMenuItem(2, 2, Users.Language == 0 ? getString(R.string.menu22) : getString(R.string.menu22_eng), false, R.drawable.delete_sweep_24px));
-            menuItemArrayList.add(new MainMenuItem(2, 2, Users.Language == 0 ? getString(R.string.menu23) : getString(R.string.menu23_eng), false, R.drawable.flex_direction_24px));
+            //menuItemArrayList.add(new MainMenuItem(2, 2, Users.Language == 0 ? getString(R.string.menu23) : getString(R.string.menu23_eng), false, R.drawable.flex_direction_24px));
 
         }
 

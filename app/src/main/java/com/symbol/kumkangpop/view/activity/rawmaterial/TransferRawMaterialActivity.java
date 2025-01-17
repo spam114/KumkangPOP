@@ -164,12 +164,12 @@ public class TransferRawMaterialActivity extends BaseActivity {
                     locationSequences[i] = data.LocationList.get(i).LocationName;
                 }
 
-                String title="창고 선택";
+                String title="입고창고 선택";
                 String okButton = "예";
                 String cancelButton = "아니요";
 
                 if(Users.Language != 0){
-                    title = "Select Location";
+                    title = "Select Location to receive";
                     okButton = "YES";
                     cancelButton = "NO";
                 }

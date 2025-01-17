@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -140,6 +141,12 @@ public class Activity9100 extends BaseActivity {
                 ShowEditDialog(2);
             }
         });
+        binding.layoutWork.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShowEditDialog2();
+            }
+        });
         binding.btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -165,7 +172,7 @@ public class Activity9100 extends BaseActivity {
             titleName = Users.Language==0 ? "수량 입력": "Enter quantity";
             msg = Users.Language==0 ? "수량을 입력해 주세요": "Please enter quantity";
             hint = Users.Language==0 ? "수량": "Quantity";
-        } else {//중량
+        } else{//중량
             titleName = Users.Language==0 ? "중량 입력": "Enter weight";
             msg = Users.Language==0 ? "중량을 입력해 주세요": "Please enter weight";
             hint = Users.Language==0 ? "중량": "Weight";
@@ -209,6 +216,53 @@ public class Activity9100 extends BaseActivity {
                 } else {//중량 확인 버튼
                     stockIn.ActualWeight = Double.parseDouble(output);
                     binding.txtWeight.setBackgroundColor(Color.parseColor("#FFF5F5DC"));
+                }
+                DrawTag(stockIn);
+                dialog.dismiss();
+            }
+        });
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+    }
+
+    private void ShowEditDialog2() {
+        String titleName= Users.Language==0 ? "주/야간 입력": "Enter Day/Night";
+        LayoutInflater inflater = LayoutInflater.from(this);
+        final View dialogView = inflater.inflate(R.layout.dialog_day_night, null);
+        AlertDialog.Builder buider = new AlertDialog.Builder(this); //AlertDialog.Builder 객체 생성
+        //  buider.setIcon(android.R.drawable.ic_menu_add); //제목옆의 아이콘 이미지(원하는 이미지 설정)
+        buider.setView(dialogView); //위에서 inflater가 만든 dialogView 객체 세팅 (Customize)
+        final AlertDialog dialog = buider.create();
+        //Dialog의 바깥쪽을 터치했을 때 Dialog를 없앨지 설정
+        dialog.setCanceledOnTouchOutside(false);//없어지지 않도록 설정
+        //Dialog 보이기
+        dialog.show();
+        TextView tvTitle = dialogView.findViewById(R.id.tvTitle);
+        tvTitle.setText(titleName);
+        RadioButton rbDay = dialogView.findViewById(R.id.rbDay);
+        rbDay.setText(Users.Language==0 ? "주간": "Day");
+        RadioButton rbNight = dialogView.findViewById(R.id.rbNight);
+        rbNight.setText(Users.Language==0 ? "야간": "Night");
+
+        if(stockIn.WorkingGroup == 1)//주간
+            rbDay.setChecked(true);
+        else//야간
+            rbNight.setChecked(true);
+
+        Button btnOK = dialogView.findViewById(R.id.btnOK);
+        Button btnCancel = dialogView.findViewById(R.id.btnCancel);
+        btnOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(rbDay.isChecked()){
+                    stockIn.WorkingGroup = 1;
+                }
+                else{
+                    stockIn.WorkingGroup = 2;
                 }
                 DrawTag(stockIn);
                 dialog.dismiss();
