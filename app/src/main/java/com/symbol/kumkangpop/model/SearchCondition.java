@@ -71,8 +71,14 @@ public class SearchCondition {
     @SerializedName("Type")
     public int Type;
 
+    @SerializedName("InsertType")
+    public String InsertType;
+
     @SerializedName("StockInType")
     public int StockInType;
+
+    @SerializedName("DeviceType")
+    public int DeviceType;
 
     @SerializedName("CheckType")
     public int CheckType;
@@ -335,6 +341,9 @@ public class SearchCondition {
 
     @SerializedName("ServiceType")
     public int ServiceType;
+
+    @SerializedName("Code")
+    public int Code;
 
     public SearchCondition(){}
 

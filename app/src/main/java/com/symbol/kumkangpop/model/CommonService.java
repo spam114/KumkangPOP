@@ -195,6 +195,15 @@ public class CommonService {
         else if(apiName.equals("GetLocation")){
             return api.GetLocation(sc);
         }
+        else if(apiName.equals("GetWordersData")){
+            return api.GetWordersData(sc);
+        }
+        else if(apiName.equals("GetProdProcess")){
+            return api.GetProdProcess(sc);
+        }
+        else if(apiName.equals("InsertProdProcess")){
+            return api.InsertProdProcess(sc);
+        }
         else {
             return null;
         }

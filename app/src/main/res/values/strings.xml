@@ -42,6 +42,8 @@
     <string name="menu21">원자재</string>
     <string name="menu22">원자재 불출</string>
     <string name="menu23">원자재 이동</string>
+    <string name="menu24">공정 관리</string>
+    <string name="menu25">공정 진행 등록</string>
 
     <string name="menu1_eng">Production Result</string>
     <string name="menu2_eng">Register Shot Blast</string>
@@ -66,6 +68,8 @@
     <string name="menu21_eng">Raw Material</string>
     <string name="menu22_eng">Carry Out Raw Material</string>
     <string name="menu23_eng">Transfer Raw Material</string>
+    <string name="menu24_eng">Process</string>
+    <string name="menu25_eng">Start Process</string>
 
     <string name="detail_menu_0000">제품 포장</string>
     <string name="detail_menu_0010">제품 포장</string>

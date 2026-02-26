@@ -18,6 +18,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
@@ -27,6 +29,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.andremion.floatingnavigationview.FloatingNavigationView;
 import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.symbol.kumkangpop.R;
 import com.symbol.kumkangpop.databinding.ActivityMainBinding;
 import com.symbol.kumkangpop.databinding.DialogNoticeBinding;
@@ -41,9 +44,12 @@ import com.symbol.kumkangpop.view.MC3300X;
 import com.symbol.kumkangpop.view.PreferenceManager;
 import com.symbol.kumkangpop.view.TypeChanger;
 import com.symbol.kumkangpop.view.activity.menu0.Activity0010;
+import com.symbol.kumkangpop.view.activity.menu2.Activity2000;
 import com.symbol.kumkangpop.view.activity.menu2.Activity2300;
+import com.symbol.kumkangpop.view.activity.process.ProcessActivity;
 import com.symbol.kumkangpop.view.adapter.MainAdapter;
 import com.symbol.kumkangpop.viewmodel.BarcodeConvertPrintViewModel;
+import com.symbol.kumkangpop.viewmodel.CommonViewModel;
 import com.symbol.kumkangpop.viewmodel.ScanViewModel;
 import com.symbol.kumkangpop.viewmodel.SimpleDataViewModel;
 
@@ -61,6 +67,8 @@ public class MainActivity extends BaseActivity {
     private FloatingNavigationView mFloatingNavigationView;
     ArrayList<BusinessClass> businessClassList;
     MC3300X mc3300X;
+    private ActivityResultLauncher<Intent> directQRResultLauncher;//QR 직접 호출을 위한 ResultLauncher
+    CommonViewModel commonViewModel;
 
     //SoundManager soundManager; // 효과음 관리 객체
 
@@ -85,13 +93,14 @@ public class MainActivity extends BaseActivity {
         simpleDataViewModel.GetSimpleData("GetNoticeData2");
         barcodeConvertPrintViewModel = new ViewModelProvider(this).get(BarcodeConvertPrintViewModel.class);
         scanViewModel = new ViewModelProvider(this).get(ScanViewModel.class);
+        commonViewModel = new ViewModelProvider(this).get(CommonViewModel.class);
         SetMC3300X();
         setBar();
         setFloatingNavigationView();
         setResultLauncher();
         observerViewModel();
         ArrayList<MainMenuItem> menuItemArrayList = getMainMenuItem();
-        mainAdapter = new MainAdapter(menuItemArrayList, this);
+        mainAdapter = new MainAdapter(menuItemArrayList, this, directQRResultLauncher);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerView.setAdapter(mainAdapter);
         backpressed = new BackPressControl(this);
@@ -256,6 +265,63 @@ public class MainActivity extends BaseActivity {
                 }
             }
         });
+
+
+        commonViewModel.data.observe(this, data -> {
+            if (data != null) {
+                Intent intent = new Intent(MainActivity.this, ProcessActivity.class);
+                intent.putExtra("worksOrderNo", data.WorderList.get(0).WorksOrderNo);
+                intent.putExtra("customerCode", data.WorderList.get(0).CustomerCode);
+                intent.putExtra("customerName", data.WorderList.get(0).CustomerName);
+                intent.putExtra("locationNo", data.WorderList.get(0).LocationNo);
+                intent.putExtra("locationName", data.WorderList.get(0).LocationName);
+                intent.putExtra("dong", data.WorderList.get(0).Dong);
+                intent.putExtra("commodityName", data.WorderList.get(0).CommodityName);
+                intent.putExtra("originalDueDate", data.WorderList.get(0).OriginalDueDate);
+
+                startActivity(intent);
+
+                /*if (data.StrResult != null) {
+                    Toast.makeText(this, data.StrResult, Toast.LENGTH_SHORT).show();
+                }
+
+                if (data.ScanResult2 != null) {
+                    if (data.ScanResult2.ListView != null) {
+                        scanListViewItemList2 = data.ScanResult2.ListView;
+                        scanListViewItemTemp = data.ScanResult2.ListViewTemp;
+                        adapter.updateAdapter((ArrayList<ScanListViewItem2>) scanListViewItemList2, binding.rbAdd.isChecked());
+                    }
+                    if (data.ScanResult2.StockOutNo != null) {
+                        binding.tvStockOutNo.setText(data.ScanResult2.StockOutNo);
+                    }
+                    action = (int) data.ScanResult2.Action;
+                }*/
+            } else {
+                Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
+                finish();
+            }
+        });
+
+        //에러메시지
+        commonViewModel.errorMsg.observe(this, models -> {
+            if (models != null) {
+                Toast.makeText(this, models, Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
+                progressOFF2();
+            }
+        });
+
+        commonViewModel.loading.observe(this, isLoading -> {
+            if (isLoading != null) {
+                if (isLoading) {//로딩중
+                    startProgress();
+                } else {//로딩끝
+                    progressOFF2();
+                }
+            }
+        });
+
     }
 
     private void viewNotice(String remark) {
@@ -300,34 +366,29 @@ public class MainActivity extends BaseActivity {
 
         resultLauncher = CommonMethod.FNBarcodeConvertPrint(this, barcodeConvertPrintViewModel);
 
-        /*resultLauncher = registerForActivityResult(
+        directQRResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
                     @Override
                     public void onActivityResult(ActivityResult result) {
-                        *//**
-         * QR코드 시작
-         *//*
                         IntentResult intentResult = IntentIntegrator.parseActivityResult(result.getResultCode(), result.getData());
                         if (intentResult.getContents() != null) {
                             String barcode = intentResult.getContents();
-                            Toast.makeText(MainActivity.this, barcode, Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(MainActivity.this, barcode, Toast.LENGTH_SHORT).show();
                             SearchCondition sc = new SearchCondition();
-                            sc.Barcode = barcode;
-                            sc.LocationNo = Users.LocationNo;
+                            sc.WorksOrderNo = barcode;
+                            commonViewModel.Get("GetWordersData", sc);
+                            /*sc.LocationNo = Users.LocationNo;
                             sc.PCCode = Users.PCCode;
-                            sc.UserID = Users.UserID;
-                            barcodeConvertPrintViewModel.FNBarcodeConvertPrint(sc);
+                            sc.UserID = Users.UserID;*/
+                            //barcodeConvertPrintViewModel.FNBarcodeConvertPrint(sc);
                             return;
                         }
-                        *//**
-         * QR코드 끝
-         *//*
                         if (result.getResultCode() == 100) {
 
                         }
                     }
-                });*/
+                });
     }
 
     private void setBar() {

@@ -28,4 +28,6 @@ public class Common {
     public ArrayList<Bundle> BundleList;
     public ArrayList<StockOut3Detail> StockOut3DetailList;
     public ArrayList<Location> LocationList;
+    public ArrayList<Worder> WorderList;
+    public ArrayList<ProdProcess> ProdProcessList;
 }

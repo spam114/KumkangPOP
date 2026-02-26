@@ -167,8 +167,6 @@ public class Activity2200 extends BaseActivity {
                         return;
                     }
                 }
-
-
             } else {
                 Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
                 Users.SoundManager.playSound(0, 2, 3);//에러

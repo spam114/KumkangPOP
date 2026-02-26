@@ -1,5 +1,6 @@
 package com.symbol.kumkangpop.view.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -10,10 +11,12 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.zxing.integration.android.IntentIntegrator;
 import com.symbol.kumkangpop.R;
 import com.symbol.kumkangpop.databinding.RowMenuBinding;
 import com.symbol.kumkangpop.model.object.MainMenuItem;
@@ -45,10 +48,13 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
     Context context;
     private ArrayList<MainMenuItem> items = new ArrayList<>();
     boolean confirmFlag;
+    ActivityResultLauncher<Intent> directQRResultLauncher;
 
-    public MainAdapter(ArrayList<MainMenuItem> items, Context context) {
+
+    public MainAdapter(ArrayList<MainMenuItem> items, Context context, ActivityResultLauncher<Intent> directQRResultLauncher) {
         this.context = context;
         this.items = items;
+        this.directQRResultLauncher = directQRResultLauncher;
     }
 
 
@@ -232,6 +238,22 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
                         context.startActivity(intent);
                     }
 
+
+                    else if (item.menuName.equals(context.getString(R.string.menu25)) ||
+                            item.menuName.equals(context.getString(R.string.menu25_eng))) {
+
+                        IntentIntegrator intentIntegrator = new IntentIntegrator((Activity) context);
+                        //intentIntegrator.setBeepEnabled(false);//바코드 인식시 소리 off
+                        intentIntegrator.setBeepEnabled(true);//바코드 인식시 소리 on
+                        intentIntegrator.setPrompt(context.getString(R.string.qr_state_common));
+                        intentIntegrator.setOrientationLocked(true);
+                        // intentIntegrator.setCaptureActivity(QRReaderActivityStockOutMaster.class);
+                        //intentIntegrator.initiateScan();
+                        intentIntegrator.setRequestCode(7);
+                        directQRResultLauncher.launch(intentIntegrator.createScanIntent());
+                        //Intent intent = new Intent(context, TransferRawMaterialActivity.class);
+                        //context.startActivity(intent);
+                    }
                 }
             });
         }

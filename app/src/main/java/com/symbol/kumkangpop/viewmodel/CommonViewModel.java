@@ -79,7 +79,6 @@ public class CommonViewModel extends ViewModel {
                         loadError.setValue(true);
                         loading.setValue(false);
                         e.printStackTrace();
-
                     }
                 })
         );

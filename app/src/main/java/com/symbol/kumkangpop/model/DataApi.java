@@ -279,5 +279,12 @@ public interface DataApi {
 
     @POST("GetLocation")
     Single<Common> GetLocation(@Body SearchCondition searchCondition);
-}
 
+    @POST("GetWordersData")
+    Single<Common> GetWordersData(@Body SearchCondition searchCondition);
+    @POST("GetProdProcess")
+    Single<Common> GetProdProcess(@Body SearchCondition searchCondition);
+
+    @POST("InsertProdProcess")
+    Single<Common> InsertProdProcess(@Body SearchCondition searchCondition);
+}
