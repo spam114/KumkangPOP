@@ -41,14 +41,14 @@ public class ProcessActivity extends BaseActivity {
     private ActivityResultLauncher<Intent> resultLauncher;//QR ResultLauncher
     private FloatingNavigationView mFloatingNavigationView;
     MC3300X mc3300X;
-    String WorksOrderNo;
+    String SaleOrderNo;
     String CustomerCode;
     String CustomerName;
     int LocationNo;
     String LocationName;
     String Dong;
     String CommodityName;
-    String OriginalDueDate;
+    String DeliveryDate;
     private ActivityResultLauncher<Intent> directQRResultLauncher;//QR 직접 호출을 위한 ResultLauncher
 
     @Override
@@ -157,7 +157,7 @@ public class ProcessActivity extends BaseActivity {
 
             // 성공 시 데이터 갱신
             SearchCondition sc = new SearchCondition();
-            sc.WorksOrderNo = WorksOrderNo;
+            sc.SaleOrderNo = SaleOrderNo;
             commonViewModel.Get("GetProdProcess", sc);
         });
 
@@ -165,14 +165,14 @@ public class ProcessActivity extends BaseActivity {
         commonViewModel.data3.observe(this, data -> {
             if (data != null) {
 
-                setView2(data.WorderList.get(0).WorksOrderNo,
+                setView2(data.WorderList.get(0).SaleOrderNo,
                         data.WorderList.get(0).CustomerCode,
                         data.WorderList.get(0).CustomerName,
                         data.WorderList.get(0).LocationNo,
                         data.WorderList.get(0).LocationName,
                         data.WorderList.get(0).Dong,
                         data.WorderList.get(0).CommodityName,
-                        data.WorderList.get(0).OriginalDueDate
+                        data.WorderList.get(0).DeliveryDate
                         );
 
                 //startActivity(intent);
@@ -214,20 +214,20 @@ public class ProcessActivity extends BaseActivity {
     }
 
     private void setView() {
-        WorksOrderNo = getIntent().getStringExtra("worksOrderNo");
+        SaleOrderNo = getIntent().getStringExtra("saleOrderNo");
         CustomerCode = getIntent().getStringExtra("customerCode");
         CustomerName = getIntent().getStringExtra("customerName");
         LocationNo = getIntent().getIntExtra("locationNo", -1);
         LocationName = getIntent().getStringExtra("locationName");
         Dong = getIntent().getStringExtra("dong");
         CommodityName = getIntent().getStringExtra("commodityName");
-        OriginalDueDate = getIntent().getStringExtra("originalDueDate");
+        DeliveryDate = getIntent().getStringExtra("deliveryDate");
 
-        binding.tv1.setText(WorksOrderNo);
+        binding.tv1.setText(SaleOrderNo);
         binding.tv2.setText(CustomerName);
         binding.tv3.setText(LocationName);
         binding.tv4.setText(Dong);
-        binding.tv5.setText(OriginalDueDate);
+        binding.tv5.setText(DeliveryDate);
         binding.tvCommodity.setText(CommodityName);
 
         if (Users.Language == 1) {
@@ -252,30 +252,30 @@ public class ProcessActivity extends BaseActivity {
         }
 
         SearchCondition sc = new SearchCondition();
-        sc.WorksOrderNo = WorksOrderNo;
+        sc.SaleOrderNo = SaleOrderNo;
         commonViewModel.Get("GetProdProcess", sc);
     }
 
     /**
      * Activity 내에서 QR스캔, 입력으로 데이터를 다시 받는다.
      */
-    private void setView2(String WorksOrderNo, String CustomerCode, String CustomerName,
-                          int LocationNo, String LocationName, String Dong, String CommodityName, String OriginalDueDate) {
+    private void setView2(String SaleOrderNo, String CustomerCode, String CustomerName,
+                          int LocationNo, String LocationName, String Dong, String CommodityName, String DeliveryDate) {
 
-        this.WorksOrderNo = WorksOrderNo;
+        this.SaleOrderNo = SaleOrderNo;
         this.CustomerCode = CustomerCode;
         this.CustomerName = CustomerName;
         this.LocationNo = LocationNo;
         this.LocationName = LocationName;
         this.Dong = Dong;
         this.CommodityName = CommodityName;
-        this.OriginalDueDate = OriginalDueDate;
+        this.DeliveryDate = DeliveryDate;
 
-        binding.tv1.setText(WorksOrderNo);
+        binding.tv1.setText(SaleOrderNo);
         binding.tv2.setText(CustomerName);
         binding.tv3.setText(LocationName);
         binding.tv4.setText(Dong);
-        binding.tv5.setText(OriginalDueDate);
+        binding.tv5.setText(DeliveryDate);
         binding.tvCommodity.setText(CommodityName);
 
         if (Users.Language == 1) {
@@ -300,7 +300,7 @@ public class ProcessActivity extends BaseActivity {
         }
 
         SearchCondition sc = new SearchCondition();
-        sc.WorksOrderNo = WorksOrderNo;
+        sc.SaleOrderNo = SaleOrderNo;
         commonViewModel.Get("GetProdProcess", sc);
     }
 
@@ -379,7 +379,7 @@ public class ProcessActivity extends BaseActivity {
                         .setCancelable(true)
                         .setPositiveButton(strPoButton, (dialog, which) -> {
                             SearchCondition sc = new SearchCondition();
-                            sc.WorksOrderNo = WorksOrderNo;
+                            sc.SaleOrderNo = SaleOrderNo;
                             sc.InsertType = state;
                             sc.Code = prodProcess.Code;
                             sc.UserID = Users.UserID;
@@ -472,7 +472,7 @@ public class ProcessActivity extends BaseActivity {
                         .setCancelable(true)
                         .setPositiveButton(strPoButton, (dialog, which) -> {
                             SearchCondition sc = new SearchCondition();
-                            sc.WorksOrderNo = WorksOrderNo;
+                            sc.SaleOrderNo = SaleOrderNo;
                             sc.InsertType = state;
                             sc.Code = prodProcess.Code;
                             sc.UserID = Users.UserID;
@@ -565,7 +565,7 @@ public class ProcessActivity extends BaseActivity {
                         .setCancelable(true)
                         .setPositiveButton(strPoButton, (dialog, which) -> {
                             SearchCondition sc = new SearchCondition();
-                            sc.WorksOrderNo = WorksOrderNo;
+                            sc.SaleOrderNo = SaleOrderNo;
                             sc.InsertType = state;
                             sc.Code = prodProcess.Code;
                             sc.UserID = Users.UserID;
@@ -685,7 +685,7 @@ public class ProcessActivity extends BaseActivity {
     private void getWordersData(String result){
         String barcode = result;
         SearchCondition sc = new SearchCondition();
-        sc.WorksOrderNo = barcode;
+        sc.SaleOrderNo = barcode;
         commonViewModel.Get3("GetWordersData", sc);
     }
 

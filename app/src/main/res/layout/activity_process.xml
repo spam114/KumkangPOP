@@ -63,7 +63,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="5"
+                    android:layout_weight="4"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -84,8 +84,9 @@
                                 android:id="@+id/txt1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="생산발주번호"
-                                android:textSize="16sp" />
+                                android:text="주문번호"
+                                android:textSize="17sp"
+                                android:textStyle="bold" />
 
                             <TextView
                                 android:id="@+id/tv1"
@@ -93,7 +94,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="7dp"
                                 android:text="TextView"
-                                android:textColor="#000000" />
+                                android:textColor="#000000"
+                                android:textStyle="bold" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -108,7 +110,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="업체"
-                                android:textSize="16sp" />
+                                android:textSize="17sp"
+                                android:textStyle="bold" />
 
                             <TextView
                                 android:id="@+id/tv2"
@@ -116,7 +119,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="7dp"
                                 android:text="TextView"
-                                android:textColor="#000000" />
+                                android:textColor="#000000"
+                                android:textStyle="bold" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -131,7 +135,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="현장"
-                                android:textSize="16sp" />
+                                android:textSize="17sp"
+                                android:textStyle="bold" />
 
                             <TextView
                                 android:id="@+id/tv3"
@@ -139,7 +144,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="7dp"
                                 android:text="TextView"
-                                android:textColor="#000000" />
+                                android:textColor="#000000"
+                                android:textStyle="bold" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -154,7 +160,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="동"
-                                android:textSize="16sp" />
+                                android:textSize="17sp"
+                                android:textStyle="bold" />
 
                             <TextView
                                 android:id="@+id/tv4"
@@ -162,7 +169,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="7dp"
                                 android:text="TextView"
-                                android:textColor="#000000" />
+                                android:textColor="#000000"
+                                android:textStyle="bold" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -177,7 +185,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="품목분류"
-                                android:textSize="16sp" />
+                                android:textSize="17sp"
+                                android:textStyle="bold" />
 
                             <TextView
                                 android:id="@+id/tvCommodity"
@@ -185,7 +194,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="7dp"
                                 android:text="TextView"
-                                android:textColor="#000000" />
+                                android:textColor="#000000"
+                                android:textStyle="bold" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -200,7 +210,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="생산완료 예정일"
-                                android:textSize="16sp" />
+                                android:textSize="17sp"
+                                android:textStyle="bold" />
 
                             <TextView
                                 android:id="@+id/tv5"
@@ -208,7 +219,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="7dp"
                                 android:text="TextView"
-                                android:textColor="#000000" />
+                                android:textColor="#000000"
+                                android:textStyle="bold" />
                         </LinearLayout>
 
 
@@ -219,7 +231,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_marginBottom="25dp"
-                    android:layout_weight="5"
+                    android:layout_weight="6"
                     android:background="@drawable/borderline_top2"
                     android:orientation="vertical"
                     android:weightSum="11">
@@ -242,7 +254,8 @@
                             android:layout_weight="1"
                             android:gravity="center"
                             android:text="공정"
-                            android:textSize="16sp" />
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/txt10"
@@ -251,7 +264,8 @@
                             android:layout_weight="1"
                             android:gravity="center"
                             android:text="시작/종료"
-                            android:textSize="16sp" />
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/txt11"
@@ -260,7 +274,8 @@
                             android:layout_weight="1"
                             android:gravity="center"
                             android:text="상태값"
-                            android:textSize="16sp" />
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -280,7 +295,8 @@
                             android:layout_weight="1"
                             android:gravity="center"
                             android:text="절단/가공"
-                            android:textSize="16sp" />
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btn1"
@@ -288,7 +304,8 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:text="시작"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/txt12"
@@ -298,7 +315,8 @@
                             android:gravity="center"
                             android:text="상태값"
                             android:textColor="#000000"
-                            android:textSize="16sp" />
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -319,7 +337,8 @@
                             android:layout_weight="1"
                             android:gravity="center"
                             android:text="용접"
-                            android:textSize="16sp" />
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btn2"
@@ -327,7 +346,8 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:text="시작"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/txt13"
@@ -337,7 +357,8 @@
                             android:gravity="center"
                             android:text="상태값"
                             android:textColor="#000000"
-                            android:textSize="16sp" />
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -358,7 +379,8 @@
                             android:layout_weight="1"
                             android:gravity="center"
                             android:text="포장"
-                            android:textSize="16sp" />
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/btn3"
@@ -366,7 +388,8 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:text="시작"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/txt14"
@@ -376,7 +399,8 @@
                             android:gravity="center"
                             android:text="상태값"
                             android:textColor="#000000"
-                            android:textSize="16sp" />
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
                     </LinearLayout>
                 </LinearLayout>
 

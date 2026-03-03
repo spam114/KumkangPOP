@@ -270,14 +270,14 @@ public class MainActivity extends BaseActivity {
         commonViewModel.data.observe(this, data -> {
             if (data != null) {
                 Intent intent = new Intent(MainActivity.this, ProcessActivity.class);
-                intent.putExtra("worksOrderNo", data.WorderList.get(0).WorksOrderNo);
+                intent.putExtra("saleOrderNo", data.WorderList.get(0).SaleOrderNo);
                 intent.putExtra("customerCode", data.WorderList.get(0).CustomerCode);
                 intent.putExtra("customerName", data.WorderList.get(0).CustomerName);
                 intent.putExtra("locationNo", data.WorderList.get(0).LocationNo);
                 intent.putExtra("locationName", data.WorderList.get(0).LocationName);
                 intent.putExtra("dong", data.WorderList.get(0).Dong);
                 intent.putExtra("commodityName", data.WorderList.get(0).CommodityName);
-                intent.putExtra("originalDueDate", data.WorderList.get(0).OriginalDueDate);
+                intent.putExtra("deliveryDate", data.WorderList.get(0).DeliveryDate);
 
                 startActivity(intent);
 
@@ -376,7 +376,7 @@ public class MainActivity extends BaseActivity {
                             String barcode = intentResult.getContents();
                             //Toast.makeText(MainActivity.this, barcode, Toast.LENGTH_SHORT).show();
                             SearchCondition sc = new SearchCondition();
-                            sc.WorksOrderNo = barcode;
+                            sc.SaleOrderNo = barcode;
                             commonViewModel.Get("GetWordersData", sc);
                             /*sc.LocationNo = Users.LocationNo;
                             sc.PCCode = Users.PCCode;
