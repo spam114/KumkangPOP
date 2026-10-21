@@ -258,6 +258,8 @@ public class CommonMethod {
         TextView txtUserID = fnvHeader.findViewById(R.id.txtUserID);
         txtUserID.setText(Users.UserID);
         ImageView userImage = fnvHeader.findViewById(R.id.userImage);
+        userImage.setOnClickListener(v ->
+                Toast.makeText(activity, "테스트 메시지", Toast.LENGTH_SHORT).show());
         TextView txtPCName = fnvHeader.findViewById(R.id.txtPCName);
         if (Users.PCCode.equals("")){
             if(Users.Language ==0){
