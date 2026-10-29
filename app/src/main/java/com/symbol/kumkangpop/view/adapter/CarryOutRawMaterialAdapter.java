@@ -42,14 +42,16 @@ public class CarryOutRawMaterialAdapter extends RecyclerView.Adapter<CarryOutRaw
     ArrayList<StockOut3Detail> filteredList;//for filter
     CommonViewModel commonViewModel;
     String inputData;
+    private final Runnable onDeleteRequested;
 
-    public CarryOutRawMaterialAdapter(ArrayList<StockOut3Detail> items, Context context, ActivityResultLauncher<Intent> resultLauncher, CommonViewModel commonViewModel) {
+    public CarryOutRawMaterialAdapter(ArrayList<StockOut3Detail> items, Context context, ActivityResultLauncher<Intent> resultLauncher, CommonViewModel commonViewModel, Runnable onDeleteRequested) {
         this.context = context;
         this.items = items;
         this.resultLauncher = resultLauncher;
         this.unFilteredlist = items;
         this.filteredList = items;
         this.commonViewModel = commonViewModel;
+        this.onDeleteRequested = onDeleteRequested;
     }
 
 
@@ -207,7 +209,7 @@ public class CarryOutRawMaterialAdapter extends RecyclerView.Adapter<CarryOutRaw
                                     (okButton, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            DeleteCarryOutRawMaterial(item.ItemTag);
+                                            DeleteCarryOutRawMaterial(item.ItemTag, item.ItemCnt, item.StockOutNo);
                                         }
                                     }).setNegativeButton(cancelButton, new DialogInterface.OnClickListener() {
                                 @Override
@@ -222,10 +224,13 @@ public class CarryOutRawMaterialAdapter extends RecyclerView.Adapter<CarryOutRaw
         }
     }
 
-    private void DeleteCarryOutRawMaterial(String itemTag){
+    private void DeleteCarryOutRawMaterial(String itemTag, double scanQty, String stockOutNo){
         SearchCondition sc = new SearchCondition();
         sc.ItemTag = itemTag;
         sc.StockOutType = 12;//11:창고이동, 12:투입불출
+        sc.ScanQty = scanQty;
+        sc.StockOutNo = stockOutNo;
+        onDeleteRequested.run();
         commonViewModel.Get3("StockOutDeleteAll", sc);
     }
 
@@ -259,4 +264,3 @@ public class CarryOutRawMaterialAdapter extends RecyclerView.Adapter<CarryOutRaw
         this.confirmFlag = confirmFlag;
     }
 }
-

@@ -7,23 +7,31 @@ import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.InputType;
+import android.view.LayoutInflater;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.andremion.floatingnavigationview.FloatingNavigationView;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.symbol.kumkangpop.R;
@@ -48,6 +56,10 @@ public class CarryOutRawMaterialActivity extends BaseActivity {
     private ActivityResultLauncher<Intent> resultLauncher;//QR ResultLauncher
     private FloatingNavigationView mFloatingNavigationView;
     MC3300X mc3300X;
+    private boolean isCarryOutRegistration;
+    private boolean isCarryOutDeletion;
+    private String registeringItemTag;
+    private String itemTagToHighlight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +77,7 @@ public class CarryOutRawMaterialActivity extends BaseActivity {
         setListener();
         setFloatingNavigationView();
         setResultLauncher();
-        adapter = new CarryOutRawMaterialAdapter(new ArrayList<>(), this, resultLauncher, commonViewModel);
+        adapter = new CarryOutRawMaterialAdapter(new ArrayList<>(), this, resultLauncher, commonViewModel, () -> isCarryOutDeletion = true);
         observerViewModel();
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerView.setAdapter(adapter);
@@ -162,7 +174,9 @@ public class CarryOutRawMaterialActivity extends BaseActivity {
 
         commonViewModel.data2.observe(this, data -> {
             if (data != null) {
-                adapter.updateAdapter(data.StockOut3DetailList, data.StrResult);
+                String highlightedItemTag = itemTagToHighlight != null ? itemTagToHighlight : data.StrResult;
+                itemTagToHighlight = null;
+                adapter.updateAdapter(data.StockOut3DetailList, highlightedItemTag);
             } else {
                 Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
                 Users.SoundManager.playSound(0, 2, 3);//에러
@@ -171,9 +185,34 @@ public class CarryOutRawMaterialActivity extends BaseActivity {
 
         commonViewModel.data3.observe(this, data -> {
             if (data != null) {
-                //adapter.updateAdapter(data.StockOut3DetailList);
+                if (isCarryOutRegistration) {
+                    isCarryOutRegistration = false;
+                    itemTagToHighlight = registeringItemTag;
+                    registeringItemTag = null;
+                    Toast.makeText(this, Users.Language == 0 ? "등록되었습니다." : "Registration completed.", Toast.LENGTH_SHORT).show();
+                    GetMainData("");
+                    return;
+                }
+                if (isCarryOutDeletion) {
+                    isCarryOutDeletion = false;
+                    Toast.makeText(this, Users.Language == 0 ? "삭제되었습니다." : "Deletion completed.", Toast.LENGTH_SHORT).show();
+                    GetMainData("");
+                    return;
+                }
                 GetMainData(data.StrResult);
             } else {
+                if (isCarryOutRegistration) {
+                    isCarryOutRegistration = false;
+                    registeringItemTag = null;
+                    itemTagToHighlight = null;
+                    Toast.makeText(this, Users.Language == 0 ? "등록에 실패했습니다." : "Registration failed.", Toast.LENGTH_SHORT).show();
+                    GetMainData("");
+                }
+                if (isCarryOutDeletion) {
+                    isCarryOutDeletion = false;
+                    Toast.makeText(this, Users.Language == 0 ? "삭제에 실패했습니다." : "Deletion failed.", Toast.LENGTH_SHORT).show();
+                    GetMainData("");
+                }
                 Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
                 Users.SoundManager.playSound(0, 2, 3);//에러
             }
@@ -182,9 +221,43 @@ public class CarryOutRawMaterialActivity extends BaseActivity {
         //에러메시지
         commonViewModel.errorMsg.observe(this, models -> {
             if (models != null) {
-                Toast.makeText(this, models, Toast.LENGTH_SHORT).show();
+                if (isCarryOutRegistration) {
+                    isCarryOutRegistration = false;
+                    registeringItemTag = null;
+                    itemTagToHighlight = null;
+                    String message = models.isEmpty()
+                            ? (Users.Language == 0 ? "등록에 실패했습니다." : "Registration failed.")
+                            : models;
+                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+                    GetMainData("");
+                } else if (isCarryOutDeletion) {
+                    isCarryOutDeletion = false;
+                    String message = models.isEmpty()
+                            ? (Users.Language == 0 ? "삭제에 실패했습니다." : "Deletion failed.")
+                            : models;
+                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+                    GetMainData("");
+                } else {
+                    Toast.makeText(this, models, Toast.LENGTH_SHORT).show();
+                }
                 Users.SoundManager.playSound(0, 2, 3);//에러
                 progressOFF2();
+            }
+        });
+
+        commonViewModel.loadError.observe(this, hasError -> {
+            if (Boolean.TRUE.equals(hasError) && isCarryOutRegistration) {
+                isCarryOutRegistration = false;
+                registeringItemTag = null;
+                itemTagToHighlight = null;
+                Toast.makeText(this, Users.Language == 0 ? "등록에 실패했습니다." : "Registration failed.", Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
+                GetMainData("");
+            } else if (Boolean.TRUE.equals(hasError) && isCarryOutDeletion) {
+                isCarryOutDeletion = false;
+                Toast.makeText(this, Users.Language == 0 ? "삭제에 실패했습니다." : "Deletion failed.", Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
+                GetMainData("");
             }
         });
 
@@ -228,7 +301,42 @@ public class CarryOutRawMaterialActivity extends BaseActivity {
         });
     }
 
-    private void InsertCarryOutRawMaterial(String itemTag) {
+    private void showScanQtyDialog(String itemTag) {
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_key_in, null);
+        AlertDialog dialog = new AlertDialog.Builder(this).setView(dialogView).create();
+        dialog.setCanceledOnTouchOutside(false);
+
+        TextView tvTitle = dialogView.findViewById(R.id.tvTitle);
+        TextInputLayout textInputLayout = dialogView.findViewById(R.id.textInputLayout);
+        TextInputEditText edtScanQty = dialogView.findViewById(R.id.edtTagNo);
+        Button btnOK = dialogView.findViewById(R.id.btnOK);
+        Button btnCancel = dialogView.findViewById(R.id.btnCancel);
+
+        tvTitle.setText(Users.Language == 0 ? "수량 입력" : "Enter quantity");
+        textInputLayout.setHint(Users.Language == 0 ? "수량" : "Quantity");
+        edtScanQty.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        btnOK.setText(Users.Language == 0 ? "확인" : "OK");
+        btnCancel.setText(Users.Language == 0 ? "닫기" : "Cancel");
+        btnOK.setOnClickListener(v -> {
+            String scanQty = edtScanQty.getText().toString().trim();
+            if (scanQty.isEmpty()) {
+                Toast.makeText(this, Users.Language == 0 ? "수량을 입력해 주세요." : "Please enter a quantity.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            try {
+                InsertCarryOutRawMaterial(itemTag, Double.parseDouble(scanQty));
+                dialog.dismiss();
+            } catch (NumberFormatException e) {
+                Toast.makeText(this, Users.Language == 0 ? "수량은 숫자만 입력해 주세요." : "Please enter a numeric quantity.", Toast.LENGTH_SHORT).show();
+            }
+        });
+        btnCancel.setOnClickListener(v -> dialog.dismiss());
+        dialog.show();
+        edtScanQty.requestFocus();
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+    }
+
+    private void InsertCarryOutRawMaterial(String itemTag, double scanQty) {
         SearchCondition sc = new SearchCondition();
         int businessClassCode = 0;
         try {
@@ -243,6 +351,9 @@ public class CarryOutRawMaterialActivity extends BaseActivity {
         sc.LocationNo = -1;//투입불출은 로직에서 itemTag의 GetByKey로 창고를 찾는다.
         sc.ServiceType = Users.ServiceType;
         sc.UserID = Users.UserID;
+        sc.ScanQty = scanQty;
+        isCarryOutRegistration = true;
+        registeringItemTag = itemTag;
         commonViewModel.Get3("InsertStockOut3POP", sc);
     }
 
@@ -270,7 +381,7 @@ public class CarryOutRawMaterialActivity extends BaseActivity {
                 progressOFF2();
             }
         }, 5000);
-        progressON("Loading...", handler);
+        progressON(Users.Language == 0 ? "로딩 중..." : "Loading...", handler);
     }
 
     @Override
@@ -313,7 +424,7 @@ public class CarryOutRawMaterialActivity extends BaseActivity {
                         if (intentResult.getContents() != null) {
                             String scanResult = intentResult.getContents();
                             //scanResult = result.getContents();
-                            InsertCarryOutRawMaterial(scanResult);
+                            showScanQtyDialog(scanResult);
                             return;
                         }
                         /**
@@ -328,7 +439,7 @@ public class CarryOutRawMaterialActivity extends BaseActivity {
     public void getKeyInResult(String result) {
         if (result.equals(""))
             return;
-        InsertCarryOutRawMaterial("EI-" + result);
+        showScanQtyDialog("EI-" + result);
     }
 
     @Override
@@ -394,7 +505,7 @@ public class CarryOutRawMaterialActivity extends BaseActivity {
             }
             if (result.equals(""))
                 return;
-            InsertCarryOutRawMaterial(result);
+            showScanQtyDialog(result);
         }
     };
 

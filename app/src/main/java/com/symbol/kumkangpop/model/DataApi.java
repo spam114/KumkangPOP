@@ -265,6 +265,9 @@ public interface DataApi {
     @POST("GetCarryOutData")
     Single<Common> GetCarryOutData(@Body SearchCondition searchCondition);
 
+    @POST("GetASReturnData")
+    Single<Common> GetASReturnData(@Body SearchCondition searchCondition);
+
     @POST("GetTransferData")
     Single<Common> GetTransferData(@Body SearchCondition searchCondition);
 
@@ -274,8 +277,14 @@ public interface DataApi {
     @POST("InsertStockOut3POP")
     Single<Common> InsertStockOut3POP(@Body SearchCondition searchCondition);
 
+    @POST("InsertASReturn")
+    Single<Common> InsertASReturn(@Body SearchCondition searchCondition);
+
     @POST("StockOutDeleteAll")
     Single<Common> StockOutDeleteAll(@Body SearchCondition searchCondition);
+
+    @POST("DeleteASReturn")
+    Single<Common> DeleteASReturn(@Body SearchCondition searchCondition);
 
     @POST("GetLocation")
     Single<Common> GetLocation(@Body SearchCondition searchCondition);

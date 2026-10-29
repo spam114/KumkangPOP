@@ -27,6 +27,7 @@ import com.symbol.kumkangpop.view.activity.menu3.Activity3000;
 import com.symbol.kumkangpop.view.activity.menu4.Activity4000;
 import com.symbol.kumkangpop.view.activity.menu5.Activity5000;
 import com.symbol.kumkangpop.view.activity.menu9.Activity9000;
+import com.symbol.kumkangpop.view.activity.field.ASReturnActivity;
 import com.symbol.kumkangpop.view.activity.rawmaterial.CarryOutRawMaterialActivity;
 import com.symbol.kumkangpop.view.activity.rawmaterial.TransferRawMaterialActivity;
 import com.symbol.kumkangpop.view.activity.report.ActivityReport1;
@@ -237,7 +238,17 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
                         Intent intent = new Intent(context, TransferRawMaterialActivity.class);
                         context.startActivity(intent);
                     }
-
+                    else if (item.menuName.equals(context.getString(R.string.menu27)) ||
+                            item.menuName.equals(context.getString(R.string.menu27_eng))) {//A/S 회수
+                        Intent intent = new Intent(context, ASReturnActivity.class);
+                        context.startActivity(intent);
+                    }
+                    else if (item.menuName.equals(context.getString(R.string.menu29)) ||
+                            item.menuName.equals(context.getString(R.string.menu29_eng))) {//A/S 입고
+                        Intent intent = new Intent(context, ASReturnActivity.class);
+                        intent.putExtra(ASReturnActivity.EXTRA_AS_INBOUND, true);
+                        context.startActivity(intent);
+                    }
 
                     else if (item.menuName.equals(context.getString(R.string.menu25)) ||
                             item.menuName.equals(context.getString(R.string.menu25_eng))) {
@@ -284,5 +295,3 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         this.confirmFlag = confirmFlag;
     }
 }
-
-

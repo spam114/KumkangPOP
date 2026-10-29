@@ -345,6 +345,9 @@ public class SearchCondition {
     @SerializedName("Code")
     public int Code;
 
+    @SerializedName("Status")
+    public int Status;
+
     public SearchCondition(){}
 
 }

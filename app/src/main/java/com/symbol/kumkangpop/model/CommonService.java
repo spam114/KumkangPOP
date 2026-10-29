@@ -180,6 +180,9 @@ public class CommonService {
         else if(apiName.equals("GetCarryOutData")){
             return api.GetCarryOutData(sc);
         }
+        else if(apiName.equals("GetASReturnData")){
+            return api.GetASReturnData(sc);
+        }
         else if(apiName.equals("GetTransferData")){
             return api.GetTransferData(sc);
         }
@@ -189,8 +192,14 @@ public class CommonService {
         else if(apiName.equals("InsertStockOut3POP")){
             return api.InsertStockOut3POP(sc);
         }
+        else if(apiName.equals("InsertASReturn")){
+            return api.InsertASReturn(sc);
+        }
         else if(apiName.equals("StockOutDeleteAll")){
             return api.StockOutDeleteAll(sc);
+        }
+        else if(apiName.equals("DeleteASReturn")){
+            return api.DeleteASReturn(sc);
         }
         else if(apiName.equals("GetLocation")){
             return api.GetLocation(sc);

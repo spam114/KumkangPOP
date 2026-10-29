@@ -1,5 +1,6 @@
 package com.symbol.kumkangpop.view.activity;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +24,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -41,6 +43,7 @@ import com.symbol.kumkangpop.model.object.Users;
 import com.symbol.kumkangpop.view.BackPressControl;
 import com.symbol.kumkangpop.view.CommonMethod;
 import com.symbol.kumkangpop.view.MC3300X;
+import com.symbol.kumkangpop.view.M110TestPrinter;
 import com.symbol.kumkangpop.view.PreferenceManager;
 import com.symbol.kumkangpop.view.TypeChanger;
 import com.symbol.kumkangpop.view.activity.menu0.Activity0010;
@@ -68,7 +71,16 @@ public class MainActivity extends BaseActivity {
     ArrayList<BusinessClass> businessClassList;
     MC3300X mc3300X;
     private ActivityResultLauncher<Intent> directQRResultLauncher;//QR 직접 호출을 위한 ResultLauncher
+    private final ActivityResultLauncher<String[]> bluetoothPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result -> {
+                if (!result.containsValue(false)) {
+                    printM110TestQr();
+                } else {
+                    Toast.makeText(this, "블루투스 권한을 허용해야 출력할 수 있어요", Toast.LENGTH_LONG).show();
+                }
+            });
     CommonViewModel commonViewModel;
+    private M110TestPrinter m110TestPrinter;
 
     //SoundManager soundManager; // 효과음 관리 객체
 
@@ -97,6 +109,7 @@ public class MainActivity extends BaseActivity {
         SetMC3300X();
         setBar();
         setFloatingNavigationView();
+        setM110TestPrinter();
         setResultLauncher();
         observerViewModel();
         ArrayList<MainMenuItem> menuItemArrayList = getMainMenuItem();
@@ -360,6 +373,52 @@ public class MainActivity extends BaseActivity {
 
     private void setFloatingNavigationView() {
         mFloatingNavigationView = CommonMethod.setFloatingNavigationView(this);
+    }
+
+    private void setM110TestPrinter() {
+        m110TestPrinter = new M110TestPrinter(this);
+        View userImage = mFloatingNavigationView.getHeaderView(0).findViewById(R.id.userImage);
+        userImage.setOnClickListener(v -> {
+            String[] permissions = requiredBluetoothPermissions();
+            if (hasAllPermissions(permissions)) {
+                printM110TestQr();
+            } else {
+                bluetoothPermissionLauncher.launch(permissions);
+            }
+        });
+    }
+
+    private String[] requiredBluetoothPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            return new String[]{
+                    Manifest.permission.BLUETOOTH_SCAN,
+                    Manifest.permission.BLUETOOTH_CONNECT
+            };
+        }
+        return new String[]{Manifest.permission.ACCESS_FINE_LOCATION};
+    }
+
+    private boolean hasAllPermissions(String[] permissions) {
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void printM110TestQr() {
+        m110TestPrinter.printQr("테그테스트", new M110TestPrinter.Callback() {
+            @Override
+            public void onStatus(String message) {
+                Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onDone(boolean success, String message) {
+                Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private void setResultLauncher() {
