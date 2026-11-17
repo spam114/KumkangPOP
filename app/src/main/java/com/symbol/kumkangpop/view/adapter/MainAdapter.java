@@ -28,6 +28,7 @@ import com.symbol.kumkangpop.view.activity.menu4.Activity4000;
 import com.symbol.kumkangpop.view.activity.menu5.Activity5000;
 import com.symbol.kumkangpop.view.activity.menu9.Activity9000;
 import com.symbol.kumkangpop.view.activity.field.ASReturnActivity;
+import com.symbol.kumkangpop.view.activity.field.FieldAluminumFormReturnActivity;
 import com.symbol.kumkangpop.view.activity.rawmaterial.CarryOutRawMaterialActivity;
 import com.symbol.kumkangpop.view.activity.rawmaterial.TransferRawMaterialActivity;
 import com.symbol.kumkangpop.view.activity.report.ActivityReport1;
@@ -50,12 +51,14 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
     private ArrayList<MainMenuItem> items = new ArrayList<>();
     boolean confirmFlag;
     ActivityResultLauncher<Intent> directQRResultLauncher;
+    ActivityResultLauncher<Intent> fieldPackingTagResultLauncher;
 
 
-    public MainAdapter(ArrayList<MainMenuItem> items, Context context, ActivityResultLauncher<Intent> directQRResultLauncher) {
+    public MainAdapter(ArrayList<MainMenuItem> items, Context context, ActivityResultLauncher<Intent> directQRResultLauncher, ActivityResultLauncher<Intent> fieldPackingTagResultLauncher) {
         this.context = context;
         this.items = items;
         this.directQRResultLauncher = directQRResultLauncher;
+        this.fieldPackingTagResultLauncher = fieldPackingTagResultLauncher;
     }
 
 
@@ -249,7 +252,20 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
                         intent.putExtra(ASReturnActivity.EXTRA_AS_INBOUND, true);
                         context.startActivity(intent);
                     }
-
+                    else if (item.menuName.equals(context.getString(R.string.menu30)) ||
+                            item.menuName.equals(context.getString(R.string.menu30_eng))) {
+                        IntentIntegrator intentIntegrator = new IntentIntegrator((Activity) context);
+                        intentIntegrator.setBeepEnabled(true);
+                        intentIntegrator.setPrompt(context.getString(R.string.qr_state_common));
+                        intentIntegrator.setOrientationLocked(true);
+                        intentIntegrator.setRequestCode(7);
+                        fieldPackingTagResultLauncher.launch(intentIntegrator.createScanIntent());
+                    }
+                    else if (item.menuName.equals(context.getString(R.string.menu31)) ||
+                            item.menuName.equals(context.getString(R.string.menu31_eng))) {
+                        Intent intent = new Intent(context, FieldAluminumFormReturnActivity.class);
+                        context.startActivity(intent);
+                    }
                     else if (item.menuName.equals(context.getString(R.string.menu25)) ||
                             item.menuName.equals(context.getString(R.string.menu25_eng))) {
 

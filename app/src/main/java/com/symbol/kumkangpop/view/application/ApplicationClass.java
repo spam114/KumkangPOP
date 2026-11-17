@@ -244,6 +244,8 @@ public class ApplicationClass extends Application {
             menuItemArrayList.add(new MainMenuItem(2, 1, Users.Language == 0 ? getString(R.string.menu25) : getString(R.string.menu25_eng), false, R.drawable.component_exchange_24px));
             menuItemArrayList.add(new MainMenuItem(1, 1, Users.Language == 0 ? getString(R.string.menu26) : getString(R.string.menu26_eng), false, -1));
             menuItemArrayList.add(new MainMenuItem(2, 1, Users.Language == 0 ? getString(R.string.menu27) : getString(R.string.menu27_eng), false, R.drawable.swap_horiz_48px));
+            menuItemArrayList.add(new MainMenuItem(2, 1, Users.Language == 0 ? getString(R.string.menu30) : getString(R.string.menu30_eng), false, R.drawable.swap_horiz_48px));
+            menuItemArrayList.add(new MainMenuItem(2, 1, Users.Language == 0 ? getString(R.string.menu31) : getString(R.string.menu31_eng), false, R.drawable.swap_horiz_48px));
             menuItemArrayList.add(new MainMenuItem(1, 1, Users.Language == 0 ? getString(R.string.menu28) : getString(R.string.menu28_eng), false, -1));
             menuItemArrayList.add(new MainMenuItem(2, 1, Users.Language == 0 ? getString(R.string.menu29) : getString(R.string.menu29_eng), false, R.drawable.swap_horiz_48px));
             //menuItemArrayList.add(new MainMenuItem(2, 4, Users.Language == 0 ? getString(R.string.menu23) : getString(R.string.menu23_eng), false, R.drawable.flex_direction_24px));
@@ -285,6 +287,8 @@ public class ApplicationClass extends Application {
             if (booleanField) {//현장관리 권한
                 menuItemArrayList.add(new MainMenuItem(1, 1, Users.Language == 0 ? getString(R.string.menu26) : getString(R.string.menu26_eng), false, -1));
                 menuItemArrayList.add(new MainMenuItem(2, 1, Users.Language == 0 ? getString(R.string.menu27) : getString(R.string.menu27_eng), false, R.drawable.swap_horiz_48px));
+                menuItemArrayList.add(new MainMenuItem(2, 1, Users.Language == 0 ? getString(R.string.menu30) : getString(R.string.menu30_eng), false, R.drawable.swap_horiz_48px));
+                menuItemArrayList.add(new MainMenuItem(2, 1, Users.Language == 0 ? getString(R.string.menu31) : getString(R.string.menu31_eng), false, R.drawable.swap_horiz_48px));
             }
 
             if (booleanInbound) {//입고관리 권한

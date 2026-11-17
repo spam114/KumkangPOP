@@ -33,6 +33,7 @@ import com.andremion.floatingnavigationview.FloatingNavigationView;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.symbol.kumkangpop.R;
+import com.symbol.kumkangpop.view.activity.field.FieldPackingTagActivity;
 import com.symbol.kumkangpop.databinding.ActivityMainBinding;
 import com.symbol.kumkangpop.databinding.DialogNoticeBinding;
 import com.symbol.kumkangpop.model.SearchCondition;
@@ -71,6 +72,7 @@ public class MainActivity extends BaseActivity {
     ArrayList<BusinessClass> businessClassList;
     MC3300X mc3300X;
     private ActivityResultLauncher<Intent> directQRResultLauncher;//QR 직접 호출을 위한 ResultLauncher
+    private ActivityResultLauncher<Intent> fieldPackingTagResultLauncher;
     private final ActivityResultLauncher<String[]> bluetoothPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result -> {
                 if (!result.containsValue(false)) {
@@ -113,7 +115,7 @@ public class MainActivity extends BaseActivity {
         setResultLauncher();
         observerViewModel();
         ArrayList<MainMenuItem> menuItemArrayList = getMainMenuItem();
-        mainAdapter = new MainAdapter(menuItemArrayList, this, directQRResultLauncher);
+        mainAdapter = new MainAdapter(menuItemArrayList, this, directQRResultLauncher, fieldPackingTagResultLauncher);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerView.setAdapter(mainAdapter);
         backpressed = new BackPressControl(this);
@@ -408,7 +410,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void printM110TestQr() {
-        m110TestPrinter.printQr("테그테스트", new M110TestPrinter.Callback() {
+        m110TestPrinter.printQr("LT-2611100001", new M110TestPrinter.Callback() {
             @Override
             public void onStatus(String message) {
                 Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
@@ -446,6 +448,18 @@ public class MainActivity extends BaseActivity {
                         if (result.getResultCode() == 100) {
 
                         }
+                    }
+                });
+
+        fieldPackingTagResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    IntentResult intentResult = IntentIntegrator.parseActivityResult(result.getResultCode(), result.getData());
+                    if (intentResult.getContents() != null) {
+                        String scannedTag = intentResult.getContents().split("\\r\\n|\\n|\\r", 2)[0].trim();
+                        Intent intent = new Intent(MainActivity.this, FieldPackingTagActivity.class);
+                        intent.putExtra(FieldPackingTagActivity.EXTRA_SCANNED_TAG, scannedTag);
+                        startActivity(intent);
                     }
                 });
     }

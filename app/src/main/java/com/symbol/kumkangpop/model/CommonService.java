@@ -213,6 +213,33 @@ public class CommonService {
         else if(apiName.equals("InsertProdProcess")){
             return api.InsertProdProcess(sc);
         }
+        else if(apiName.equals("CheckItemTag")){
+            return api.CheckItemTag(sc);
+        }
+        else if(apiName.equals("GetIssuedTagList")){
+            return api.GetIssuedTagList(sc);
+        }
+        else if(apiName.equals("GetFieldPackingTagPart")){
+            return api.GetFieldPackingTagPart(sc);
+        }
+        else if(apiName.equals("GetFieldPackingTagPartSpec")){
+            return api.GetFieldPackingTagPartSpec(sc);
+        }
+        else if(apiName.equals("InsertFieldPackingTag")){
+            return api.InsertFieldPackingTag(sc);
+        }
+        else if(apiName.equals("CancelFieldPackingTag")){
+            return api.CancelFieldPackingTag(sc);
+        }
+        else if(apiName.equals("GetFieldAluminumFormReturnList")){
+            return api.GetFieldAluminumFormReturnList(sc);
+        }
+        else if(apiName.equals("InsertStockIn")){
+            return api.InsertStockIn(sc);
+        }
+        else if(apiName.equals("DeleteFieldAluminumFormReturn")){
+            return api.DeleteFieldAluminumFormReturn(sc);
+        }
         else {
             return null;
         }

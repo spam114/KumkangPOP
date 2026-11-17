@@ -217,6 +217,16 @@ public class CarryOutRawMaterialActivity extends BaseActivity {
                 Users.SoundManager.playSound(0, 2, 3);//에러
             }
         });
+        commonViewModel.data4.observe(this, data -> {
+            if (data != null) {
+                String itemTag = data.StrResult;
+                int qty = data.IntResult;
+                showScanQtyDialog(itemTag, qty);
+            } else {
+                Toast.makeText(this, Users.Language == 0 ? "서버 연결 오류" : "Server connection error", Toast.LENGTH_SHORT).show();
+                Users.SoundManager.playSound(0, 2, 3);//에러
+            }
+        });
 
         //에러메시지
         commonViewModel.errorMsg.observe(this, models -> {
@@ -301,18 +311,29 @@ public class CarryOutRawMaterialActivity extends BaseActivity {
         });
     }
 
-    private void showScanQtyDialog(String itemTag) {
+    private void checkItemTag(String itemTag){
+        SearchCondition sc = new SearchCondition();
+        sc.ItemTag = itemTag;
+        commonViewModel.Get4("CheckItemTag", sc);
+    }
+
+
+    private void showScanQtyDialog(String itemTag, int qty) {
+
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_key_in, null);
         AlertDialog dialog = new AlertDialog.Builder(this).setView(dialogView).create();
         dialog.setCanceledOnTouchOutside(false);
 
         TextView tvTitle = dialogView.findViewById(R.id.tvTitle);
+        TextView tvRemainingQty = dialogView.findViewById(R.id.tvRemainingQty);
         TextInputLayout textInputLayout = dialogView.findViewById(R.id.textInputLayout);
         TextInputEditText edtScanQty = dialogView.findViewById(R.id.edtTagNo);
         Button btnOK = dialogView.findViewById(R.id.btnOK);
         Button btnCancel = dialogView.findViewById(R.id.btnCancel);
 
         tvTitle.setText(Users.Language == 0 ? "수량 입력" : "Enter quantity");
+        tvRemainingQty.setText(Users.Language == 0 ? "남은수량: " + qty : "Remaining quantity: " + qty);
+        tvRemainingQty.setVisibility(View.VISIBLE);
         textInputLayout.setHint(Users.Language == 0 ? "수량" : "Quantity");
         edtScanQty.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         btnOK.setText(Users.Language == 0 ? "확인" : "OK");
@@ -424,7 +445,7 @@ public class CarryOutRawMaterialActivity extends BaseActivity {
                         if (intentResult.getContents() != null) {
                             String scanResult = intentResult.getContents();
                             //scanResult = result.getContents();
-                            showScanQtyDialog(scanResult);
+                            checkItemTag(scanResult);
                             return;
                         }
                         /**
@@ -439,7 +460,7 @@ public class CarryOutRawMaterialActivity extends BaseActivity {
     public void getKeyInResult(String result) {
         if (result.equals(""))
             return;
-        showScanQtyDialog("EI-" + result);
+        checkItemTag("EI-" + result);
     }
 
     @Override
@@ -505,7 +526,7 @@ public class CarryOutRawMaterialActivity extends BaseActivity {
             }
             if (result.equals(""))
                 return;
-            showScanQtyDialog(result);
+            checkItemTag(result);
         }
     };
 

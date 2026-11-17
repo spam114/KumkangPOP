@@ -46,9 +46,11 @@
     <string name="menu24">공정 관리</string>
     <string name="menu25">공정 진행 등록</string>
     <string name="menu26">현장 관리</string>
-    <string name="menu27">A/S 회수</string>
+    <string name="menu27">A/S 회수(판매)</string>
     <string name="menu28">입고 관리</string>
     <string name="menu29">A/S 입고</string>
+    <string name="menu30">현장 포장 태그 발행</string>
+    <string name="menu31">현장 알폼 회수(임대)</string>
 
     <string name="menu1_eng">Production Result</string>
     <string name="menu2_eng">Register Shot Blast</string>
@@ -76,9 +78,34 @@
     <string name="menu24_eng">Process</string>
     <string name="menu25_eng">Start Process</string>
     <string name="menu26_eng">Field Management</string>
-    <string name="menu27_eng">A/S Collection</string>
+    <string name="menu27_eng">A/S Collection(Sale)</string>
     <string name="menu28_eng">Receiving Management</string>
     <string name="menu29_eng">A/S Receiving</string>
+    <string name="menu30_eng">Field Packing Tag Issuance</string>
+    <string name="menu31_eng">Field Aluminum Form Return (Rental)</string>
+
+    <string name="field_packing_tag_reprint">재출력</string>
+    <string name="field_packing_tag_reprint_eng">Reprint</string>
+    <string name="field_packing_tag_reprint_warning">태그(스티커)는 한 장만 존재해야 합니다.\n분실 또는 훼손된 경우에만 재출력해 주세요.</string>
+    <string name="field_packing_tag_reprint_warning_eng">There must be only one tag (sticker).\nPlease print only if it has been lost or damaged.</string>
+    <string name="field_packing_tag_cancel_tag">태그 취소</string>
+    <string name="field_packing_tag_cancel_tag_eng">Cancel TAG</string>
+    <string name="field_packing_tag_cancel_warning">TAG를 취소한 후 반드시 실제 TAG(스티커)를 제거해 주세요.\n취소된 TAG는 다시 복구할 수 없습니다.</string>
+    <string name="field_packing_tag_cancel_warning_eng">After cancelling the TAG, be sure to remove the physical TAG (sticker).\nA cancelled TAG cannot be restored.</string>
+    <string name="field_packing_tag_confirm">확인</string>
+    <string name="field_packing_tag_confirm_eng">Confirm</string>
+    <string name="field_packing_tag_cancel">취소</string>
+    <string name="field_packing_tag_cancel_eng">Cancel</string>
+    <string name="field_packing_tag_management">TAG 관리</string>
+    <string name="field_packing_tag_management_eng">TAG Management</string>
+    <string name="field_packing_tag_management_details">TAG 번호: %1$s\n\n품명: %2$s\n규격: %3$s\n유형: %4$s\n수량: %5$s</string>
+    <string name="field_packing_tag_management_details_eng">TAG No.: %1$s\n\nItem: %2$s\nSpec: %3$s\nType: %4$s\nQuantity: %5$s</string>
+    <string name="field_packing_tag_type_standard">규격</string>
+    <string name="field_packing_tag_type_standard_eng">Standard</string>
+    <string name="field_packing_tag_type_non_standard">비규격</string>
+    <string name="field_packing_tag_type_non_standard_eng">Non-standard</string>
+    <string name="field_packing_tag_type_scrap">스크랩</string>
+    <string name="field_packing_tag_type_scrap_eng">Scrap</string>
 
     <string name="detail_menu_0000">제품 포장</string>
     <string name="detail_menu_0010">제품 포장</string>

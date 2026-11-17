@@ -71,6 +71,9 @@ public class SearchCondition {
     @SerializedName("Type")
     public int Type;
 
+    @SerializedName("UseFlag")
+    public int UseFlag;
+
     @SerializedName("InsertType")
     public String InsertType;
 

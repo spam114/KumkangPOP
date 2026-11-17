@@ -30,6 +30,8 @@ public class CommonViewModel extends ViewModel {
     public MutableLiveData<Common> data2 = new MutableLiveData<>();//todo
     public MutableLiveData<Common> data3 = new MutableLiveData<>();//todo
     public MutableLiveData<Common> data4 = new MutableLiveData<>();//todo
+    public MutableLiveData<Common> data5 = new MutableLiveData<>();//todo
+    public MutableLiveData<String> errorMsg5 = new MutableLiveData<>();//todo
 
     public MutableLiveData<SData> str = new MutableLiveData<>();//todo
     public MutableLiveData<SData> str2 = new MutableLiveData<>();//todo
@@ -160,6 +162,35 @@ public class CommonViewModel extends ViewModel {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
+                        loadError.setValue(true);
+                        loading.setValue(false);
+                        e.printStackTrace();
+                    }
+                })
+        );
+    }
+
+    public void Get5(String apiName, SearchCondition sc) {
+        loading.setValue(true);
+        disposable.add(service.Get(apiName, sc)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableSingleObserver<Common>() {
+                    @Override
+                    public void onSuccess(@NonNull Common models) {
+                        if (models.ErrorCheck != null) {
+                            errorMsg5.setValue(models.ErrorCheck);
+                            loadError.setValue(true);
+                            loading.setValue(false);
+                            return;
+                        }
+                        data5.setValue(models);
+                        loading.setValue(false);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        errorMsg5.setValue(e.getMessage());
                         loadError.setValue(true);
                         loading.setValue(false);
                         e.printStackTrace();

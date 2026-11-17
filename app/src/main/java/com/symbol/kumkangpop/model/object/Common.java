@@ -15,6 +15,7 @@ public class Common {
     public ArrayList<Container> ContainerList;
     public ArrayList<StockOut> StockOutList;
     public String StrResult;
+    public String StrResult2;
     public int IntResult;
     public boolean BoolResult;
     public ScanResult ScanResult;
@@ -30,4 +31,6 @@ public class Common {
     public ArrayList<Location> LocationList;
     public ArrayList<Worder> WorderList;
     public ArrayList<ProdProcess> ProdProcessList;
+    public ArrayList<Part> PartList;
+    public ArrayList<PartSpec> PartSpecList;
 }

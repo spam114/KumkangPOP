@@ -296,4 +296,31 @@ public interface DataApi {
 
     @POST("InsertProdProcess")
     Single<Common> InsertProdProcess(@Body SearchCondition searchCondition);
+
+    @POST("CheckItemTag")
+    Single<Common> CheckItemTag(@Body SearchCondition searchCondition);
+
+    @POST("GetIssuedTagList")
+    Single<Common> GetIssuedTagList(@Body SearchCondition searchCondition);
+
+    @POST("GetFieldPackingTagPart")
+    Single<Common> GetFieldPackingTagPart(@Body SearchCondition searchCondition);
+
+    @POST("GetFieldPackingTagPartSpec")
+    Single<Common> GetFieldPackingTagPartSpec(@Body SearchCondition searchCondition);
+
+    @POST("InsertFieldPackingTag")
+    Single<Common> InsertFieldPackingTag(@Body SearchCondition searchCondition);
+
+    @POST("CancelFieldPackingTag")
+    Single<Common> CancelFieldPackingTag(@Body SearchCondition searchCondition);
+
+    @POST("GetFieldAluminumFormReturnList")
+    Single<Common> GetFieldAluminumFormReturnList(@Body SearchCondition searchCondition);
+
+    @POST("InsertStockIn")
+    Single<Common> InsertStockIn(@Body SearchCondition searchCondition);
+    @POST("DeleteFieldAluminumFormReturn")
+    Single<Common> DeleteFieldAluminumFormReturn(@Body SearchCondition searchCondition);
+
 }
